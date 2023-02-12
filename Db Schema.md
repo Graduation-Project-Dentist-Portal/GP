@@ -85,6 +85,7 @@ Relationships:
 | One to Many | user to job |
 | One to Many | post to picture |
 | One to Many | tool_for_sale to picture |
+| One to Many | user to medical_case |
 
 Notes:
 -	user identity card still messing
