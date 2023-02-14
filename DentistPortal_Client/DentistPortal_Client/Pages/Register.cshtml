@@ -1,0 +1,33 @@
+﻿@page
+@model DentistPortal_Client.Pages.RegisterModel
+@{
+    <form method="post">
+        <div class="border p-3 mt-4">
+            <div class="row pb-2">
+                <h2 class="text-primary pl-3">Register</h2>
+                <hr>
+            </div>
+            <div class="mb-3">
+                <label>Username</label>
+                <input asp-for="User.Username" class="form-control">
+            </div> 
+            <div class="mb-3">
+                <label>First Name</label>
+                <input asp-for="User.FirstName" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label>Last Name</label>
+                <input asp-for="User.LastName" class="form-control">
+            </div> 
+            <div class="mb-3">
+                <label>Password</label>
+                <input asp-for="User.PasswordHash" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label>Role</label>
+                <input asp-for="User.Role" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:150px">Create</button>
+        </div>
+    </form>
+}
