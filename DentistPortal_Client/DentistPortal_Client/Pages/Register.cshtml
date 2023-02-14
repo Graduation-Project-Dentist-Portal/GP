@@ -21,7 +21,11 @@
             </div> 
             <div class="mb-3">
                 <label>Password</label>
-                <input asp-for="User.PasswordHash" class="form-control">
+                <input asp-for="User.Password" class="form-control" type="password">
+            </div> 
+            <div class="mb-3">
+                <label>Repeated Password</label>
+                <input asp-for="User.RepeatedPassword" class="form-control" type="password">
             </div>
             <div class="mb-3">
                 <label>Role</label>

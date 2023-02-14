@@ -1,4 +1,4 @@
-using DentistPortal_API.Model;
+using DentistPortal_API.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text;
@@ -8,7 +8,7 @@ namespace DentistPortal_Client.Pages
 {
     public class RegisterModel : PageModel
     {
-        public User User { get; set; } = new();
+        public UserDto User { get; set; } = new();
         IConfiguration config = new ConfigurationBuilder()
                .AddJsonFile("appsettings.json")
                .AddEnvironmentVariables()
@@ -22,7 +22,7 @@ namespace DentistPortal_Client.Pages
         {
         }
 
-        public async Task<IActionResult> OnPost(User user)
+        public async Task<IActionResult> OnPost(UserDto user)
         {
             var httpClient = HttpContext.RequestServices.GetService<IHttpClientFactory>();
             var client = httpClient.CreateClient();
