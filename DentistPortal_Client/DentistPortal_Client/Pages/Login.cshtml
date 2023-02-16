@@ -1,7 +1,8 @@
 ﻿@page
+@using DentistPortal_Client.Pages.Shared
 @model DentistPortal_Client.Pages.LoginModel
 @{
-    Layout = null;
+    Layout = "Shared/_LoginRegisterLayout";
     <div style="margin-top:200px">
         <form method="post" class="align-content-center col-6 w-25" style="margin:auto;text-align:center;color:#1A2238;">
             <div class="form-floating form-outline mb-4">
@@ -20,7 +21,7 @@
         </div>
     </div>
 }
-@if (@Model.Msg != null)
+`@if (@Model.Msg != null)
 {
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     if (@Model.Status == "error")

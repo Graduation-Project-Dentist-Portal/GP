@@ -27,6 +27,10 @@ namespace DentistPortal_API.Controllers
         [Route("api/login")]
         public async Task<IActionResult> Login([FromBody] UserDto user)
         {
+            if (string.IsNullOrEmpty(user.Username) || string.IsNullOrEmpty(user.Password))
+            {
+                return BadRequest("Cant be empty");
+            }
             var loggedUser = await _context.User.FirstOrDefaultAsync(x => x.Username == user.Username && x.IsActive == true);
             var hasher = new PasswordHasher<User>();
             if (loggedUser == null)
@@ -44,10 +48,10 @@ namespace DentistPortal_API.Controllers
 
         [HttpPost]
         [Route("api/create-user")]
-        public async Task<ActionResult> Register([FromBody] User newUser)
+        public async Task<ActionResult> Register([FromBody] UserDto newUser)
         {
             User user = await _context.User.FirstOrDefaultAsync(x => x.Username == newUser.Username);
-            if (string.IsNullOrEmpty(newUser.Username) || string.IsNullOrEmpty(newUser.PasswordHash))
+            if (string.IsNullOrEmpty(newUser.Username) || string.IsNullOrEmpty(newUser.Password) || string.IsNullOrEmpty(newUser.FirstName) || string.IsNullOrEmpty(newUser.LastName) || string.IsNullOrEmpty(newUser.Role) || (newUser.Role != "Doctor" && newUser.Role != "Student" && newUser.Role != "Patient"))
                 return BadRequest("Cant be empty");
             else if (user is not null)
             {
@@ -55,11 +59,17 @@ namespace DentistPortal_API.Controllers
             }
             else
             {
-                newUser.Id = Guid.NewGuid();
-                newUser.IsActive = true;
+                user = new();
+                user.Id = Guid.NewGuid();
+                user.IsActive = true;
                 var hasher = new PasswordHasher<User>();
-                newUser.PasswordHash = hasher.HashPassword(newUser, newUser.PasswordHash);
-                await _context.User.AddAsync(newUser);
+                user.PasswordHash = hasher.HashPassword(user, newUser.Password);
+                user.FirstName = newUser.FirstName;
+                user.LastName = newUser.LastName;
+                user.Role = newUser.Role;
+                user.Username = newUser.Username;
+                user.ProfilePicture = newUser.ProfilePicture;
+                await _context.User.AddAsync(user);
                 await _context.SaveChangesAsync();
                 return Ok();
             }

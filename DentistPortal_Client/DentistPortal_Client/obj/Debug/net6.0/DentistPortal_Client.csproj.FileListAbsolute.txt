@@ -348,3 +348,4 @@ D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\obj\Debug\net6.0\DentistPor
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\obj\Debug\net6.0\DentistPortal_Client.genruntimeconfig.cache
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\obj\Debug\net6.0\ref\DentistPortal_Client.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\CurrieTechnologies.Razor.SweetAlert2.dll
+D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\obj\Debug\net6.0\scopedcss\Pages\Shared\_LoginRegisterLayout.cshtml.rz.scp.css

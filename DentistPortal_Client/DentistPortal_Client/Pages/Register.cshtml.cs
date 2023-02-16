@@ -34,9 +34,14 @@ namespace DentistPortal_Client.Pages
             {
                 Msg = "Successfully Created!";
                 Status = "success";
-                return RedirectToPage();
+                return RedirectToPage("/Home");
             }
-            return RedirectToPage();
+            else
+            {
+                Msg = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                Status = "error";
+                return RedirectToPage("/Register");
+            }
         }
     }
 }
