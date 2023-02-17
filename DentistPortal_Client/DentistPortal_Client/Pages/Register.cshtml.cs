@@ -14,12 +14,13 @@ namespace DentistPortal_Client.Pages
                .AddEnvironmentVariables()
                .Build();
         [TempData]
-        public string Msg { get; set; }
+        public string Msg { get; set; } = String.Empty;
         [TempData]
-        public string Status { get; set; }
+        public string Status { get; set; } = String.Empty;
 
-        public void OnGet()
+        public void OnGet(UserDto? user)
         {
+            User = user;
         }
 
         public async Task<IActionResult> OnPost(UserDto user)
@@ -40,7 +41,7 @@ namespace DentistPortal_Client.Pages
             {
                 Msg = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 Status = "error";
-                return RedirectToPage("/Register");
+                return RedirectToPage("/Register", user);
             }
         }
     }

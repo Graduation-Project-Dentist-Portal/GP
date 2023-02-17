@@ -49,7 +49,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("Token").Value)),
             ValidateIssuer = true,
             ValidateAudience = true,
-            ValidAudience = "",
+            ValidAudience = "https://localhost:7156/",
             ValidIssuer = "Graduation Project Team",
             ClockSkew = TimeSpan.Zero
         };

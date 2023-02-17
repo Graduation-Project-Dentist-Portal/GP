@@ -2,6 +2,7 @@ using CurrieTechnologies.Razor.SweetAlert2;
 using DentistPortal_API.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 
@@ -35,7 +36,8 @@ namespace DentistPortal_Client.Pages
             {
                 Msg = "Successfully logged in!";
                 Status = "success";
-                return RedirectToPage("/Home");
+                string token = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                return RedirectToPage("/Home", new { token });
             }
             else
             {

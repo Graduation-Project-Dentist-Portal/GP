@@ -61,7 +61,7 @@ Tables:
 	| --- | --- | --- |
     | Guid |Id | Primary Key |
 	| String | PicturePath |  |
-	| Guid | OwnerId | Foreign Key => (Post.Id) or Foreign Key => (ToolForSale.Id) |
+	| Guid | OwnerId | Foreign Key => (Post.Id) or Foreign Key => (ToolForSale.Id) or Foreign Key => (MedicalCase.Id)|
 	| Boolean | IsActive | |
 
 - MedicalCase
@@ -91,7 +91,7 @@ Tables:
 	| --- | --- | --- |
     | Guid |Id | Primary Key |
 	| String | Comment |  |
-	| Guid | ClinicId | Foreign Key => (Clinic.Id) |
+	| Guid | ClinicId | Foreign Key => (Clinic.Id) | 
 
 Relationships:
 

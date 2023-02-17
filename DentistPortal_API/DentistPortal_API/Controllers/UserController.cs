@@ -121,7 +121,7 @@ namespace DentistPortal_API.Controllers
                 expires: DateTime.Now.AddMinutes(3),
                 signingCredentials: cred,
                 issuer: "Graduation Project Team",
-                audience: "https://localhost:7264"
+                audience: "https://localhost:7156/"
                 );
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
             return jwt;
