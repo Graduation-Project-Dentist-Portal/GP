@@ -49,7 +49,8 @@ Tables:
 	| String | ToolName |  |
 	| String | Description |  |
 	| Float | ToolPrice |  |
-	| Guid | SellerId | Foreign Key => (Patient.Id) or Foreign Key => (Dentist.Id) |
+	| Guid | SellerId | Foreign Key => (Patient.Id) or Foreign Key => (Dentist.Id) |		
+	| string | PicturePaths | |
 	| Boolean | IsActive | |
 
 - Job
@@ -70,6 +71,7 @@ Tables:
     | Guid |Id | Primary Key |
 	| String | Description |  |
 	| Guid | UserId | Foreign Key => (Patient.Id) or Foreign Key => (Dentist.Id) |
+	| string | PicturePaths | |
 	| Boolean | IsActive | |
 
 - MedicalCase
@@ -80,7 +82,9 @@ Tables:
 	| String | Description |  |
 	| String | PatientName |  |
 	| String | PatientPhone |  |
-	| String | PatientAge |  |
+	| String | PatientAge |  |	
+	| string | PicturePaths | |
+	| string | Diagnosis | |
 	| Guid | DoctorId | Foreign Key => (Dentist.Id) |
 	| Boolean | IsActive | |
 

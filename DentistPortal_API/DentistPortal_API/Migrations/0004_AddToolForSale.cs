@@ -19,7 +19,7 @@ namespace DentistPortal_API.Migrations
                 .WithColumn("ToolPrice").AsFloat().NotNullable()
                 .WithColumn("SellerIdDoctor").AsGuid().Nullable().ForeignKey("Dentist", "Id").OnDelete(System.Data.Rule.Cascade)//Cant both be empty check at API
                 .WithColumn("SellerIdPatient").AsGuid().Nullable().ForeignKey("Patient", "Id").OnDelete(System.Data.Rule.Cascade)//Cant both be empty check at API
-                .WithColumn("PicturePaths").AsString().NotNullable()
+                .WithColumn("PicturePaths").AsString(int.MaxValue).NotNullable()
                 .WithColumn("IsActive").AsBoolean().NotNullable();
         }
     }

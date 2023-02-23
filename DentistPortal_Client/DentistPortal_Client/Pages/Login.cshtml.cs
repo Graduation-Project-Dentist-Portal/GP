@@ -1,5 +1,5 @@
 using CurrieTechnologies.Razor.SweetAlert2;
-using DentistPortal_API.DTO;
+using DentistPortal_Client.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;

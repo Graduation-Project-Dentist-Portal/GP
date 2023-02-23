@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "22G3yty2hUUvw8CZnrR8dEs1b+T4+3IPKzxFYZf1RTZ8zz+IuzRR1/cSGknFg7EvNIZ2HTWDRu23hFDoULtHkQ==",
+  "dgSpecHash": "sq2rDUyHDPoebfOZWou5a+iQiy4aRdBC2kbXh7Ij7fPT8Fa4LtnMQP0RQ9JlYqy8I/5q7NSbJua7ljbVcFXUbA==",
   "success": true,
   "projectFilePath": "D:\\FCAI\\GP\\DentistPortal_Client\\DentistPortal_Client\\DentistPortal_Client.csproj",
   "expectedPackageFiles": [
@@ -33,8 +33,10 @@
     "C:\\Users\\youne\\.nuget\\packages\\microsoft.identitymodel.tokens\\6.10.0\\microsoft.identitymodel.tokens.6.10.0.nupkg.sha512",
     "C:\\Users\\youne\\.nuget\\packages\\microsoft.jsinterop\\6.0.0\\microsoft.jsinterop.6.0.0.nupkg.sha512",
     "C:\\Users\\youne\\.nuget\\packages\\microsoft.netcore.platforms\\2.1.2\\microsoft.netcore.platforms.2.1.2.nupkg.sha512",
+    "C:\\Users\\youne\\.nuget\\packages\\microsoft.win32.systemevents\\7.0.0\\microsoft.win32.systemevents.7.0.0.nupkg.sha512",
     "C:\\Users\\youne\\.nuget\\packages\\system.buffers\\4.5.1\\system.buffers.4.5.1.nupkg.sha512",
     "C:\\Users\\youne\\.nuget\\packages\\system.collections.immutable\\5.0.0\\system.collections.immutable.5.0.0.nupkg.sha512",
+    "C:\\Users\\youne\\.nuget\\packages\\system.drawing.common\\7.0.0\\system.drawing.common.7.0.0.nupkg.sha512",
     "C:\\Users\\youne\\.nuget\\packages\\system.identitymodel.tokens.jwt\\6.10.0\\system.identitymodel.tokens.jwt.6.10.0.nupkg.sha512",
     "C:\\Users\\youne\\.nuget\\packages\\system.io.pipelines\\6.0.0\\system.io.pipelines.6.0.0.nupkg.sha512",
     "C:\\Users\\youne\\.nuget\\packages\\system.memory\\4.5.4\\system.memory.4.5.4.nupkg.sha512",

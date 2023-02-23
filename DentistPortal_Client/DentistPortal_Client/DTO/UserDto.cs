@@ -1,4 +1,4 @@
-﻿namespace DentistPortal_API.DTO
+﻿namespace DentistPortal_Client.DTO
 {
     public class UserDto
     {

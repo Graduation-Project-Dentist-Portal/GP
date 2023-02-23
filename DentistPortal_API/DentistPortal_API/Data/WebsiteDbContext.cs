@@ -7,7 +7,8 @@ namespace DentistPortal_API.Data
     public class WebsiteDbContext : DbContext
     {
         public WebsiteDbContext(DbContextOptions<WebsiteDbContext> options) : base(options) { }
-        public DbSet<User> User { get; set; }
+        public DbSet<Dentist> Dentist { get; set; }
+        public DbSet<Patient> Patient { get; set; }
         public DbSet<RefreshToken> RefreshToken { get; set; }
         public DbSet<MedicalCase> MedicalCase { get; set; }
         public DbSet<Picture> Picture { get; set; }

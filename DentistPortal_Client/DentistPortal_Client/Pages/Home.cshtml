@@ -1,7 +1,7 @@
 ﻿@page
 @model DentistPortal_Client.Pages.HomeModel
 @{
-    <a asp-page="/DoctorPages/AddMedicalCase" asp-route-token=@Model.Token>Add Medical Case</a>
+    <a asp-page="/DoctorPages/DisplayMedicalCases" asp-route-token=@Model.Token>Medical Cases</a>
 }
 @if (@Model.Msg != null)
 {

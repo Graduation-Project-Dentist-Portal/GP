@@ -1,4 +1,4 @@
-﻿namespace DentistPortal_API.DTO
+﻿namespace DentistPortal_Client.DTO
 {
     public class MedicalCaseDto
     {
@@ -6,6 +6,8 @@
         public string PatientName { get; set; } = String.Empty;
         public string PatientPhone { get; set; } = String.Empty;
         public string PatientAge { get; set; } = String.Empty;
+        public string Diagnosis { get; set; } = String.Empty;
         public Guid DoctorId { get; set; }
+        public List<string> CasePictures { get; set; } = new();
     }
 }

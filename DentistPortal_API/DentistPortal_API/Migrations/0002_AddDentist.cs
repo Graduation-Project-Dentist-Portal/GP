@@ -23,7 +23,7 @@ namespace DentistPortal_API.Migrations
                 .WithColumn("IsActive").AsBoolean().NotNullable()
                 .WithColumn("Graduated").AsBoolean().NotNullable()
                 .WithColumn("University").AsString().NotNullable()
-                .WithColumn("Level").AsInt64().NotNullable()
+                .WithColumn("Level").AsInt32().NotNullable()
                 .WithColumn("IdentityCardPicture").AsString().NotNullable()
                 .WithColumn("UniversityCardPicture").AsString().NotNullable();
         }

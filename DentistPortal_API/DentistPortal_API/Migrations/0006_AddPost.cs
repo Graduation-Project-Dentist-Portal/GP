@@ -17,7 +17,7 @@ namespace DentistPortal_API.Migrations
                 .WithColumn("Description").AsString().NotNullable()
                 .WithColumn("OwnerIdDoctor").AsGuid().Nullable().ForeignKey("Dentist", "Id").OnDelete(System.Data.Rule.Cascade)//Cant both be empty check at API
                 .WithColumn("OwnerIdPatient").AsGuid().Nullable().ForeignKey("Patient", "Id").OnDelete(System.Data.Rule.Cascade)//Cant both be empty check at API
-                .WithColumn("PicturePaths").AsString().NotNullable()
+                .WithColumn("PicturePaths").AsString(int.MaxValue).NotNullable()
                 .WithColumn("IsActive").AsBoolean().NotNullable();
         }
     }
