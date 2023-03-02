@@ -22,7 +22,7 @@ namespace DentistPortal_API.Controllers
         {
             try
             {
-                if (string.IsNullOrEmpty(medicalCaseDto.Description) || string.IsNullOrEmpty(medicalCaseDto.PatientName) || string.IsNullOrEmpty(medicalCaseDto.PatientPhone) || string.IsNullOrEmpty(medicalCaseDto.PatientAge) || medicalCaseDto.DoctorId == Guid.Empty || string.IsNullOrEmpty(medicalCaseDto.CasePictures[0]))
+                if (string.IsNullOrEmpty(medicalCaseDto.Description) || string.IsNullOrEmpty(medicalCaseDto.PatientName) || string.IsNullOrEmpty(medicalCaseDto.PatientPhone) || string.IsNullOrEmpty(medicalCaseDto.PatientAge) || medicalCaseDto.DoctorId == Guid.Empty || string.IsNullOrEmpty(medicalCaseDto.CasePictures[0]) || string.IsNullOrEmpty(medicalCaseDto.Diagnosis))
                 {
                     return BadRequest("Cant be empty");
                 }
@@ -74,7 +74,7 @@ namespace DentistPortal_API.Controllers
         }
 
         [HttpDelete]
-        [Route("api/delete-medCase/{id}"), Authorize]
+        [Route("api/delete-medical-case/{id}"), Authorize]
         public async Task<IActionResult> DeleteMedicalCase(Guid id)
         {
             try
@@ -94,6 +94,82 @@ namespace DentistPortal_API.Controllers
                     else
                     {
                         return BadRequest("Cant find the medical case");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("api/get-medical-case/{id}"), Authorize]
+        public async Task<IActionResult> GetMedicalCase(Guid id)
+        {
+            try
+            {
+                if (id == Guid.Empty)
+                {
+                    return BadRequest("Cant be empty");
+                }
+                else
+                {
+                    var medicalCase = await _context.MedicalCase.FirstOrDefaultAsync(x => x.Id == id && x.IsActive == true);
+                    if (medicalCase is not null)
+                    {
+                        return Ok(medicalCase);
+                    }
+                    else
+                    {
+                        return BadRequest("Cant Find the medical case");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut]
+        [Route("api/edit-medical-case/{id}"), Authorize]
+        public async Task<IActionResult> EditMedicalCase(Guid id, [FromBody] MedicalCaseDto medicalCaseDto)
+        {
+            try
+            {
+                if (id == Guid.Empty || string.IsNullOrEmpty(medicalCaseDto.Description) || string.IsNullOrEmpty(medicalCaseDto.PatientName) || string.IsNullOrEmpty(medicalCaseDto.PatientPhone) || string.IsNullOrEmpty(medicalCaseDto.PatientAge) || string.IsNullOrEmpty(medicalCaseDto.Diagnosis))
+                {
+                    return BadRequest("Cant be empty");
+                }
+                else
+                {
+                    var oldMedicalCase = await _context.MedicalCase.FirstOrDefaultAsync(x => x.Id == id && x.IsActive == true);
+                    if (oldMedicalCase != null)
+                    {
+                        oldMedicalCase.Description = medicalCaseDto.Description;
+                        oldMedicalCase.PatientName = medicalCaseDto.PatientName;
+                        oldMedicalCase.PatientPhone = medicalCaseDto.PatientPhone;
+                        oldMedicalCase.PatientAge = medicalCaseDto.PatientAge;
+                        oldMedicalCase.Diagnosis = medicalCaseDto.Diagnosis;
+                        if (medicalCaseDto.CasePictures.Count > 0)
+                        {
+                            oldMedicalCase.PicturePaths = string.Empty;
+                            foreach (var x in medicalCaseDto.CasePictures)
+                            {
+                                if (x != medicalCaseDto.CasePictures.Last())
+                                    oldMedicalCase.PicturePaths += x + ",";
+                                else
+                                    oldMedicalCase.PicturePaths += x;
+                            }
+                        }
+                        _context.MedicalCase.Update(oldMedicalCase);
+                        await _context.SaveChangesAsync();
+                        return Ok();
+                    }
+                    else
+                    {
+                        return BadRequest("Cant find old medical case");
                     }
                 }
             }

@@ -1,0 +1,60 @@
+﻿@page
+@model DentistPortal_Client.Pages.DoctorPages.MedicalCases.EditDeleteMedicalCaseModel
+@{
+
+    <form method="post" enctype="multipart/form-data" class="align-content-center col-6 w-100" style="margin:auto;text-align:center;color:#1A2238;">
+        <input name="medicalCase.Id" value="@Model.MedicalCase.Id" hidden>
+        <div class="form-floating form-outline mb-4">
+            <input name="medicalCase.PatientName" class="form-control" value="@Model.MedicalCase.PatientName">
+            <label class="form-label">Patient Name</label>
+        </div>
+        <div class="form-floating form-outline mb-4">
+            <input name="medicalCase.PatientPhone" class="form-control" value="@Model.MedicalCase.PatientPhone">
+            <label class="form-label">Patient Phone</label>
+        </div>
+        <div class="form-floating form-outline mb-4">
+            <input name="medicalCase.PatientAge" class="form-control" value="@Model.MedicalCase.PatientAge">
+            <label class="form-label">Pateint Age</label>
+        </div>
+        <div class="form-floating form-outline mb-4">
+            <input name="medicalCase.Diagnosis" class="form-control" value="@Model.MedicalCase.Diagnosis">
+            <label class="form-label">Diagnosis</label>
+        </div>
+        <div class="form-floating form-outline mb-4">
+            <textarea name="medicalCase.Description" class="form-control" rows="5">@Model.MedicalCase.Description</textarea>
+            <label class="form-label">Description</label>
+        </div>
+        <div class="form-floating form-outline mb-4">
+            <input name="files" class="form-control" type="file" multiple>
+            <label class="form-label">Upload Case Pictures</label>
+        </div>
+        <button asp-page-handler="Edit" type="submit" class="btn btn-success btn-block mb-3"><i class="bi bi-patch-plus"> Edit</i></button>
+        <button asp-page-handler="Delete" asp-route-id="@Model.MedicalCase.Id" type="submit" class="btn btn-danger btn-block mb-3"><i class="bi bi-trash"> Delete</i></button>
+    </form>
+
+}
+@if (@Model.Msg != null)
+{
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    if (@Model.Status == "success")
+    {
+        <script type="text/javascript">
+            Swal.fire({
+                icon: 'success',
+                title: '@Model.Msg',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        </script>
+    }
+    else
+    {
+        <script type="text/javascript">
+            Swal.fire({
+                icon: 'error',
+                title: '@Model.Msg',
+                showConfirmButton: true
+            })
+        </script>
+    }
+}
