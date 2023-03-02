@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "sq2rDUyHDPoebfOZWou5a+iQiy4aRdBC2kbXh7Ij7fPT8Fa4LtnMQP0RQ9JlYqy8I/5q7NSbJua7ljbVcFXUbA==",
+  "dgSpecHash": "9cCfd5eGaDKslzplsAVgJnF7S3Ez745d1N45T4NysX0bMoKFcgJ2ALGYYBODw7ILspUTRftHHlY+x0zZWI4OoQ==",
   "success": true,
   "projectFilePath": "D:\\FCAI\\GP\\DentistPortal_Client\\DentistPortal_Client\\DentistPortal_Client.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\youne\\.nuget\\packages\\blazored.localstorage\\4.3.0\\blazored.localstorage.4.3.0.nupkg.sha512",
     "C:\\Users\\youne\\.nuget\\packages\\currietechnologies.razor.sweetalert2\\5.4.0\\currietechnologies.razor.sweetalert2.5.4.0.nupkg.sha512",
     "C:\\Users\\youne\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\6.0.14\\microsoft.aspnetcore.authentication.jwtbearer.6.0.14.nupkg.sha512",
     "C:\\Users\\youne\\.nuget\\packages\\microsoft.aspnetcore.authorization\\6.0.0\\microsoft.aspnetcore.authorization.6.0.0.nupkg.sha512",

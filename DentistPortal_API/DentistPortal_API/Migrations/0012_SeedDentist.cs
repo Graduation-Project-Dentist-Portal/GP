@@ -43,6 +43,20 @@ namespace DentistPortal_API.Migrations
                 IdentityCardPicture = "test",
                 UniversityCardPicture = "test",
                 Level = 0
+            })
+            .Row(new
+            {
+                Id = Guid.Parse("e0406609-ed2e-466d-87b8-7b8fb1c34800"),
+                Username = "MohamedKhaled",
+                FirstName = "Mohamed",
+                LastName = "Khaled",
+                PasswordHash = hasher.HashPassword(new dentist(), "123"),
+                IsActive = true,
+                Graduated = false,
+                University = "Helwan",
+                IdentityCardPicture = "test",
+                UniversityCardPicture = "test",
+                Level = 3
             });
         }
     }

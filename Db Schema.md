@@ -49,7 +49,7 @@ Tables:
 	| String | ToolName |  |
 	| String | Description |  |
 	| Float | ToolPrice |  |
-	| Guid | SellerId | Foreign Key => (Patient.Id) or Foreign Key => (Dentist.Id) |		
+	| Guid | SellerId | Foreign Key => (Dentist.Id) |		
 	| string | PicturePaths | |
 	| Boolean | IsActive | |
 
@@ -85,7 +85,9 @@ Tables:
 	| String | PatientAge |  |	
 	| string | PicturePaths | |
 	| string | Diagnosis | |
+	| string | CaseStatus | |
 	| Guid | DoctorId | Foreign Key => (Dentist.Id) |
+	| TimeStamp | TimeCreated |  |
 	| Boolean | IsActive | |
 
 - Clinic
@@ -110,11 +112,10 @@ Relationships:
 | Type | Tables involved 
 | --- | --- |
 | One to One | Dentist/Patient to RefreshToken |
-| One to Many | Dentist/Patient to toolForSale |
+| One to Many | Dentist to toolForSale |
 | One to Many | Dentist/Patient to Post |
 | One to Many | Dentist/Patient to Job |
 | One to Many | Dentist to MedicalCase |
 
 Notes:
--	User identity card still messing
 -	jobs contact info and the job owner still missing

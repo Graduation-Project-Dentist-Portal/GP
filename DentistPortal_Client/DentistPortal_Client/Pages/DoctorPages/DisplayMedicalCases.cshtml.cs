@@ -11,7 +11,13 @@ namespace DentistPortal_Client.Pages.DoctorPages
 {
     public class DisplayMedicalCasesModel : PageModel
     {
-        IConfiguration config = new ConfigurationBuilder()
+        private IHttpClientFactory _httpClient;
+        public Guid DoctorId;
+        public DisplayMedicalCasesModel(IHttpClientFactory httpClientFactory)
+        {
+            _httpClient = httpClientFactory;
+        }
+        public IConfiguration config = new ConfigurationBuilder()
                .AddJsonFile("appsettings.json")
                .AddEnvironmentVariables()
                .Build();
@@ -19,15 +25,18 @@ namespace DentistPortal_Client.Pages.DoctorPages
         public string Msg { get; set; } = String.Empty;
         [TempData]
         public string Status { get; set; } = String.Empty;
-        public string Token { get; set; }
         public List<MedicalCase> MedicalCases = new();
         public string[] Pictures { get; set; }
-        public async Task OnGet(string token)
+        public async Task OnGet()
         {
-            Token = token;
-            var httpClient = HttpContext.RequestServices.GetService<IHttpClientFactory>();
-            var client = httpClient.CreateClient();
+            LoginModel model = new LoginModel(_httpClient);
+            await model.GetNewToken(HttpContext.Session.GetString("Token"), HttpContext);
+            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
+            DoctorId = Guid.Parse(jwt.Claims.First().Value);
+            //var httpClient = HttpContext.RequestServices.GetService<IHttpClientFactory>();
+            var client = _httpClient.CreateClient();
             client.BaseAddress = new Uri(config["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
             var request = await client.GetStringAsync("/api/display-medical-cases");
             if (request is not null)
             {
@@ -46,7 +55,7 @@ namespace DentistPortal_Client.Pages.DoctorPages
             }
         }
 
-        public async Task<IActionResult> OnPost(MedicalCaseDto medicalCase, string token, List<IFormFile> files)
+        public async Task<IActionResult> OnPost(MedicalCaseDto medicalCase, List<IFormFile> files)
         {
             foreach (var file in files)
             {
@@ -62,11 +71,13 @@ namespace DentistPortal_Client.Pages.DoctorPages
                     }
                 }
             }
+            var token = HttpContext.Session.GetString("Token");
             var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
             medicalCase.DoctorId = Guid.Parse(jwt.Claims.First().Value);
-            var httpClient = HttpContext.RequestServices.GetService<IHttpClientFactory>();
-            var client = httpClient.CreateClient();
+            //var httpClient = HttpContext.RequestServices.GetService<IHttpClientFactory>();
+            var client = _httpClient.CreateClient();
             client.BaseAddress = new Uri(config["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var jsonCategory = JsonSerializer.Serialize(medicalCase);
             var content = new StringContent(jsonCategory, Encoding.UTF8, "application/json");
             var request = await client.PostAsync("/api/create-medical-case", content);
@@ -74,13 +85,34 @@ namespace DentistPortal_Client.Pages.DoctorPages
             {
                 Msg = "Successfully added medical case!";
                 Status = "success";
-                return RedirectToPage("/DoctorPages/DisplayMedicalCases", new { token });
+                return RedirectToPage("/DoctorPages/DisplayMedicalCases");
             }
             else
             {
                 Msg = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 Status = "error";
-                return RedirectToPage("/DoctorPages/DisplayMedicalCases", new { token });
+                return RedirectToPage("/DoctorPages/DisplayMedicalCases");
+            }
+        }
+
+        public async Task<IActionResult> OnPostDelete(Guid id)
+        {
+            var token = HttpContext.Session.GetString("Token");
+            var client = _httpClient.CreateClient();
+            client.BaseAddress = new Uri(config["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            var request = await client.DeleteAsync($"api/delete-medCase/{id}");
+            if (request.IsSuccessStatusCode)
+            {
+                Msg = "Deleted successfully!";
+                Status = "success";
+                return RedirectToPage("");
+            }
+            else
+            {
+                Msg = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                Status = "error";
+                return RedirectToPage("");
             }
         }
     }

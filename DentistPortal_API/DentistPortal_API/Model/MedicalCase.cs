@@ -11,5 +11,7 @@
         public bool IsActive { get; set; }
         public string PicturePaths { get; set; } = String.Empty;
         public string Diagnosis { get; set; } = String.Empty;
+        public string CaseStatus { get; set; } = String.Empty;
+        public DateTime TimeCreated { get; set; }
     }
 }

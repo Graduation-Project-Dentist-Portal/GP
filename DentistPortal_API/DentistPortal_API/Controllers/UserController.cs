@@ -1,6 +1,7 @@
 ﻿using DentistPortal_API.Data;
 using DentistPortal_API.DTO;
 using DentistPortal_API.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -33,14 +34,13 @@ namespace DentistPortal_API.Controllers
             }
             var loggedUserDentist = await _context.Dentist.FirstOrDefaultAsync(x => x.Username == user.Username && x.IsActive == true);
             var loggedUserPatient = await _context.Patient.FirstOrDefaultAsync(x => x.Username == user.Username && x.IsActive == true);
-            var hasherDentist = new PasswordHasher<Dentist>();
-            var hasherPatient = new PasswordHasher<Patient>();
             if (loggedUserDentist == null && loggedUserPatient == null)
             {
                 return BadRequest("User not found!");
             }
             if (loggedUserDentist != null)
             {
+                var hasherDentist = new PasswordHasher<Dentist>();
                 if (hasherDentist.VerifyHashedPassword(loggedUserDentist, loggedUserDentist.PasswordHash, user.Password).Equals(PasswordVerificationResult.Success))
                 {
                     string token = await CreateToken(loggedUserDentist.Id);
@@ -53,6 +53,7 @@ namespace DentistPortal_API.Controllers
             }
             else
             {
+                var hasherPatient = new PasswordHasher<Patient>();
                 if (hasherPatient.VerifyHashedPassword(loggedUserPatient, loggedUserPatient.PasswordHash, user.Password).Equals(PasswordVerificationResult.Success))
                 {
                     string token = await CreateToken(loggedUserPatient.Id);
@@ -109,7 +110,7 @@ namespace DentistPortal_API.Controllers
             return refreshToken;
         }
 
-        async private Task SetRefreshToken(RefreshToken newRT, Guid id)
+        private async Task SetRefreshToken(RefreshToken newRT, Guid id)
         {
             var cookiesOptions = new CookieOptions
             {
@@ -158,6 +159,53 @@ namespace DentistPortal_API.Controllers
                 );
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
             return jwt;
+        }
+
+        [HttpPost]
+        [Route("api/refresh-token/{id}"), Authorize]
+        public async Task<ActionResult<string>> RefreshToken([FromBody] string rT, Guid id)
+        {
+            try
+            {
+                RefreshToken refreshToken = await _context.RefreshToken.FirstOrDefaultAsync(x => x.Token.Equals(rT) && x.IsActive == true);
+                var loggedUser = await _context.Dentist.FirstOrDefaultAsync(user => user.Id == id && user.IsActive == true);
+                RefreshToken userRefreshToken = await _context.RefreshToken.FirstOrDefaultAsync(x => x.Id == loggedUser.RefreshTokenId && x.IsActive == true);
+                if (!loggedUser.RefreshTokenId.Equals(refreshToken.Id))
+                    return Unauthorized("Invalid refresh token");
+                else if (userRefreshToken.TimeExpires < DateTime.Now)
+                    return Unauthorized("Token expired");
+                else
+                {
+                    var token = await CreateToken(loggedUser.Id);
+                    var newRT = await CreateRefreshToken();
+                    await SetRefreshToken(newRT, loggedUser.Id);
+                    return Ok(token);
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("api/get-rt"), Authorize]
+        public async Task<ActionResult<RefreshToken>> GetRefreshToken([FromBody] Guid id)
+        {
+            try
+            {
+                var hasher = new PasswordHasher<Dentist>();
+                var loggedUser = await _context.Dentist.FirstOrDefaultAsync(x => x.Id == id && x.IsActive == true);
+                if (loggedUser == null)
+                    return BadRequest("User not found!");
+                RefreshToken refreshToken = await _context.RefreshToken.FirstOrDefaultAsync(x => x.Id == loggedUser.RefreshTokenId && x.IsActive == true);
+                return Ok(refreshToken.Token);
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

@@ -21,6 +21,8 @@ namespace DentistPortal_API.Migrations
                 .WithColumn("DoctorId").AsGuid().NotNullable().ForeignKey("Dentist","Id").OnDelete(System.Data.Rule.Cascade)
                 .WithColumn("PicturePaths").AsString(int.MaxValue).NotNullable()
                 .WithColumn("Diagnosis").AsString().NotNullable()
+                .WithColumn("TimeCreated").AsDateTime().NotNullable()
+                .WithColumn("CaseStatus").AsString().NotNullable()
                 .WithColumn("IsActive").AsBoolean().NotNullable();
         }
     }

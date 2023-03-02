@@ -2,7 +2,11 @@
 @model DentistPortal_Client.Pages.DoctorPages.DisplayMedicalCasesModel
 @using System.Drawing
 @using DentistPortal_Client.DTO
+@using System.Net.Http
+@using Microsoft.AspNetCore.Http
+@using Microsoft.Extensions.DependencyInjection;
 @{
+    Guid id = new();
     int counter = 0;
     <div>
         <div class="text-center">
@@ -17,6 +21,10 @@
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target=@("#collapse"+@counter) aria-controls=@("collapse"+@counter) aria-expanded="true">
                                 @medCase.Diagnosis
                             </button>
+                            @if (medCase.DoctorId == Model.DoctorId)
+                            {
+                                <a onclick="@id = @medCase.Id" class="btn btn-danger" style="color:white;margin-top:10px;font-style:normal" data-bs-toggle="modal" data-bs-target="#deleteCaseModal"><i class="bi bi-trash" style="font-style:normal"> Delete</i></a>
+                            }
                         </h2>
                         <div id=@("collapse"+@counter) class="accordion-collapse collapse" aria-labelledby=@("heading"+@counter) data-bs-parent="#accordionExample">
                             <div class="accordion-body">
@@ -55,7 +63,7 @@
             </div>
         </div>
         <br>
-        <!-- Button trigger modal -->
+        <!-- Button trigger CreateModal -->
         <div class="text-center">
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddMedicalCase">
                 Add Medical Case
@@ -63,7 +71,7 @@
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- CreateModal -->
     <div class="modal fade" id="AddMedicalCase" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
@@ -73,7 +81,6 @@
                 </div>
                 <div class="modal-body modal-lg">
                     <form method="post" enctype="multipart/form-data" class="align-content-center col-6 w-100" style="margin:auto;text-align:center;color:#1A2238;">
-                        <input name="token" value=@Model.Token hidden>
                         <div class="form-floating form-outline mb-4">
                             <input name="medicalCase.PatientName" class="form-control">
                             <label class="form-label">Patient Name</label>
@@ -104,8 +111,30 @@
             </div>
         </div>
     </div>
-}
 
+    <!--Delete MedicalCaseModal-->
+
+    <div class="modal fade" id="deleteCaseModal" tabindex="-1" aria-labelledby="deleteCaseModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="text-align:center">
+                    Are you sure?
+                    <br />
+                    You won't be able to revert this!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <form asp-page-handler="Delete" asp-route-id="@id" method="post">
+                        <button type="submit" class="btn btn-primary" style="margin-right:125px" data-bs-dismiss="modal">Yes, delete it!</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 @if (@Model.Msg != null)
 {
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>

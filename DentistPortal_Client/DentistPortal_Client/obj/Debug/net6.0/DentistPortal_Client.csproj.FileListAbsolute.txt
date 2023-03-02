@@ -12,13 +12,9 @@ D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Micro
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.AspNetCore.Authentication.Core.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.AspNetCore.Authentication.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.AspNetCore.Authentication.OAuth.dll
-D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.AspNetCore.Authorization.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.AspNetCore.Authorization.Policy.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.AspNetCore.Components.Authorization.dll
-D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.AspNetCore.Components.dll
-D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.AspNetCore.Components.Forms.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.AspNetCore.Components.Server.dll
-D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.AspNetCore.Components.Web.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.AspNetCore.Connections.Abstractions.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.AspNetCore.CookiePolicy.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.AspNetCore.Cors.dll
@@ -49,7 +45,6 @@ D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Micro
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.AspNetCore.Identity.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.AspNetCore.Localization.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.AspNetCore.Localization.Routing.dll
-D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.AspNetCore.Metadata.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.AspNetCore.Mvc.Abstractions.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.AspNetCore.Mvc.ApiExplorer.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.AspNetCore.Mvc.Core.dll
@@ -101,7 +96,6 @@ D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Micro
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.Extensions.Configuration.UserSecrets.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.Extensions.Configuration.Xml.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.Extensions.DependencyInjection.Abstractions.dll
-D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.Extensions.DependencyInjection.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.Extensions.Diagnostics.HealthChecks.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.Extensions.Features.dll
@@ -117,7 +111,6 @@ D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Micro
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.Extensions.Identity.Stores.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.Extensions.Localization.Abstractions.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.Extensions.Localization.dll
-D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.Extensions.Logging.Abstractions.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.Extensions.Logging.Configuration.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.Extensions.Logging.Console.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.Extensions.Logging.Debug.dll
@@ -131,7 +124,6 @@ D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Micro
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.Extensions.Options.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.Extensions.Primitives.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.Extensions.WebEncoders.dll
-D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.JSInterop.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.Net.Http.Headers.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.VisualBasic.Core.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.VisualBasic.dll
@@ -360,3 +352,12 @@ D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\Microsoft.
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\System.Drawing.Common.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
 D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
+D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.AspNetCore.Authorization.dll
+D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.AspNetCore.Components.dll
+D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.AspNetCore.Components.Forms.dll
+D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.AspNetCore.Components.Web.dll
+D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.AspNetCore.Metadata.dll
+D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.Extensions.DependencyInjection.dll
+D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.Extensions.Logging.Abstractions.dll
+D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\refs\Microsoft.JSInterop.dll
+D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client\bin\Debug\net6.0\Blazored.LocalStorage.dll
