@@ -1,37 +1,118 @@
 ﻿@page
 @model DentistPortal_Client.Pages.DoctorPages.MedicalCases.EditDeleteMedicalCaseModel
 @{
-
-    <form method="post" enctype="multipart/form-data" class="align-content-center col-6 w-100" style="margin:auto;text-align:center;color:#1A2238;">
-        <input name="medicalCase.Id" value="@Model.MedicalCase.Id" hidden>
+    Guid id = new();
+    Model.Pictures = Model.MedicalCase.PicturePaths.Split(",").Where(x => !string.IsNullOrEmpty(x)).ToArray();
+    <form method="post" enctype="multipart/form-data" class="align-content-center col-6 w-100 needs-validation" style="margin:auto;text-align:center;color:#1A2238;" novalidate>
+        <input name="medicalCaseDto.DoctorId" value="@Model.MedicalCase.DoctorId" hidden>
+        <input name="id" value="@Model.MedicalCase.Id" hidden>
         <div class="form-floating form-outline mb-4">
-            <input name="medicalCase.PatientName" class="form-control" value="@Model.MedicalCase.PatientName">
-            <label class="form-label">Patient Name</label>
+            <input name="medicalCaseDto.PatientName" class="form-control" id="floatingPatientName" placeholder="PatientName" value="@Model.MedicalCase.PatientName" required>
+            <label class="form-label" for="floatingPatientName">Patient Name</label>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Please fill the patient name.
+            </div>
         </div>
         <div class="form-floating form-outline mb-4">
-            <input name="medicalCase.PatientPhone" class="form-control" value="@Model.MedicalCase.PatientPhone">
-            <label class="form-label">Patient Phone</label>
+            <input name="medicalCaseDto.PatientPhone" class="form-control" id="floatingPatientPhone" placeholder="PatientPhone" value="@Model.MedicalCase.PatientPhone" required>
+            <label class="form-label" for="floatingPatientPhone">Patient Phone</label>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Please fill the patient phone.
+            </div>
         </div>
         <div class="form-floating form-outline mb-4">
-            <input name="medicalCase.PatientAge" class="form-control" value="@Model.MedicalCase.PatientAge">
-            <label class="form-label">Pateint Age</label>
+            <input name="medicalCaseDto.PatientAge" class="form-control" id="floatingPatientAge" placeholder="PatientAge" value="@Model.MedicalCase.PatientAge" required>
+            <label class="form-label" for="floatingPatientAge">Pateint Age</label>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Please fill the patient age.
+            </div>
         </div>
         <div class="form-floating form-outline mb-4">
-            <input name="medicalCase.Diagnosis" class="form-control" value="@Model.MedicalCase.Diagnosis">
-            <label class="form-label">Diagnosis</label>
+            <input name="medicalCaseDto.Diagnosis" class="form-control" id="floatingPatientDiagnosis" placeholder="PatientDiagnosis" value="@Model.MedicalCase.Diagnosis" required>
+            <label class="form-label" for="floatingPatientDiagnosis">Diagnosis</label>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Please fill the patient diagnosis.
+            </div>
         </div>
         <div class="form-floating form-outline mb-4">
-            <textarea name="medicalCase.Description" class="form-control" rows="5">@Model.MedicalCase.Description</textarea>
-            <label class="form-label">Description</label>
+            <textarea name="medicalCaseDto.Description" class="form-control resize" rows="5" id="floatingPatientDescription" placeholder="PatientDesription" required>@Model.MedicalCase.Description</textarea>
+            <label class="form-label" for="floatingPatientDescription">Description</label>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Please fill the patient case description.
+            </div>
+        </div>
+        <div id=@("carouselExampleControls") class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner text-center">
+                @foreach (var item in Model.Pictures)
+                {
+                    if (item == Model.Pictures[0])
+                    {
+                        <div class="carousel-item active">
+                            <img src="data:image/png;base64,@item" alt="..." width="400" height="400" />
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="carousel-item">
+                            <img src="data:image/png;base64,@item" alt="..." width="400" height="400" />
+                        </div>
+                    }
+                }
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target=@("#carouselExampleControls") data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target=@("#carouselExampleControls") data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
         <div class="form-floating form-outline mb-4">
             <input name="files" class="form-control" type="file" multiple>
-            <label class="form-label">Upload Case Pictures</label>
+            <label class="form-label">Upload new case pictures</label>
         </div>
-        <button asp-page-handler="Edit" type="submit" class="btn btn-success btn-block mb-3"><i class="bi bi-patch-plus"> Edit</i></button>
-        <button asp-page-handler="Delete" asp-route-id="@Model.MedicalCase.Id" type="submit" class="btn btn-danger btn-block mb-3"><i class="bi bi-trash"> Delete</i></button>
+        <button asp-page-handler="Edit" type="submit" class="btn btn-success btn-block mb-3"><i class="bi bi-pencil-square"> Edit</i></button>
+        <a onclick="@(id=Model.MedicalCase.Id)" data-bs-toggle="modal" data-bs-target="#deleteCaseModal" class="btn btn-danger btn-block mb-3"><i class="bi bi-trash"> Delete</i></a>
     </form>
 
+    <!--Delete MedicalCaseModal-->
+
+    <div class="modal fade" id="deleteCaseModal" tabindex="-1" aria-labelledby="deleteCaseModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="text-align:center">
+                    Are you sure?
+                    <br />
+                    You won't be able to revert this!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <form asp-page-handler="Delete" asp-route-id="@id" method="post">
+                        <button type="submit" class="btn btn-danger" style="margin-right:125px" data-bs-dismiss="modal">Yes, delete it!</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 }
 @if (@Model.Msg != null)
 {

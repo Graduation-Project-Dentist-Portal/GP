@@ -23,6 +23,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRG9jdG9yUGFnZXNcTWVkaWNhbENhc2VzXEVkaXREZWxldGVNZWRpY2FsQ2FzZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/FCAI/GP/DentistPortal_Client/DentistPortal_Client/Pages/DoctorPages/MedicalCases/FinishCase.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRG9jdG9yUGFnZXNcTWVkaWNhbENhc2VzXEZpbmlzaENhc2UuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FCAI/GP/DentistPortal_Client/DentistPortal_Client/Pages/DoctorPages/MedicalCases/MyMedicalCases.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRG9jdG9yUGFnZXNcTWVkaWNhbENhc2VzXE15TWVkaWNhbENhc2VzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/FCAI/GP/DentistPortal_Client/DentistPortal_Client/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 

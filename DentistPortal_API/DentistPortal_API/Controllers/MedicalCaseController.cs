@@ -22,7 +22,7 @@ namespace DentistPortal_API.Controllers
         {
             try
             {
-                if (string.IsNullOrEmpty(medicalCaseDto.Description) || string.IsNullOrEmpty(medicalCaseDto.PatientName) || string.IsNullOrEmpty(medicalCaseDto.PatientPhone) || string.IsNullOrEmpty(medicalCaseDto.PatientAge) || medicalCaseDto.DoctorId == Guid.Empty || string.IsNullOrEmpty(medicalCaseDto.CasePictures[0]) || string.IsNullOrEmpty(medicalCaseDto.Diagnosis))
+                if (string.IsNullOrEmpty(medicalCaseDto.Description) || string.IsNullOrEmpty(medicalCaseDto.PatientName) || string.IsNullOrEmpty(medicalCaseDto.PatientPhone) || medicalCaseDto.PatientPhone == null || medicalCaseDto.DoctorId == Guid.Empty || string.IsNullOrEmpty(medicalCaseDto.CasePictures[0]) || string.IsNullOrEmpty(medicalCaseDto.Diagnosis))
                 {
                     return BadRequest("Cant be empty");
                 }
@@ -32,6 +32,15 @@ namespace DentistPortal_API.Controllers
                     return BadRequest("Already Added!");
                 }
                 medicalCase = new();
+                if (medicalCaseDto.AssignedToMe == true)
+                {
+                    if (await _context.MedicalCase.CountAsync(x => x.AssignedDoctorId == medicalCaseDto.DoctorId && x.CaseStatus == "Pending") >= 2)
+                        return BadRequest("Cant take more than 2 cases at a time!");
+                    medicalCase.AssignedDoctorId = medicalCaseDto.DoctorId;
+                    medicalCase.CaseStatus = "Pending";
+                }
+                else
+                    medicalCase.CaseStatus = "Open";
                 medicalCase.Id = Guid.NewGuid();
                 medicalCase.PatientName = medicalCaseDto.PatientName;
                 medicalCase.PatientPhone = medicalCaseDto.PatientPhone;
@@ -48,7 +57,6 @@ namespace DentistPortal_API.Controllers
                         medicalCase.PicturePaths += x;
                 }
                 medicalCase.TimeCreated = DateTime.Now;
-                medicalCase.CaseStatus = "Open";
                 await _context.MedicalCase.AddAsync(medicalCase);
                 await _context.SaveChangesAsync();
                 return Ok();
@@ -65,7 +73,7 @@ namespace DentistPortal_API.Controllers
         {
             try
             {
-                return Ok(await _context.MedicalCase.Where(x => x.IsActive == true).OrderBy(x => x.TimeCreated).ToListAsync());
+                return Ok(await _context.MedicalCase.Where(x => x.IsActive == true && x.CaseStatus == "Open").OrderBy(x => x.TimeCreated).ToListAsync());
             }
             catch (Exception ex)
             {
@@ -138,7 +146,7 @@ namespace DentistPortal_API.Controllers
         {
             try
             {
-                if (id == Guid.Empty || string.IsNullOrEmpty(medicalCaseDto.Description) || string.IsNullOrEmpty(medicalCaseDto.PatientName) || string.IsNullOrEmpty(medicalCaseDto.PatientPhone) || string.IsNullOrEmpty(medicalCaseDto.PatientAge) || string.IsNullOrEmpty(medicalCaseDto.Diagnosis))
+                if (id == Guid.Empty || string.IsNullOrEmpty(medicalCaseDto.Description) || string.IsNullOrEmpty(medicalCaseDto.PatientName) || string.IsNullOrEmpty(medicalCaseDto.PatientPhone) || medicalCaseDto.PatientPhone == null || string.IsNullOrEmpty(medicalCaseDto.Diagnosis))
                 {
                     return BadRequest("Cant be empty");
                 }
@@ -176,6 +184,103 @@ namespace DentistPortal_API.Controllers
             catch (Exception e)
             {
                 return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("api/my-medical-cases/{id}"), Authorize]
+        public async Task<IActionResult> GetMyMedicalCases(Guid id)
+        {
+            try
+            {
+                return Ok(await _context.MedicalCase.Where(x => x.IsActive == true && x.AssignedDoctorId == id).ToListAsync());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut]
+        [Route("api/take-medical-case/{caseId}"), Authorize]
+        public async Task<IActionResult> TakeMedicalCase(Guid caseId, [FromBody] Guid userId)
+        {
+            try
+            {
+                if (await _context.MedicalCase.CountAsync(x => x.AssignedDoctorId == userId && x.CaseStatus == "Pending") >= 2)
+                    return BadRequest("Cant take more than 2 cases at a time!");
+                var medCase = await _context.MedicalCase.FirstOrDefaultAsync(x => x.Id == caseId);
+                if (medCase == null)
+                { return BadRequest("Cant find the case"); }
+                else
+                {
+                    medCase.AssignedDoctorId = userId;
+                    medCase.CaseStatus = "Pending";
+                    _context.MedicalCase.Update(medCase);
+                    await _context.SaveChangesAsync();
+                    return Ok();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut]
+        [Route("api/leave-medical-case"), Authorize]
+        public async Task<IActionResult> LeaveMedicalCase([FromBody] Guid caseId)
+        {
+            try
+            {
+                var medCase = await _context.MedicalCase.FirstOrDefaultAsync(x => x.Id == caseId);
+                if (medCase == null)
+                { return BadRequest("Cant find the case"); }
+                else
+                {
+                    medCase.AssignedDoctorId = Guid.Empty;
+                    medCase.CaseStatus = "Open";
+                    _context.MedicalCase.Update(medCase);
+                    await _context.SaveChangesAsync();
+                    return Ok();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("api/finish-medical-case"), Authorize]
+        public async Task<IActionResult> FinishMedicalCase([FromBody] FinishedCaseDto finishedCaseDto)
+        {
+            if (finishedCaseDto.CaseId == Guid.Empty || finishedCaseDto.DoctorId == Guid.Empty || string.IsNullOrEmpty(finishedCaseDto.BeforePicture) || string.IsNullOrEmpty(finishedCaseDto.AfterPicture) || string.IsNullOrEmpty(finishedCaseDto.DoctorWork))
+                return BadRequest("Cant be empty");
+            try
+            {
+                var medCase = await _context.MedicalCase.FirstOrDefaultAsync(x => x.Id == finishedCaseDto.CaseId);
+                if (medCase == null)
+                { return BadRequest("Cant find the case"); }
+                else
+                {
+                    medCase.CaseStatus = "Closed";
+                    FinishedCases finishedCase = new();
+                    finishedCase.Id = Guid.NewGuid();
+                    finishedCase.AfterPicture = finishedCaseDto.AfterPicture;
+                    finishedCase.BeforePicture = finishedCaseDto.BeforePicture;
+                    finishedCase.CaseId = finishedCaseDto.CaseId;
+                    finishedCase.DoctorId = finishedCaseDto.DoctorId;
+                    finishedCase.DoctorWork = finishedCaseDto.DoctorWork;
+                    await _context.FinishedCases.AddAsync(finishedCase);
+                    _context.MedicalCase.Update(medCase);
+                    await _context.SaveChangesAsync();
+                    return Ok();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }

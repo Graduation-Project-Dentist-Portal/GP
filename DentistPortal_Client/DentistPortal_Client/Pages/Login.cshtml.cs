@@ -41,6 +41,7 @@ namespace DentistPortal_Client.Pages
                 Msg = "Successfully logged in!";
                 Status = "success";
                 string token = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
                 HttpContext.Session.SetString("Token", token);
                 //_token = token;
                 //var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);

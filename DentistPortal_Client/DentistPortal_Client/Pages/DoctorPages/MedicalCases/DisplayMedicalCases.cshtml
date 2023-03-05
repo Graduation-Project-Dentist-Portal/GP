@@ -20,10 +20,6 @@
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target=@("#collapse"+@counter) aria-controls=@("collapse"+@counter) aria-expanded="true">
                                 @medCase.Diagnosis
                             </button>
-                            @if (medCase.DoctorId == Model.DoctorId)
-                            {
-                                <a class="btn btn-danger" style="color:white;margin-top:10px;font-style:normal" asp-page="EditDeleteMedicalCase" asp-route-id="@medCase.Id"><i class="bi bi-trash" style="font-style:normal">Edit</i></a>
-                            }
                         </h2>
                         <div id=@("collapse"+@counter) class="accordion-collapse collapse" aria-labelledby=@("heading"+@counter) data-bs-parent="#accordionExample">
                             <div class="accordion-body">
@@ -54,6 +50,16 @@
                                         <span class="visually-hidden">Next</span>
                                     </button>
                                 </div>
+                                <div class="d-inline-block">
+                                    <form asp-page-handler="TakeCase" asp-route-caseId="@medCase.Id" method="post">
+
+                                        @if (medCase.DoctorId == Model.DoctorId)
+                                        {
+                                            <a class="btn btn-success" style="color:white;margin-top:10px;font-style:normal" asp-page="EditDeleteMedicalCase" asp-route-id="@medCase.Id"><i class="bi bi-pencil-square" style="font-style:normal"> Edit</i></a>
+                                        }
+                                        <button type="submit" class="btn btn-outline-dark" style="color:white;margin-top:10px;font-style:normal"><i class="bi bi-person-heart" style="font-style:normal;color:black"> Take Case</i></button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -65,7 +71,7 @@
         <!-- Button trigger CreateModal -->
         <div class="text-center">
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddMedicalCase">
-                Add Medical Case
+                <i class="bi bi-plus-circle" style="font-style:normal"> Add Medical Case</i>
             </button>
         </div>
     </div>
@@ -79,32 +85,76 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body modal-lg">
-                    <form method="post" enctype="multipart/form-data" class="align-content-center col-6 w-100" style="margin:auto;text-align:center;color:#1A2238;">
+                    <form method="post" enctype="multipart/form-data" class="align-content-center col-6 w-100 needs-validation" style="margin:auto;color:#1A2238;" novalidate>
                         <div class="form-floating form-outline mb-4">
-                            <input name="medicalCase.PatientName" class="form-control">
-                            <label class="form-label">Patient Name</label>
+                            <input name="medicalCase.PatientName" class="form-control" id="floatingPatientName" placeholder="PatientName" required>
+                            <label class="form-label" for="floatingPatientName">Patient Name</label>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please fill the patient name.
+                            </div>
                         </div>
                         <div class="form-floating form-outline mb-4">
-                            <input name="medicalCase.PatientPhone" class="form-control">
-                            <label class="form-label">Patient Phone</label>
+                            <input name="medicalCase.PatientPhone" class="form-control" id="floatingPatientPhone" placeholder="PatientPhone" required>
+                            <label class="form-label" for="floatingPatientPhone">Patient Phone</label>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please fill the patient phone.
+                            </div>
                         </div>
                         <div class="form-floating form-outline mb-4">
-                            <input name="medicalCase.PatientAge" class="form-control">
-                            <label class="form-label">Pateint Age</label>
+                            <input name="medicalCase.PatientAge" class="form-control" id="floatingPatientAge" placeholder="PatientAge" required>
+                            <label class="form-label" for="floatingPatientAge">Pateint Age</label>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please fill the patient age.
+                            </div>
                         </div>
                         <div class="form-floating form-outline mb-4">
-                            <input name="medicalCase.Diagnosis" class="form-control">
-                            <label class="form-label">Diagnosis</label>
+                            <input name="medicalCase.Diagnosis" class="form-control" id="floatingPatientDiagnosis" placeholder="PatientDiagnosis" required>
+                            <label class="form-label" for="floatingPatientDiagnosis">Diagnosis</label>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please fill the patient diagnosis.
+                            </div>
                         </div>
                         <div class="form-floating form-outline mb-4">
-                            <textarea name="medicalCase.Description" class="form-control" rows="5"></textarea>
-                            <label class="form-label">Description</label>
+                            <textarea name="medicalCase.Description" class="form-control resize" rows="5" id="floatingPatientDescription" placeholder="PatientDesription" required></textarea>
+                            <label class="form-label" for="floatingPatientDescription">Description</label>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please fill the patient case description.
+                            </div>
                         </div>
                         <div class="form-floating form-outline mb-4">
-                            <input name="files" class="form-control" type="file" multiple>
-                            <label class="form-label">Upload Case Pictures</label>
+                            <input name="files" class="form-control" type="file" id="floatingPatientPictures" placeholder="PatientPictures" multiple required>
+                            <label class="form-label" for="floatingPatientPictures">Upload Case Pictures</label>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please add the case pictures.
+                            </div>
                         </div>
-                        <button type="submit" class="btn btn-success btn-block mb-3"><i class="bi bi-patch-plus"> ADD</i></button>
+                        <div class="form-check form-outline mb-4">
+                            <input class="form-check-input" type="checkbox" name="medicalCase.AssignedToMe" value="true">
+                            <label class="form-check-label">
+                                Assign Case to me
+                            </label>
+                        </div>
+                        <div style="text-align:center">
+                            <button type="submit" class="btn btn-success btn-block mb-3"><i class="bi bi-patch-plus text-center" style="font-style:normal;"> Add</i></button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -125,14 +175,13 @@
             })
         </script>
     }
-    else
+    else if (@Model.Status == "error")
     {
         <script type="text/javascript">
             Swal.fire({
                 icon: 'error',
                 title: '@Model.Msg',
-                showConfirmButton: false,
-                timer: 1500
+                showConfirmButton: true
             })
         </script>
     }

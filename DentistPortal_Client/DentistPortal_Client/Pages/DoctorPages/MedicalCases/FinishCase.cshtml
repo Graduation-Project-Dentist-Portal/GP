@@ -1,0 +1,64 @@
+﻿@page
+@model DentistPortal_Client.Pages.DoctorPages.MedicalCases.FinishCaseModel
+@{
+    <form method="post" enctype="multipart/form-data" class="align-content-center col-6 w-100 needs-validation" style="margin:auto;text-align:center;color:#1A2238;" novalidate>
+        <input name="finishedCaseDto.CaseId" value="@Model.FinishedCase.CaseId" hidden>
+        <div class="form-floating form-outline mb-4">
+            <textarea name="finishedCaseDto.DoctorWork" class="form-control resize" rows="5" id="floatingDoctorWork" placeholder="DoctorWork" required>@Model.FinishedCase.DoctorWork</textarea>
+            <label class="form-label" for="floatingDoctorWork">Write what have you done</label>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Please write what you did.
+            </div>
+        </div>
+        <div class="form-floating form-outline mb-4">
+            <input name="before" class="form-control" type="file" required>
+            <label class="form-label">Upload Before Picture</label>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Please add case picture.
+            </div>
+        </div>
+        <div class="form-floating form-outline mb-4">
+            <input name="after" class="form-control" type="file" required>
+            <label class="form-label">Upload After Picture</label>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Please add case picture.
+            </div>
+        </div>
+        <a class="btn btn-secondary" asp-page="MyMedicalCases">Close</a>
+        <button type="submit" class="btn btn-success btn-block"><i class="bi bi-check-circle" style="font-style:normal"> Finish</i></button>
+    </form>
+}
+@if (@Model.Msg != null)
+{
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    if (@Model.Status == "success")
+    {
+        <script type="text/javascript">
+            Swal.fire({
+                icon: 'success',
+                title: '@Model.Msg',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        </script>
+    }
+    else if (@Model.Status == "error")
+    {
+        <script type="text/javascript">
+            Swal.fire({
+                icon: 'error',
+                title: '@Model.Msg',
+                showConfirmButton: true
+            })
+        </script>
+    }
+}

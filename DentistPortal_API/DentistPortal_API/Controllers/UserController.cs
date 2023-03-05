@@ -43,7 +43,7 @@ namespace DentistPortal_API.Controllers
                 var hasherDentist = new PasswordHasher<Dentist>();
                 if (hasherDentist.VerifyHashedPassword(loggedUserDentist, loggedUserDentist.PasswordHash, user.Password).Equals(PasswordVerificationResult.Success))
                 {
-                    string token = await CreateToken(loggedUserDentist.Id);
+                    string token = await CreateToken(loggedUserDentist.Id, "Dentist");
                     var refreshToken = await CreateRefreshToken();
                     await SetRefreshToken(refreshToken, loggedUserDentist.Id);
                     return Ok(token);
@@ -56,7 +56,7 @@ namespace DentistPortal_API.Controllers
                 var hasherPatient = new PasswordHasher<Patient>();
                 if (hasherPatient.VerifyHashedPassword(loggedUserPatient, loggedUserPatient.PasswordHash, user.Password).Equals(PasswordVerificationResult.Success))
                 {
-                    string token = await CreateToken(loggedUserPatient.Id);
+                    string token = await CreateToken(loggedUserPatient.Id, "Patient");
                     var refreshToken = await CreateRefreshToken();
                     await SetRefreshToken(refreshToken, loggedUserPatient.Id);
                     return Ok(token);
@@ -142,11 +142,12 @@ namespace DentistPortal_API.Controllers
             await _context.SaveChangesAsync();
         }
 
-        private async Task<string> CreateToken(Guid id)
+        private async Task<string> CreateToken(Guid id, string role)
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier,id.ToString())
+                new Claim(ClaimTypes.NameIdentifier,id.ToString()),
+                new Claim(ClaimTypes.Role,role.ToString())
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Token").Value));
             var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
@@ -176,7 +177,7 @@ namespace DentistPortal_API.Controllers
                     return Unauthorized("Token expired");
                 else
                 {
-                    var token = await CreateToken(loggedUser.Id);
+                    var token = await CreateToken(loggedUser.Id, "Dentist");
                     var newRT = await CreateRefreshToken();
                     await SetRefreshToken(newRT, loggedUser.Id);
                     return Ok(token);

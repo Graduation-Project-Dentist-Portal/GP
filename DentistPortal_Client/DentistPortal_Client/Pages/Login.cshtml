@@ -4,16 +4,28 @@
 @{
     Layout = "Shared/_LoginRegisterLayout";
     <div style="margin-top:200px">
-        <form method="post" class="align-content-center col-6 w-25" style="margin:auto;text-align:center;color:#1A2238;">
+        <form method="post" class="align-content-center col-6 w-25 needs-validation" style="margin:auto;text-align:center;color:#1A2238;">
             <div class="form-floating form-outline mb-4">
-                <Input id="name" asp-for="User.Username" class="form-control" />
-                <label class="form-label" for="floatingInput">Username</label>
+                <Input id="floatingUsername" asp-for="User.Username" class="form-control" placeholder="Username" required />
+                <label class="form-label" for="floatingUsername">Username</label>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please enter your username.
+                </div>
             </div>
             <div class="form-floating form-outline mb-4">
-                <Input id="password" asp-for="User.Password" type="password" class="form-control" />
-                <label class="form-label">Password</label>
+                <Input id="floatingPassword" asp-for="User.Password" type="password" class="form-control" placeholder="Passowrd" required />
+                <label class="form-label" for="floatingPassword">Password</label>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please enter your password
+                </div>
             </div>
-            <button type="submit" class="btn btn-success"><i class="bi bi-door-open-fill"> Sign in</i></button>
+            <button type="submit" class="btn btn-success"><i class="bi bi-door-open"> Sign in</i></button>
         </form>
         <br /><br />
         <div class="text-center">

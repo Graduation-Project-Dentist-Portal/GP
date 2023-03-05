@@ -73,15 +73,14 @@ namespace DentistPortal_Client.Pages.DoctorPages.MedicalCases
                 return RedirectToPage("");
             }
         }
-        public async Task<IActionResult> OnPostEdit(MedicalCase medicalCase, List<IFormFile>? files)
+        public async Task<IActionResult> OnPostEdit(MedicalCaseDto medicalCaseDto, List<IFormFile>? files, Guid id)
         {
-            MedicalCaseDto medicalCaseDto = new MedicalCaseDto();
-            medicalCaseDto.DoctorId = medicalCase.DoctorId;
-            medicalCaseDto.PatientPhone = medicalCase.PatientPhone;
-            medicalCaseDto.PatientName = medicalCase.PatientName;
-            medicalCaseDto.Description = medicalCase.Description;
-            medicalCaseDto.PatientAge = medicalCase.PatientAge;
-            medicalCaseDto.Diagnosis = medicalCase.Diagnosis;
+            if (medicalCaseDto.PatientAge <= 0 || medicalCaseDto.PatientAge >= 100 || medicalCaseDto.PatientAge != (int)medicalCaseDto.PatientAge)
+            {
+                Msg = "Wrong input for Patient Age!";
+                Status = "error";
+                return RedirectToPage("", new { id });
+            }
             if (files != null)
             {
                 foreach (var file in files)
@@ -106,7 +105,7 @@ namespace DentistPortal_Client.Pages.DoctorPages.MedicalCases
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var jsonCategory = JsonSerializer.Serialize(medicalCaseDto);
             var content = new StringContent(jsonCategory, Encoding.UTF8, "application/json");
-            var request = await client.PutAsync($"api/edit-medical-case/{medicalCase.Id}", content);
+            var request = await client.PutAsync($"api/edit-medical-case/{id}", content);
             if (request.IsSuccessStatusCode)
             {
                 Msg = "Edited successfully!";
@@ -117,7 +116,7 @@ namespace DentistPortal_Client.Pages.DoctorPages.MedicalCases
             {
                 Msg = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 Status = "error";
-                return RedirectToPage("", new { medicalCase.Id });
+                return RedirectToPage("", new { id });
             }
         }
     }

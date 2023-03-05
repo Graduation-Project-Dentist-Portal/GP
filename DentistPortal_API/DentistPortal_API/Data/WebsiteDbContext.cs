@@ -12,5 +12,6 @@ namespace DentistPortal_API.Data
         public DbSet<RefreshToken> RefreshToken { get; set; }
         public DbSet<MedicalCase> MedicalCase { get; set; }
         public DbSet<Picture> Picture { get; set; }
+        public DbSet<FinishedCases> FinishedCases { get; set; }
     }
 }

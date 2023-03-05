@@ -82,11 +82,12 @@ Tables:
 	| String | Description |  |
 	| String | PatientName |  |
 	| String | PatientPhone |  |
-	| String | PatientAge |  |	
+	| int | PatientAge |  |	
 	| string | PicturePaths | |
 	| string | Diagnosis | |
 	| string | CaseStatus | |
 	| Guid | DoctorId | Foreign Key => (Dentist.Id) |
+	| Guid | AssignedDoctorId | Foreign Key => (Dentist.Id) |
 	| TimeStamp | TimeCreated |  |
 	| Boolean | IsActive | |
 
@@ -94,7 +95,7 @@ Tables:
 
 	| Field Type | Field Name | Keys
 	| --- | --- | --- |
-    | Guid |Id | Primary Key |
+    | Guid | Id | Primary Key |
 	| String | Adress |  |
 	| Guid | DoctorId | Foreign Key => (Patient.Id) or Foreign Key => (Dentist.Id) |
 	| String | ClinicPhone |  |
@@ -103,9 +104,21 @@ Tables:
 
 	| Field Type | Field Name | Keys
 	| --- | --- | --- |
-    | Guid |Id | Primary Key |
+    | Guid | Id | Primary Key |
 	| String | Comment |  |
 	| Guid | ClinicId | Foreign Key => (Clinic.Id) | 
+
+- FinishedCases
+
+	| Field Type | Field Name | Keys
+	| --- | --- | --- |
+    | Guid | Id | Primary Key |
+	| String | DoctorWork |  |
+	| Guid | DoctorId | Foreign Key => (Dentist.Id) | 
+	| string | BeforePicture | |
+	| string | AfterPicture | |
+    | Guid | CaseId | Foreign Key => (MedicalCase.Id) |
+
 
 Relationships:
 
@@ -116,6 +129,7 @@ Relationships:
 | One to Many | Dentist/Patient to Post |
 | One to Many | Dentist/Patient to Job |
 | One to Many | Dentist to MedicalCase |
+| One to Many | Dentist to FinishedCases |
 
 Notes:
 -	jobs contact info and the job owner still missing
