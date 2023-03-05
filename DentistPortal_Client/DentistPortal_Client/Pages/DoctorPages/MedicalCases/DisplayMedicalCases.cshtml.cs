@@ -30,12 +30,8 @@ namespace DentistPortal_Client.Pages.DoctorPages
             _httpClient = httpClientFactory;
         }
 
-        public async Task OnGet(MedicalCaseDto? medicalCase)
+        public async Task OnGet()
         {
-            if (medicalCase is not null)
-                MedicalCaseDto = medicalCase;
-            //LoginModel model = new LoginModel(_httpClient);
-            //await model.GetNewToken(HttpContext.Session.GetString("Token"), HttpContext);
             var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
             DoctorId = Guid.Parse(jwt.Claims.First().Value);
             var client = _httpClient.CreateClient();

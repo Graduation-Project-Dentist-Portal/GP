@@ -42,13 +42,21 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
-            "Blazored.LocalStorage": {
-              "target": "Package",
-              "version": "[4.3.0, )"
-            },
             "CurrieTechnologies.Razor.SweetAlert2": {
               "target": "Package",
               "version": "[5.4.0, )"
+            },
+            "Hangfire.AspNetCore": {
+              "target": "Package",
+              "version": "[1.7.33, )"
+            },
+            "Hangfire.Core": {
+              "target": "Package",
+              "version": "[1.7.33, )"
+            },
+            "Hangfire.SqlServer": {
+              "target": "Package",
+              "version": "[1.7.33, )"
             },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",

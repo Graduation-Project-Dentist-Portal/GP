@@ -4,6 +4,15 @@
     this.style.height = 'auto';
     this.style.height = (this.scrollHeight) + 'px';
 });
+$(".reset").click(function () {
+    var forms = document.querySelectorAll('.reset')
+
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+            form.find("input[type=text], textarea").val("");
+        }, false)
+});
 // Example starter JavaScript for disabling form submissions if there are invalid fields
 (function () {
     'use strict'

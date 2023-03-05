@@ -61,7 +61,7 @@ Tables:
 	| String | JobTitle |  |
 	| String | Description |  |
 	| Float | Salary |  |
-	| Guid | OwnerId | Foreign Key => (Patient.Id) or Foreign Key => (Dentist.Id) |
+	| Guid | OwnerId | Foreign Key => (Dentist.Id) |
 	| Boolean | IsActive | |
 
 - Post

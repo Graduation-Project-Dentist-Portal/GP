@@ -85,13 +85,10 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body modal-lg">
-                    <form method="post" enctype="multipart/form-data" class="align-content-center col-6 w-100 needs-validation" style="margin:auto;color:#1A2238;" novalidate>
+                    <form method="post" id="createMedicalCase" enctype="multipart/form-data" class="align-content-center col-6 w-100 needs-validation" style="margin:auto;color:#1A2238;" novalidate>
                         <div class="form-floating form-outline mb-4">
                             <input name="medicalCase.PatientName" class="form-control" id="floatingPatientName" placeholder="PatientName" required>
                             <label class="form-label" for="floatingPatientName">Patient Name</label>
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
                             <div class="invalid-feedback">
                                 Please fill the patient name.
                             </div>
@@ -99,9 +96,6 @@
                         <div class="form-floating form-outline mb-4">
                             <input name="medicalCase.PatientPhone" class="form-control" id="floatingPatientPhone" placeholder="PatientPhone" required>
                             <label class="form-label" for="floatingPatientPhone">Patient Phone</label>
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
                             <div class="invalid-feedback">
                                 Please fill the patient phone.
                             </div>
@@ -109,9 +103,6 @@
                         <div class="form-floating form-outline mb-4">
                             <input name="medicalCase.PatientAge" class="form-control" id="floatingPatientAge" placeholder="PatientAge" required>
                             <label class="form-label" for="floatingPatientAge">Pateint Age</label>
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
                             <div class="invalid-feedback">
                                 Please fill the patient age.
                             </div>
@@ -119,9 +110,6 @@
                         <div class="form-floating form-outline mb-4">
                             <input name="medicalCase.Diagnosis" class="form-control" id="floatingPatientDiagnosis" placeholder="PatientDiagnosis" required>
                             <label class="form-label" for="floatingPatientDiagnosis">Diagnosis</label>
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
                             <div class="invalid-feedback">
                                 Please fill the patient diagnosis.
                             </div>
@@ -129,9 +117,6 @@
                         <div class="form-floating form-outline mb-4">
                             <textarea name="medicalCase.Description" class="form-control resize" rows="5" id="floatingPatientDescription" placeholder="PatientDesription" required></textarea>
                             <label class="form-label" for="floatingPatientDescription">Description</label>
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
                             <div class="invalid-feedback">
                                 Please fill the patient case description.
                             </div>
@@ -139,9 +124,6 @@
                         <div class="form-floating form-outline mb-4">
                             <input name="files" class="form-control" type="file" id="floatingPatientPictures" placeholder="PatientPictures" multiple required>
                             <label class="form-label" for="floatingPatientPictures">Upload Case Pictures</label>
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
                             <div class="invalid-feedback">
                                 Please add the case pictures.
                             </div>

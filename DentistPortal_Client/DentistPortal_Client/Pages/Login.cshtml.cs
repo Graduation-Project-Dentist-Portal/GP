@@ -6,7 +6,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
-using Blazored.LocalStorage;
+using Hangfire;
+using Hangfire.Common;
+
 namespace DentistPortal_Client.Pages
 {
     public class LoginModel : PageModel
@@ -32,7 +34,6 @@ namespace DentistPortal_Client.Pages
 
         public async Task<IActionResult> OnPost(UserDto user)
         {
-            //var httpClient = HttpContext.RequestServices.GetService<IHttpClientFactory>();
             var client = _httpClient.CreateClient();
             client.BaseAddress = new Uri(config["BaseAddress"]);
             var request = await client.PostAsJsonAsync("/api/login", user);
@@ -43,13 +44,6 @@ namespace DentistPortal_Client.Pages
                 string token = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
                 HttpContext.Session.SetString("Token", token);
-                //_token = token;
-                //var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
-                //var id = Guid.Parse(jwt.Claims.First().Value);
-                //var timer = new Timer(async (e) =>
-                //{
-                //    await GetNewToken(id.ToString(), _token);
-                //}, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
                 return RedirectToPage("/Home");
             }
             else
@@ -62,7 +56,6 @@ namespace DentistPortal_Client.Pages
 
         public async Task GetNewToken(string token, HttpContext context)
         {
-            //var httpClient = HttpContext.RequestServices.GetService<IHttpClientFactory>();
             var client = _httpClient.CreateClient();
             client.BaseAddress = new Uri(config["BaseAddress"]);
             var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);

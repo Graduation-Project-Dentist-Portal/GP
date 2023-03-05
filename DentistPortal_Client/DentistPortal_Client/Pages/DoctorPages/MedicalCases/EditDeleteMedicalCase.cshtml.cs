@@ -59,6 +59,7 @@ namespace DentistPortal_Client.Pages.DoctorPages.MedicalCases
             var client = _httpClient.CreateClient();
             client.BaseAddress = new Uri(config["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
             var request = await client.DeleteAsync($"api/delete-medical-case/{id}");
             if (request.IsSuccessStatusCode)
             {
@@ -73,6 +74,7 @@ namespace DentistPortal_Client.Pages.DoctorPages.MedicalCases
                 return RedirectToPage("");
             }
         }
+
         public async Task<IActionResult> OnPostEdit(MedicalCaseDto medicalCaseDto, List<IFormFile>? files, Guid id)
         {
             if (medicalCaseDto.PatientAge <= 0 || medicalCaseDto.PatientAge >= 100 || medicalCaseDto.PatientAge != (int)medicalCaseDto.PatientAge)
@@ -98,7 +100,6 @@ namespace DentistPortal_Client.Pages.DoctorPages.MedicalCases
                     }
                 }
             }
-
             var token = HttpContext.Session.GetString("Token");
             var client = _httpClient.CreateClient();
             client.BaseAddress = new Uri(config["BaseAddress"]);

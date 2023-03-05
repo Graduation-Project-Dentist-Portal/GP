@@ -1,7 +1,6 @@
-using Blazored.LocalStorage;
 using CurrieTechnologies.Razor.SweetAlert2;
-
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.AddHttpClient();
 // Add services to the container.
 builder.Services.AddRazorPages(options =>
@@ -11,7 +10,6 @@ builder.Services.AddRazorPages(options =>
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 builder.Services.AddSweetAlert2();
 builder.Services.AddSession();
-builder.Services.AddBlazoredLocalStorage();
 
 var app = builder.Build();
 
@@ -25,7 +23,9 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 app.UseSession();
+
 app.UseRouting();
 
 app.UseAuthorization();
