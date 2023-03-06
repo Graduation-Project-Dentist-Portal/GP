@@ -61,7 +61,7 @@ Tables:
 	| String | JobTitle |  |
 	| String | Description |  |
 	| Float | Salary |  |
-	| Guid | OwnerId | Foreign Key => (Dentist.Id) |
+	| Guid | OwnerId | Foreign Key => (Patient.Id) or Foreign Key => (Dentist.Id) |
 	| Boolean | IsActive | |
 
 - Post
@@ -97,8 +97,14 @@ Tables:
 	| --- | --- | --- |
     | Guid | Id | Primary Key |
 	| String | Adress |  |
-	| Guid | DoctorId | Foreign Key => (Patient.Id) or Foreign Key => (Dentist.Id) |
+	| String | Name |  |
+	| Guid | DoctorId | Foreign Key => (Dentist.Id) |
 	| String | ClinicPhone |  |
+	| int | OpenTime |  |
+	| int | CloseTime |  |
+	| string | ClinicDescription |  |
+	| string | PicturePaths | |
+	| Boolean | IsActive | |
 
 - Feedback
 
@@ -106,7 +112,10 @@ Tables:
 	| --- | --- | --- |
     | Guid | Id | Primary Key |
 	| String | Comment |  |
+	| String | AiScore |  |
 	| Guid | ClinicId | Foreign Key => (Clinic.Id) | 
+	| Guid | UserId | Foreign Key => (Patient.Id) | 
+	| Boolean | IsActive | |
 
 - FinishedCases
 
@@ -127,9 +136,11 @@ Relationships:
 | One to One | Dentist/Patient to RefreshToken |
 | One to Many | Dentist to toolForSale |
 | One to Many | Dentist/Patient to Post |
-| One to Many | Dentist/Patient to Job |
+| One to Many | Dentist to Job |
 | One to Many | Dentist to MedicalCase |
 | One to Many | Dentist to FinishedCases |
+| One to Many | Dentist to Clinic |
+| One to Many | Patient to Feedback |
 
 Notes:
 -	jobs contact info and the job owner still missing

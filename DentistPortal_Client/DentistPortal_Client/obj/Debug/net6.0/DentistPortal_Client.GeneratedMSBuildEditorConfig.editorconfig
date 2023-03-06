@@ -15,6 +15,18 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes = true
 build_property.MSBuildProjectDirectory = D:\FCAI\GP\DentistPortal_Client\DentistPortal_Client
 build_property._RazorSourceGeneratorDebug = 
 
+[D:/FCAI/GP/DentistPortal_Client/DentistPortal_Client/Pages/DoctorPages/Clinics/DisplayClinics.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRG9jdG9yUGFnZXNcQ2xpbmljc1xEaXNwbGF5Q2xpbmljcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FCAI/GP/DentistPortal_Client/DentistPortal_Client/Pages/DoctorPages/Clinics/EditDeleteClinic.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRG9jdG9yUGFnZXNcQ2xpbmljc1xFZGl0RGVsZXRlQ2xpbmljLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FCAI/GP/DentistPortal_Client/DentistPortal_Client/Pages/DoctorPages/Clinics/ViewClinic.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRG9jdG9yUGFnZXNcQ2xpbmljc1xWaWV3Q2xpbmljLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/FCAI/GP/DentistPortal_Client/DentistPortal_Client/Pages/DoctorPages/MedicalCases/DisplayMedicalCases.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRG9jdG9yUGFnZXNcTWVkaWNhbENhc2VzXERpc3BsYXlNZWRpY2FsQ2FzZXMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 

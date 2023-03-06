@@ -1,0 +1,136 @@
+﻿@page
+@model DentistPortal_Client.Pages.DoctorPages.Clinics.EditDeleteClinicModel
+@{
+    Guid id = new();
+    Model.Pictures = Model.Clinic.PicturePaths.Split(",").Where(x => !string.IsNullOrEmpty(x)).ToArray();
+    <form method="post" enctype="multipart/form-data" class="align-content-center col-6 w-100 needs-validation" style="margin:auto;text-align:center;color:#1A2238;" novalidate>
+        <input name="clinicDto.DoctorId" value="@Model.Clinic.DoctorId" hidden>
+        <input name="id" value="@Model.Clinic.Id" hidden>
+        <div class="form-floating form-outline mb-4">
+            <input name="clinicDto.Name" class="form-control" id="floatingClinicName" placeholder="clinicName" value="@Model.Clinic.Name" required>
+            <label class="form-label" for="floatingClinicName">Clinic Name</label>
+            <div class="invalid-feedback">
+                Please fill the clinic name.
+            </div>
+        </div>
+        <div class="form-floating form-outline mb-4">
+            <input name="clinicDto.ClinicPhone" class="form-control" id="floatingClinicPhone" placeholder="ClinicPhone" value="@Model.Clinic.ClinicPhone" required>
+            <label class="form-label" for="floatingClinicPhone">Clinic Phone</label>
+            <div class="invalid-feedback">
+                Please fill the clinic phone.
+            </div>
+        </div>
+        <div class="form-floating form-outline mb-4">
+            <input name="clinicDto.Address" class="form-control" id="floatingClinicAdress" placeholder="ClinicAdress" value="@Model.Clinic.Address" required>
+            <label class="form-label" for="floatingClinicAdress">Clinic Adress</label>
+            <div class="invalid-feedback">
+                Please fill the clinic adress.
+            </div>
+        </div>
+        <div class="form-floating form-outline mb-4">
+            <input name="clinicDto.OpenTime" class="form-control" id="floatingClinicOpenTime" placeholder="ClinicOpenTime" value="@Model.Clinic.OpenTime" required>
+            <label class="form-label" for="floatingClinicOpenTime">Open Time</label>
+            <div class="invalid-feedback">
+                Please fill the open time.
+            </div>
+        </div>
+        <div class="form-floating form-outline mb-4">
+            <input name="clinicDto.CloseTime" class="form-control" rows="5" id="floatingClinicCloseTime" placeholder="ClinicCloseTime" value="@Model.Clinic.CloseTime" required>
+            <label class="form-label" for="floatingClinicCloseTime">Close Time</label>
+            <div class="invalid-feedback">
+                Please fill the close time.
+            </div>
+        </div>
+        <div class="form-floating form-outline mb-4">
+            <textarea name="clinicDto.ClinicDescription" class="form-control resize" rows="5" id="floatingClinicDescription" placeholder="ClinicDescription" required>@Model.Clinic.ClinicDescription</textarea>
+            <label class="form-label" for="floatingClinicDescription">Description</label>
+            <div class="invalid-feedback">
+                Please fill the clinic description.
+            </div>
+        </div>
+        <div id=@("carouselExampleControls") class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner text-center">
+                @foreach (var item in Model.Pictures)
+                {
+                    if (item == Model.Pictures[0])
+                    {
+                        <div class="carousel-item active">
+                            <img src="data:image/png;base64,@item" alt="..." width="400" height="400" />
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="carousel-item">
+                            <img src="data:image/png;base64,@item" alt="..." width="400" height="400" />
+                        </div>
+                    }
+                }
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target=@("#carouselExampleControls") data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target=@("#carouselExampleControls") data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+        <div class="form-floating form-outline mb-4">
+            <input name="files" class="form-control" type="file" id="floatingPatientPictures" placeholder="PatientPictures" multiple>
+            <label class="form-label" for="floatingPatientPictures">Upload Clinic Pictures</label>
+            <div class="invalid-feedback">
+                Please add the clinic pictures.
+            </div>
+        </div>
+        <button asp-page-handler="Edit" type="submit" class="btn btn-success btn-block mb-3"><i class="bi bi-pencil-square"> Edit</i></button>
+        <a onclick="@(id=Model.Clinic.Id)" data-bs-toggle="modal" data-bs-target="#deleteClinicModal" class="btn btn-danger btn-block mb-3"><i class="bi bi-trash"> Delete</i></a>
+    </form>
+
+    <!--Delete MedicalCaseModal-->
+
+    <div class="modal fade" id="deleteClinicModal" tabindex="-1" aria-labelledby="deleteClinicModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="text-align:center">
+                    Are you sure?
+                    <br />
+                    You won't be able to revert this!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <form asp-page-handler="Delete" asp-route-id="@id" method="post">
+                        <button type="submit" class="btn btn-danger" style="margin-right:125px" data-bs-dismiss="modal">Yes, delete it!</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (@Model.Msg != null)
+{
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    if (@Model.Status == "success")
+    {
+        <script type="text/javascript">
+            Swal.fire({
+                icon: 'success',
+                title: '@Model.Msg',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        </script>
+    }
+    else
+    {
+        <script type="text/javascript">
+            Swal.fire({
+                icon: 'error',
+                title: '@Model.Msg',
+                showConfirmButton: true
+            })
+        </script>
+    }
+}

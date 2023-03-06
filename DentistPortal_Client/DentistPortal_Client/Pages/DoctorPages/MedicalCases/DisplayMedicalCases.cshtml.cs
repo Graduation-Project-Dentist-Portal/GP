@@ -37,20 +37,31 @@ namespace DentistPortal_Client.Pages.DoctorPages
             var client = _httpClient.CreateClient();
             client.BaseAddress = new Uri(config["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
-            var request = await client.GetStringAsync("/api/display-medical-cases");
-            if (request is not null)
+            try
             {
-                var options = new JsonSerializerOptions
+                var request = await client.GetStringAsync("/api/display-medical-cases");
+                if (request is not null)
                 {
-                    WriteIndented = true,
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                    DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
-                };
-                MedicalCases = JsonSerializer.Deserialize<List<MedicalCase>>(request, options);
+                    if (request.Length > 0)
+                    {
+                        var options = new JsonSerializerOptions
+                        {
+                            WriteIndented = true,
+                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                            DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
+                        };
+                        MedicalCases = JsonSerializer.Deserialize<List<MedicalCase>>(request, options);
+                    }
+                }
+                else
+                {
+                    Msg = request.ToString();
+                    Status = "error";
+                }
             }
-            else
+            catch (Exception e)
             {
-                Msg = request.ToString();
+                Msg = e.Message;
                 Status = "error";
             }
         }

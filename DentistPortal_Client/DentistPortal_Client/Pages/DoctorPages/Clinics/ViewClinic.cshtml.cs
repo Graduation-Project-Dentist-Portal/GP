@@ -1,0 +1,108 @@
+using DentistPortal_Client.DTO;
+using DentistPortal_Client.Model;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Text.Json;
+
+namespace DentistPortal_Client.Pages.DoctorPages.Clinics
+{
+    public class ViewClinicModel : PageModel
+    {
+        private IHttpClientFactory _httpClient;
+        public IConfiguration config = new ConfigurationBuilder()
+                      .AddJsonFile("appsettings.json")
+                      .AddEnvironmentVariables()
+                      .Build();
+        [TempData]
+        public string Msg { get; set; } = String.Empty;
+        [TempData]
+        public string Status { get; set; } = String.Empty;
+        public Clinic Clinic = new();
+        public List<Feedback> Feedbacks = new();
+        public string[] Pictures { get; set; }
+
+        public ViewClinicModel(IHttpClientFactory httpClient)
+        {
+            _httpClient = httpClient;
+        }
+
+        public async Task OnGet(Guid id)
+        {
+            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
+            var client = _httpClient.CreateClient();
+            client.BaseAddress = new Uri(config["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+            var request = await client.GetStringAsync($"/api/get-clinic/{id}");
+            if (request is not null)
+            {
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
+                };
+                Clinic = JsonSerializer.Deserialize<Clinic>(request, options);
+            }
+            else
+            {
+                Msg = request.ToString();
+                Status = "error";
+            }
+            var req = await client.GetStringAsync($"/api/get-feedbacks/{id}");
+            if (req is not null)
+            {
+                if (req.Length > 0)
+                {
+                    var options = new JsonSerializerOptions
+                    {
+                        WriteIndented = true,
+                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                        DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
+                    };
+                    Feedbacks = JsonSerializer.Deserialize<List<Feedback>>(req, options);
+                }
+            }
+            else
+            {
+                Msg = request.ToString();
+                Status = "error";
+            }
+        }
+
+        public async Task<IActionResult> OnPostAddComment(FeedbackDto feedbackDto)
+        {
+            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
+            feedbackDto.UserId = Guid.Parse(jwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            var client = _httpClient.CreateClient();
+            client.BaseAddress = new Uri(config["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+            var jsonCategory = JsonSerializer.Serialize(feedbackDto);
+            var content = new StringContent(jsonCategory, Encoding.UTF8, "application/json");
+            try
+            {
+                var request = await client.PostAsync($"/api/add-feedback", content);
+                if (request.IsSuccessStatusCode)
+                {
+                    Msg = "Added susscessfully!";
+                    Status = "success";
+                    return RedirectToPage("", new { id = feedbackDto.ClinicId });
+                }
+                else
+                {
+                    Msg = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                    Status = "error";
+                    return RedirectToPage("", new { id = feedbackDto.ClinicId });
+                }
+            }
+            catch (Exception e)
+            {
+                Msg = e.Message;
+                Status = "error";
+                return RedirectToPage("", new { id = feedbackDto.ClinicId });
+            }
+        }
+    }
+}

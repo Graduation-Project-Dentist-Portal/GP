@@ -73,6 +73,8 @@ namespace DentistPortal_API.Controllers
         {
             try
             {
+                if (await _context.MedicalCase.CountAsync() == 0)
+                    return Ok();
                 return Ok(await _context.MedicalCase.Where(x => x.IsActive == true && x.CaseStatus == "Open").OrderBy(x => x.TimeCreated).ToListAsync());
             }
             catch (Exception ex)
