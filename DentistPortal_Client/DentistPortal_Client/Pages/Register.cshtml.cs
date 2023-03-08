@@ -18,12 +18,12 @@ namespace DentistPortal_Client.Pages
         [TempData]
         public string Status { get; set; } = String.Empty;
 
-        public void OnGet(UserDto? user)
+        public async Task OnGet(UserDto? user)
         {
             User = user;
         }
 
-        public async Task<IActionResult> OnPost(UserDto user)
+        public async Task<IActionResult> OnPostCreate(UserDto user, IFormFile? prof)
         {
             var httpClient = HttpContext.RequestServices.GetService<IHttpClientFactory>();
             var client = httpClient.CreateClient();

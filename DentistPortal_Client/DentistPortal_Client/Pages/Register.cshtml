@@ -2,8 +2,8 @@
 @model DentistPortal_Client.Pages.RegisterModel
 @{
     Layout = "Shared/_LoginRegisterLayout";
-    <div style="margin-top:100px">
-        <form method="post" class="align-content-center col-6 w-25" style="margin:auto;text-align:center;color:#1A2238;">
+    <form method="post" asp-page-handler="Create" class="align-content-center col-6 w-25" style="margin:auto;text-align:center;color:#1A2238;">
+        <div style="margin-top:100px">
             <div class="form-floating form-outline mb-4">
                 <input asp-for="User.Username" class="form-control">
                 <label class="form-label">Username</label>
@@ -32,12 +32,20 @@
                     <option value="Student">Student</option>
                 </select>
             </div>
+            <div class="form-floating form-outline mb-4">
+                <input name="prof" class="form-control" type="file" id="floatingPatientPictures" placeholder="PatientPictures">
+                <label class="form-label" for="floatingPatientPictures">Upload Clinic Pictures</label>
+                <div class="invalid-feedback">
+                    Please add the clinic pictures.
+                </div>
+            </div>
             <button type="submit" class="btn btn-success btn-block mb-3"><i class="bi bi-patch-plus"> Sign up</i></button>
             <div class="text-center">
                 <p style="color:#66FCF1">Already have an account? <a class="btn btn-outline-primary" asp-page="/Login">Sign in</a></p>
             </div>
-        </form>
-    </div>
+        </div>
+
+    </form>
 }
 @if (@Model.Msg != null)
 {

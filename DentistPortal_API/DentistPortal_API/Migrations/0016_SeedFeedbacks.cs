@@ -5,15 +5,6 @@ namespace DentistPortal_API.Migrations
     [Migration(16)]
     public class _0016_SeedFeedbacks : Migration
     {
-        record feedback
-        {
-            public Guid Id { get; set; }
-            public string Comment { get; set; } = string.Empty;
-            public string AiScore { get; set; } = string.Empty;
-            public Guid ClinicId { get; set; }
-            public Guid UserId { get; set; }
-            public bool IsActive { get; set; }
-        }
         public override void Down()
         {
         }
@@ -27,6 +18,7 @@ namespace DentistPortal_API.Migrations
                 AiScore = "test",
                 ClinicId = "D98F7075-795E-4F7F-A31F-155590479518",
                 UserId = "63c108fc-aaf8-4f5b-a795-7beb3f29d76a",
+                Likes = 0,
                 IsActive = true
             }).Row(new
             {
@@ -35,6 +27,7 @@ namespace DentistPortal_API.Migrations
                 AiScore = "test",
                 ClinicId = "D98F7075-795E-4F7F-A31F-155590479518",
                 UserId = "63c108fc-aaf8-4f5b-a795-7beb3f29d76a",
+                Likes = 0,
                 IsActive = true
             });
         }

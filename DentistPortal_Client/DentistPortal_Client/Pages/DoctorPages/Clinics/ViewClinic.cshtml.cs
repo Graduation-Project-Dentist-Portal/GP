@@ -104,5 +104,75 @@ namespace DentistPortal_Client.Pages.DoctorPages.Clinics
                 return RedirectToPage("", new { id = feedbackDto.ClinicId });
             }
         }
+
+        public async Task<IActionResult> OnPostLike(Guid id, Guid clinicId)
+        {
+            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
+            LikeDto likeDto = new LikeDto();
+            likeDto.FeedbackId = id;
+            likeDto.PatientId = Guid.Parse(jwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            var client = _httpClient.CreateClient();
+            client.BaseAddress = new Uri(config["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+            var jsonCategory = JsonSerializer.Serialize(likeDto);
+            var content = new StringContent(jsonCategory, Encoding.UTF8, "application/json");
+            try
+            {
+                var request = await client.PostAsync($"/api/like", content);
+                if (request.IsSuccessStatusCode)
+                {
+                    Msg = "Up voted susscessfully!";
+                    Status = "success";
+                    return RedirectToPage("", new { id = clinicId });
+                }
+                else
+                {
+                    Msg = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                    Status = "error";
+                    return RedirectToPage("", new { id = clinicId });
+                }
+            }
+            catch (Exception e)
+            {
+                Msg = e.Message;
+                Status = "error";
+                return RedirectToPage("", new { id = clinicId });
+            }
+        }
+
+        public async Task<IActionResult> OnPostUnLike(Guid id, Guid clinicId)
+        {
+            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
+            LikeDto likeDto = new LikeDto();
+            likeDto.FeedbackId = id;
+            likeDto.PatientId = Guid.Parse(jwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            var client = _httpClient.CreateClient();
+            client.BaseAddress = new Uri(config["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+            var jsonCategory = JsonSerializer.Serialize(likeDto);
+            var content = new StringContent(jsonCategory, Encoding.UTF8, "application/json");
+            try
+            {
+                var request = await client.PostAsync($"/api/un-like", content);
+                if (request.IsSuccessStatusCode)
+                {
+                    Msg = "Down voted susscessfully!";
+                    Status = "success";
+                    return RedirectToPage("", new { id = clinicId });
+                }
+                else
+                {
+                    Msg = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                    Status = "error";
+                    return RedirectToPage("", new { id = clinicId });
+                }
+            }
+            catch (Exception e)
+            {
+                Msg = e.Message;
+                Status = "error";
+                return RedirectToPage("", new { id = clinicId });
+            }
+        }
     }
 }

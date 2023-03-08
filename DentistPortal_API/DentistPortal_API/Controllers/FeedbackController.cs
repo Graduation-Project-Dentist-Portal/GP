@@ -24,7 +24,7 @@ namespace DentistPortal_API.Controllers
             {
                 if (await _context.Feedback.CountAsync(x => x.ClinicId == id && x.IsActive == true) == 0)
                     return Ok();
-                return Ok(await _context.Feedback.Where(x => x.ClinicId == id && x.IsActive == true).ToListAsync());
+                return Ok(await _context.Feedback.Where(x => x.ClinicId == id && x.IsActive == true).OrderByDescending(X => X.Likes).Include(x => x.Patient).ToListAsync());
             }
             catch (Exception e)
             {
@@ -46,6 +46,7 @@ namespace DentistPortal_API.Controllers
                 feedback.ClinicId = feedbackDto.ClinicId;
                 feedback.Id = Guid.NewGuid();
                 feedback.IsActive = true;
+                feedback.Likes = 0;
                 await _context.Feedback.AddAsync(feedback);
                 await _context.SaveChangesAsync();
                 return Ok();
@@ -66,7 +67,7 @@ namespace DentistPortal_API.Controllers
                     throw new InvalidOperationException("Cant be empty");
                 else
                 {
-                    Feedback feedback = await _context.Feedback.FirstOrDefaultAsync(x => x.Id == id);
+                    Feedback feedback = await _context.Feedback.FirstOrDefaultAsync(x => x.Id == id && x.IsActive == true);
                     if (feedback is not null)
                     {
                         feedback.IsActive = false;
@@ -111,6 +112,97 @@ namespace DentistPortal_API.Controllers
                         return BadRequest("Cant find old feedback");
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("api/like"), Authorize]
+        public async Task<IActionResult> Like([FromBody] LikeDto likeDto)
+        {
+            try
+            {
+                if (likeDto.FeedbackId == Guid.Empty || likeDto.PatientId == Guid.Empty)
+                    return BadRequest("Cant be empty");
+                Like like = new();
+                like.Id = Guid.NewGuid();
+                like.PatientId = likeDto.PatientId;
+                like.FeedbackId = likeDto.FeedbackId;
+                like.IsActive = true;
+                var feedback = await _context.Feedback.FirstOrDefaultAsync(x => x.Id == likeDto.FeedbackId && x.IsActive == true);
+                if (feedback is null)
+                    return BadRequest("Cant find feedback");
+                feedback.Likes++;
+                _context.Feedback.Update(feedback);
+                await _context.Like.AddAsync(like);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("api/un-like"), Authorize]
+        public async Task<IActionResult> UnLike([FromBody] LikeDto likeDto)
+        {
+            try
+            {
+                if (likeDto.FeedbackId == Guid.Empty || likeDto.PatientId == Guid.Empty)
+                    return BadRequest("Cant be empty");
+                var feedback = await _context.Feedback.FirstOrDefaultAsync(x => x.Id == likeDto.FeedbackId && x.IsActive == true); ;
+                if (feedback is null)
+                    return BadRequest("Cant find feedback");
+                var like = await _context.Like.FirstOrDefaultAsync(x => x.FeedbackId == likeDto.FeedbackId && x.PatientId == likeDto.PatientId && x.IsActive == true);
+                if (like is null)
+                    return BadRequest("Cant find like");
+                feedback.Likes--;
+                like.IsActive = false;
+                _context.Feedback.Update(feedback);
+                _context.Like.Update(like);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("api/get-likes/{id}"), Authorize]
+        public async Task<IActionResult> GetLikes(Guid id)
+        {
+            if (id == Guid.Empty)
+                return BadRequest("Cant be empty");
+            try
+            {
+                return Ok(await _context.Like.CountAsync(x => x.IsActive == true && x.FeedbackId == id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("api/is-liked/{feedbackId}/{PatientId}"), Authorize]
+        public async Task<IActionResult> IsLiked(Guid feedbackId, Guid PatientId)
+        {
+            try
+            {
+                if (PatientId == Guid.Empty || feedbackId == Guid.Empty)
+                    return BadRequest("Cant be empty");
+                var like = await _context.Like.FirstOrDefaultAsync(x => x.IsActive == true && x.FeedbackId == feedbackId && x.PatientId == PatientId);
+                if (like == null)
+                    return Ok(false);
+                else
+                    return Ok(true);
             }
             catch (Exception e)
             {

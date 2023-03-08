@@ -18,8 +18,8 @@ namespace DentistPortal_API.Migrations
                 .WithColumn("DoctorId").AsGuid().NotNullable().ForeignKey("Dentist", "Id").OnDelete(System.Data.Rule.Cascade)
                 .WithColumn("ClinicPhone").AsString().NotNullable()
                 .WithColumn("Name").AsString().NotNullable()
-                .WithColumn("OpenTime").AsInt32().NotNullable()
-                .WithColumn("CloseTime").AsInt32().NotNullable()
+                .WithColumn("OpenTime").AsDateTime().NotNullable()
+                .WithColumn("CloseTime").AsDateTime().NotNullable()
                 .WithColumn("ClinicDescription").AsString().NotNullable()
                 .WithColumn("PicturePaths").AsString(int.MaxValue).NotNullable()
                 .WithColumn("IsActive").AsBoolean().NotNullable();

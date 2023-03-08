@@ -75,12 +75,6 @@ namespace DentistPortal_Client.Pages.DoctorPages.Clinics
 
         public async Task<IActionResult> OnPostEdit(ClinicDto clinicDto, List<IFormFile>? files, Guid id)
         {
-            if (clinicDto.OpenTime <= 0 || clinicDto.OpenTime >= 12 || clinicDto.OpenTime != (int)clinicDto.OpenTime || clinicDto.CloseTime <= 0 || clinicDto.CloseTime >= 12 || clinicDto.CloseTime != (int)clinicDto.CloseTime)
-            {
-                Msg = "Wrong input for Clinic Open/Close Time!";
-                Status = "error";
-                return RedirectToPage("", new { id });
-            }
             if (files != null)
             {
                 foreach (var file in files)

@@ -1,6 +1,87 @@
 ﻿@page
+@using System.IdentityModel.Tokens.Jwt
+@using System.Security.Claims
+@using Microsoft.Extensions.Configuration
+@using System.Net.Http
+@using Microsoft.Extensions.DependencyInjection;
+@using Microsoft.AspNetCore.Http;
+
 @model DentistPortal_Client.Pages.DoctorPages.Clinics.ViewClinicModel
 @{
+    IConfiguration config = new ConfigurationBuilder()
+                      .AddJsonFile("appsettings.json")
+                      .AddEnvironmentVariables()
+                      .Build();
+    bool isLiked;
+    var httpClient = HttpContext.RequestServices.GetService<IHttpClientFactory>();
+    var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
+    var client = httpClient.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+    client.BaseAddress = new Uri(config["BaseAddress"]);
+    var userId = Guid.Parse(jwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+    string req;
+    Model.Pictures = Model.Clinic.PicturePaths.Split(",").Where(x => !string.IsNullOrEmpty(x)).ToArray();
+
+
+    <!-- Display Clinic Section -->
+
+    <div>
+        <form method="post" enctype="multipart/form-data" class="align-content-center col-6 w-100 needs-validation" style="margin:auto;text-align:center;color:#1A2238;" novalidate>
+            <input name="clinicDto.DoctorId" value="@Model.Clinic.DoctorId" hidden>
+            <input name="id" value="@Model.Clinic.Id" hidden>
+            <div class="form-floating form-outline mb-4">
+                <input class="form-control" id="floatingClinicName" placeholder="clinicName" value="@Model.Clinic.Name" disabled readonly>
+                <label class="form-label" for="floatingClinicName">Clinic Name</label>
+            </div>
+            <div class="form-floating form-outline mb-4">
+                <input class="form-control" id="floatingClinicPhone" placeholder="ClinicPhone" value="@Model.Clinic.ClinicPhone" disabled readonly>
+                <label class="form-label" for="floatingClinicPhone">Clinic Phone</label>
+            </div>
+            <div class="form-floating form-outline mb-4">
+                <input class="form-control" id="floatingClinicAdress" placeholder="ClinicAdress" value="@Model.Clinic.Address" disabled readonly>
+                <label class="form-label" for="floatingClinicAdress">Clinic Adress</label>
+            </div>
+            <div class="form-floating form-outline mb-4">
+                <input type="time" class="form-control" id="floatingClinicOpenTime" placeholder="ClinicOpenTime" value="@Model.Clinic.OpenTime.TimeOfDay" disabled readonly>
+                <label class="form-label" for="floatingClinicOpenTime">Open Time</label>
+            </div>
+            <div class="form-floating form-outline mb-4">
+                <input type="time" class="form-control" rows="5" id="floatingClinicCloseTime" placeholder="ClinicCloseTime" value="@Model.Clinic.CloseTime.TimeOfDay" disabled readonly>
+                <label class="form-label" for="floatingClinicCloseTime">Close Time</label>
+            </div>
+            <div class="form-floating form-outline mb-4">
+                <textarea class="form-control resize" rows="5" id="floatingClinicDescription" placeholder="ClinicDescription" disabled readonly>@Model.Clinic.ClinicDescription</textarea>
+                <label class="form-label" for="floatingClinicDescription">Description</label>
+            </div>
+            <div id=@("carouselExampleControls") class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner text-center">
+                    @foreach (var picture in Model.Pictures)
+                    {
+                        if (picture == Model.Pictures[0])
+                        {
+                            <div class="carousel-item active">
+                                <img src="data:image/png;base64,@picture" alt="..." width="400" height="400" />
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="carousel-item">
+                                <img src="data:image/png;base64,@picture" alt="..." width="400" height="400" />
+                            </div>
+                        }
+                    }
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target=@("#carouselExampleControls") data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target=@("#carouselExampleControls") data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </form>
+    </div>
 
     <!--Comments Section-->
 
@@ -14,23 +95,45 @@
                             <input type="text" name="feedbackDto.Comment" for="addANote" class="form-control" placeholder="Type comment..." />
                             <label class="form-label" for="addANote">Type comment then press enter...</label>
                             <div class="invalid-feedback">
-                                Please fill the clinic phone.
+                                Please add comment.
                             </div>
                         </div>
                         <button type="submit" hidden>Add</button>
                     </form>
-                    @foreach (var item in Model.Feedbacks)
+                    @foreach (var feedback in Model.Feedbacks)
                     {
+                        req = string.Empty;
+                        req = await client.GetStringAsync($"api/is-liked/{feedback.Id}/{userId}");
                         <div class="card mb-4">
                             <div class="card-body">
-                                <p>@item.Comment</p>
+                                <p>@feedback.Comment</p>
 
                                 <div class="d-flex justify-content-between">
                                     <div class="d-flex flex-row align-items-center">
-                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(4).webp" alt="avatar" width="25"
+                                        <img src="data:image/png;base64,@feedback.Patient.ProfilePicture" alt="avatar" width="25"
                                          height="25" />
-                                        <p class="small mb-0 ms-2">name</p>
+                                        <p class="small mb-0 ms-2">@feedback.Patient.FirstName @feedback.Patient.LastName</p>
                                     </div>
+                                    @if (req == "false")
+                                    {
+                                        <form method="post" asp-page-handler="Like" asp-route-id="@feedback.Id" asp-route-clinicId="@Model.Clinic.Id">
+                                            <div class="d-flex flex-row align-items-center">
+                                                <button type="submit" class="small text-muted mb-0">Upvote?</button>
+                                                <i class="bi bi-hand-thumbs-up mx-2 fa-xs text-black" style="margin-top: -0.16rem;"></i>
+                                                <p class="small text-muted mb-0">@feedback.Likes</p>
+                                            </div>
+                                        </form>
+                                    }
+                                    else if (req == "true")
+                                    {
+                                        <form method="post" asp-page-handler="UnLike" asp-route-id="@feedback.Id" asp-route-clinicId="@Model.Clinic.Id">
+                                            <div class="d-flex flex-row align-items-center text-primary">
+                                                <button type="submit" class="small mb-0 text-primary">Upvoted</button>
+                                                <i class="bi bi-hand-thumbs-up-fill mx-2 fa-xs" style="margin-top: -0.16rem;"></i>
+                                                <p class="small mb-0">@feedback.Likes</p>
+                                            </div>
+                                        </form>
+                                    }
                                 </div>
                             </div>
                         </div>

@@ -38,7 +38,7 @@ namespace DentistPortal_API.Controllers
         {
             try
             {
-                if (string.IsNullOrEmpty(clinicDto.Name) || string.IsNullOrEmpty(clinicDto.Address) || string.IsNullOrEmpty(clinicDto.ClinicPhone) || clinicDto.OpenTime != (int)clinicDto.OpenTime || clinicDto.CloseTime != (int)clinicDto.CloseTime || clinicDto.DoctorId == Guid.Empty || string.IsNullOrEmpty(clinicDto.CasePictures[0]) || string.IsNullOrEmpty(clinicDto.ClinicDescription))
+                if (string.IsNullOrEmpty(clinicDto.Name) || string.IsNullOrEmpty(clinicDto.Address) || string.IsNullOrEmpty(clinicDto.ClinicPhone) || clinicDto.DoctorId == Guid.Empty || string.IsNullOrEmpty(clinicDto.ClinicDescription) || clinicDto.OpenTime == DateTime.MinValue || clinicDto.CloseTime == DateTime.MinValue)
                 {
                     return BadRequest("Cant be empty");
                 }
@@ -84,7 +84,7 @@ namespace DentistPortal_API.Controllers
                     throw new InvalidOperationException("Cant be empty");
                 else
                 {
-                    Clinic clinic = await _context.Clinic.FirstOrDefaultAsync(x => x.Id == id);
+                    Clinic clinic = await _context.Clinic.FirstOrDefaultAsync(x => x.Id == id && x.IsActive == true);
                     if (clinic is not null)
                     {
                         clinic.IsActive = false;
@@ -110,7 +110,7 @@ namespace DentistPortal_API.Controllers
         {
             try
             {
-                if (id == Guid.Empty || string.IsNullOrEmpty(clinicDto.Name) || string.IsNullOrEmpty(clinicDto.Address) || string.IsNullOrEmpty(clinicDto.ClinicPhone) || clinicDto.OpenTime != (int)clinicDto.OpenTime || clinicDto.CloseTime != (int)clinicDto.CloseTime || clinicDto.DoctorId == Guid.Empty || string.IsNullOrEmpty(clinicDto.ClinicDescription))
+                if (id == Guid.Empty || string.IsNullOrEmpty(clinicDto.Name) || string.IsNullOrEmpty(clinicDto.Address) || string.IsNullOrEmpty(clinicDto.ClinicPhone) || clinicDto.DoctorId == Guid.Empty || string.IsNullOrEmpty(clinicDto.ClinicDescription) || clinicDto.OpenTime == DateTime.MinValue || clinicDto.CloseTime == DateTime.MinValue)
                 {
                     return BadRequest("Cant be empty");
                 }

@@ -18,6 +18,7 @@ namespace DentistPortal_API.Migrations
                 .WithColumn("ClinicId").AsGuid().NotNullable().ForeignKey("Clinic", "Id").OnDelete(System.Data.Rule.Cascade)
                 .WithColumn("UserId").AsGuid().NotNullable().ForeignKey("Patient", "Id").OnDelete(System.Data.Rule.Cascade)
                 .WithColumn("AiScore").AsString().NotNullable()
+                .WithColumn("Likes").AsInt32().NotNullable()
                 .WithColumn("IsActive").AsBoolean().NotNullable();
         }
     }

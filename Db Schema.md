@@ -41,7 +41,7 @@ Tables:
 	| TimeStamp | TimeExpires |  |
 	| Boolean | IsActive | |
 
-- ToolForSale
+- Tool
 
 	| Field Type | Field Name | Keys
 	| --- | --- | --- |
@@ -100,8 +100,8 @@ Tables:
 	| String | Name |  |
 	| Guid | DoctorId | Foreign Key => (Dentist.Id) |
 	| String | ClinicPhone |  |
-	| int | OpenTime |  |
-	| int | CloseTime |  |
+	| DateTime | OpenTime |  |
+	| DateTime | CloseTime |  |
 	| string | ClinicDescription |  |
 	| string | PicturePaths | |
 	| Boolean | IsActive | |
@@ -112,9 +112,9 @@ Tables:
 	| --- | --- | --- |
     | Guid | Id | Primary Key |
 	| String | Comment |  |
-	| String | AiScore |  |
 	| Guid | ClinicId | Foreign Key => (Clinic.Id) | 
 	| Guid | UserId | Foreign Key => (Patient.Id) | 
+	| int | Likes | | 
 	| Boolean | IsActive | |
 
 - FinishedCases
@@ -128,19 +128,31 @@ Tables:
 	| string | AfterPicture | |
     | Guid | CaseId | Foreign Key => (MedicalCase.Id) |
 
+- Like
+
+	| Field Type | Field Name | Keys
+	| --- | --- | --- |
+    | Guid | Id | Primary Key |
+	| Guid | PatientId | Foreign Key => (Patient.Id) | 
+    | Guid | FeedbackId | Foreign Key => (Feedback.Id) |
+	| Boolean | IsActive | |
+
+
 
 Relationships:
 
 | Type | Tables involved 
 | --- | --- |
 | One to One | Dentist/Patient to RefreshToken |
-| One to Many | Dentist to toolForSale |
+| One to Many | Dentist to Tool |
 | One to Many | Dentist/Patient to Post |
-| One to Many | Dentist to Job |
+| One to Many | Dentist/Patient to Job |
 | One to Many | Dentist to MedicalCase |
 | One to Many | Dentist to FinishedCases |
-| One to Many | Dentist to Clinic |
+| One to Many | Patient to Like |
 | One to Many | Patient to Feedback |
+| One to Many | Feedback to Like |
+| One to Many | Clinic to Feedback |
 
 Notes:
 -	jobs contact info and the job owner still missing

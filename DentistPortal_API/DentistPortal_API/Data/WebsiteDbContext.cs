@@ -14,5 +14,6 @@ namespace DentistPortal_API.Data
         public DbSet<FinishedCases> FinishedCases { get; set; }
         public DbSet<Clinic> Clinic { get; set; }
         public DbSet<Feedback> Feedback { get; set; }
+        public DbSet<Like> Like { get; set; }
     }
 }

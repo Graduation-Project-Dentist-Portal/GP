@@ -67,12 +67,6 @@ namespace DentistPortal_Client.Pages.DoctorPages.Clinics
 
         public async Task<IActionResult> OnPost(ClinicDto clinicDto, List<IFormFile> files)
         {
-            if (clinicDto.OpenTime <= 0 || clinicDto.OpenTime >= 12 || clinicDto.OpenTime != (int)clinicDto.OpenTime || clinicDto.CloseTime <= 0 || clinicDto.CloseTime >= 12 || clinicDto.CloseTime != (int)clinicDto.CloseTime)
-            {
-                Msg = "Wrong input for Clinic Open/Close Time!";
-                Status = "error";
-                return RedirectToPage("DisplayClinics");
-            }
             if (files.Count > 0)
             {
                 foreach (var file in files)

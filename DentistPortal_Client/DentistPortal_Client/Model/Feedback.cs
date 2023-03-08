@@ -1,4 +1,7 @@
-﻿namespace DentistPortal_Client.Model
+﻿using DentistPortal_API.Model;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace DentistPortal_Client.Model
 {
     public class Feedback
     {
@@ -8,5 +11,8 @@
         public Guid ClinicId { get; set; }
         public Guid UserId { get; set; }
         public bool IsActive { get; set; }
+        public int Likes { get; set; }
+        [ForeignKey("UserId")]
+        public Patient Patient { get; set; } = new();
     }
 }
