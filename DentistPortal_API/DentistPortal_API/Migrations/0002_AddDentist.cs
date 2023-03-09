@@ -18,14 +18,14 @@ namespace DentistPortal_API.Migrations
                 .WithColumn("FirstName").AsString().NotNullable()
                 .WithColumn("LastName").AsString().NotNullable()
                 .WithColumn("PasswordHash").AsString().NotNullable()
-                .WithColumn("ProfilePicture").AsString().Nullable()
+                .WithColumn("ProfilePicture").AsString(int.MaxValue).Nullable()
                 .WithColumn("RefreshTokenId").AsGuid().Nullable().ForeignKey("RefreshToken", "Id")
                 .WithColumn("IsActive").AsBoolean().NotNullable()
                 .WithColumn("Graduated").AsBoolean().NotNullable()
                 .WithColumn("University").AsString().NotNullable()
                 .WithColumn("Level").AsInt32().NotNullable()
-                .WithColumn("IdentityCardPicture").AsString().NotNullable()
-                .WithColumn("UniversityCardPicture").AsString().NotNullable();
+                .WithColumn("IdentityCardPicture").AsString(int.MaxValue).NotNullable()
+                .WithColumn("UniversityCardPicture").AsString(int.MaxValue).NotNullable();
         }
     }
 }

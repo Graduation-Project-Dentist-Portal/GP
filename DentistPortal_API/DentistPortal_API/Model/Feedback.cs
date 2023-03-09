@@ -12,6 +12,6 @@ namespace DentistPortal_API.Model
         public bool IsActive { get; set; }
         public int Likes { get; set; }
         [ForeignKey("UserId")]
-        public Patient Patient { get; set; } = new();
+        public Patient? Patient { get; set; } = new();
     }
 }

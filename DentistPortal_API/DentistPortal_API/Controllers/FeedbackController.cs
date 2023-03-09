@@ -47,6 +47,7 @@ namespace DentistPortal_API.Controllers
                 feedback.Id = Guid.NewGuid();
                 feedback.IsActive = true;
                 feedback.Likes = 0;
+                feedback.Patient = null;
                 await _context.Feedback.AddAsync(feedback);
                 await _context.SaveChangesAsync();
                 return Ok();
