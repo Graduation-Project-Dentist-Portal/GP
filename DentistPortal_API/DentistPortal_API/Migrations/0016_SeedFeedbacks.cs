@@ -2,7 +2,7 @@
 
 namespace DentistPortal_API.Migrations
 {
-    [Migration(16)]
+   // [Migration(16)]
     public class _0016_SeedFeedbacks : Migration
     {
         public override void Down()

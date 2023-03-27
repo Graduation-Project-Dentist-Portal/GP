@@ -5,5 +5,6 @@
         public string Comment { get; set; } = string.Empty;
         public Guid ClinicId { get; set; }
         public Guid UserId { get; set; }
+        public string AiScore { get; set; } = string.Empty;
     }
 }

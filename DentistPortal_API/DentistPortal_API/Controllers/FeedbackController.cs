@@ -36,7 +36,7 @@ namespace DentistPortal_API.Controllers
         [Route("api/add-feedback"), Authorize]
         public async Task<IActionResult> AddFeedback([FromBody] FeedbackDto feedbackDto)
         {
-            if (string.IsNullOrEmpty(feedbackDto.Comment) || feedbackDto.UserId == Guid.Empty || feedbackDto.ClinicId == Guid.Empty)
+            if (string.IsNullOrEmpty(feedbackDto.Comment) || feedbackDto.UserId == Guid.Empty || feedbackDto.ClinicId == Guid.Empty || string.IsNullOrEmpty(feedbackDto.AiScore) || (feedbackDto.AiScore != "0" && feedbackDto.AiScore != "1" && feedbackDto.AiScore != "-1"))
                 return BadRequest("Cant be empty!");
             try
             {
@@ -48,6 +48,7 @@ namespace DentistPortal_API.Controllers
                 feedback.IsActive = true;
                 feedback.Likes = 0;
                 feedback.Patient = null;
+                feedback.AiScore = feedbackDto.AiScore;
                 await _context.Feedback.AddAsync(feedback);
                 await _context.SaveChangesAsync();
                 return Ok();

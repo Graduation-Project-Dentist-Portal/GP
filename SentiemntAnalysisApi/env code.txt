@@ -1,0 +1,5 @@
+anaconda env
+
+conda create --name GP python=3.7
+conda activate GP
+

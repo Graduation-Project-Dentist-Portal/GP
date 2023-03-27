@@ -74,6 +74,34 @@ namespace DentistPortal_Client.Pages.DoctorPages.Clinics
 
         public async Task<IActionResult> OnPostAddComment(FeedbackDto feedbackDto)
         {
+            try
+            {
+                Comment comment = new Comment
+                {
+                    comment = feedbackDto.Comment
+                };
+                var clientForAi = _httpClient.CreateClient();
+                clientForAi.BaseAddress = new Uri("http://127.0.0.1:5000");
+                var jsonComment = JsonSerializer.Serialize(comment);
+                var contentForAi = new StringContent(jsonComment, Encoding.UTF8, "application/json");
+                var requestForAi = await clientForAi.PostAsync("/api/get-score", contentForAi);
+                if (requestForAi.IsSuccessStatusCode)
+                {
+                    feedbackDto.AiScore = requestForAi.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                }
+                else
+                {
+                    Msg = requestForAi.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                    Status = "error";
+                    return RedirectToPage("", new { id = feedbackDto.ClinicId });
+                }
+            }
+            catch (Exception e)
+            {
+                Msg = e.Message;
+                Status = "error";
+                return RedirectToPage("", new { id = feedbackDto.ClinicId });
+            }
             var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
             feedbackDto.UserId = Guid.Parse(jwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
             var client = _httpClient.CreateClient();
