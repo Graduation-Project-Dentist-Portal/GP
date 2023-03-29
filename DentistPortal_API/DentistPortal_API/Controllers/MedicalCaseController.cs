@@ -22,7 +22,7 @@ namespace DentistPortal_API.Controllers
         {
             try
             {
-                if (string.IsNullOrEmpty(medicalCaseDto.Description) || string.IsNullOrEmpty(medicalCaseDto.PatientName) || string.IsNullOrEmpty(medicalCaseDto.PatientPhone) || medicalCaseDto.PatientPhone == null || medicalCaseDto.DoctorId == Guid.Empty || string.IsNullOrEmpty(medicalCaseDto.CasePictures[0]) || string.IsNullOrEmpty(medicalCaseDto.Diagnosis))
+                if (!await IsValid(medicalCaseDto) || medicalCaseDto.CasePictures.Count == 0)
                 {
                     return BadRequest("Cant be empty");
                 }
@@ -148,7 +148,7 @@ namespace DentistPortal_API.Controllers
         {
             try
             {
-                if (id == Guid.Empty || string.IsNullOrEmpty(medicalCaseDto.Description) || string.IsNullOrEmpty(medicalCaseDto.PatientName) || string.IsNullOrEmpty(medicalCaseDto.PatientPhone) || medicalCaseDto.PatientPhone == null || string.IsNullOrEmpty(medicalCaseDto.Diagnosis))
+                if (id == Guid.Empty || !await IsValid(medicalCaseDto))
                 {
                     return BadRequest("Cant be empty");
                 }
@@ -284,6 +284,18 @@ namespace DentistPortal_API.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        private async Task<bool> IsValid(MedicalCaseDto medicalCaseDto)
+        {
+            if (string.IsNullOrEmpty(medicalCaseDto.Description) ||
+                string.IsNullOrEmpty(medicalCaseDto.PatientName) ||
+                string.IsNullOrEmpty(medicalCaseDto.PatientPhone) ||
+                medicalCaseDto.PatientPhone == null ||
+                medicalCaseDto.DoctorId == Guid.Empty ||
+                string.IsNullOrEmpty(medicalCaseDto.Diagnosis))
+                return false;
+            return true;
         }
     }
 }

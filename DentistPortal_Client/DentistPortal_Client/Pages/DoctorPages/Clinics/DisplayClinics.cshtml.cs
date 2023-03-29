@@ -106,5 +106,67 @@ namespace DentistPortal_Client.Pages.DoctorPages.Clinics
                 return RedirectToPage("DisplayClinics");
             }
         }
+
+        public async Task<IActionResult> OnPostDelete(Guid id)
+        {
+            var token = HttpContext.Session.GetString("Token");
+            var client = _httpClient.CreateClient();
+            client.BaseAddress = new Uri(config["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+            var request = await client.DeleteAsync($"api/delete-clinic/{id}");
+            if (request.IsSuccessStatusCode)
+            {
+                Msg = "Deleted successfully!";
+                Status = "success";
+                return RedirectToPage("/DoctorPages/Clinics/DisplayClinics");
+            }
+            else
+            {
+                Msg = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                Status = "error";
+                return RedirectToPage("");
+            }
+        }
+
+        public async Task<IActionResult> OnPostEdit(ClinicDto clinicDto, List<IFormFile>? files, Guid id)
+        {
+            if (files != null)
+            {
+                foreach (var file in files)
+                {
+                    if (file.Length > 0)
+                    {
+                        using (var ms = new MemoryStream())
+                        {
+                            await file.CopyToAsync(ms);
+                            var fileBytes = ms.ToArray();
+                            string s = Convert.ToBase64String(fileBytes);
+                            // act on the Base64 data
+                            clinicDto.CasePictures.Add(s);
+                        }
+                    }
+                }
+            }
+            var token = HttpContext.Session.GetString("Token");
+            var client = _httpClient.CreateClient();
+            client.BaseAddress = new Uri(config["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            var jsonCategory = JsonSerializer.Serialize(clinicDto);
+            var content = new StringContent(jsonCategory, Encoding.UTF8, "application/json");
+            var request = await client.PutAsync($"api/edit-clinic/{id}", content);
+            if (request.IsSuccessStatusCode)
+            {
+                Msg = "Edited successfully!";
+                Status = "success";
+                return RedirectToPage("/DoctorPages/Clinics/DisplayClinics");
+            }
+            else
+            {
+                Msg = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                Status = "error";
+                return RedirectToPage("", new { id });
+            }
+        }
     }
 }

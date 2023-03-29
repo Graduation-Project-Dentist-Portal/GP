@@ -3,37 +3,38 @@ using DentistPortal_Client.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 
-namespace DentistPortal_Client.Pages.DoctorPages.Clinics
+namespace DentistPortal_Client.Pages.DoctorPages.Tools
 {
-    public class EditDeleteClinicModel : PageModel
+    public class MyToolsModel : PageModel
     {
         private IHttpClientFactory _httpClient;
-        public IConfiguration config = new ConfigurationBuilder()
-                      .AddJsonFile("appsettings.json")
-                      .AddEnvironmentVariables()
-                      .Build();
+        IConfiguration config = new ConfigurationBuilder()
+             .AddJsonFile("appsettings.json")
+             .AddEnvironmentVariables()
+             .Build();
         [TempData]
         public string Msg { get; set; } = String.Empty;
         [TempData]
         public string Status { get; set; } = String.Empty;
-        public Clinic Clinic = new();
+        public List<Tool> Tools = new();
         public string[] Pictures { get; set; }
 
-        public EditDeleteClinicModel(IHttpClientFactory httpClient)
+        public MyToolsModel(IHttpClientFactory httpClient)
         {
             _httpClient = httpClient;
         }
 
-        public async Task OnGet(Guid id)
+        public async Task OnGet()
         {
             var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
             var client = _httpClient.CreateClient();
             client.BaseAddress = new Uri(config["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
-            var request = await client.GetStringAsync($"/api/get-clinic/{id}");
+            var request = await client.GetStringAsync($"/api/display-my-tools/{jwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value}");
             if (request is not null)
             {
                 var options = new JsonSerializerOptions
@@ -42,7 +43,7 @@ namespace DentistPortal_Client.Pages.DoctorPages.Clinics
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                     DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
                 };
-                Clinic = JsonSerializer.Deserialize<Clinic>(request, options);
+                Tools = JsonSerializer.Deserialize<List<Tool>>(request, options);
             }
             else
             {
@@ -50,20 +51,17 @@ namespace DentistPortal_Client.Pages.DoctorPages.Clinics
                 Status = "error";
             }
         }
-
         public async Task<IActionResult> OnPostDelete(Guid id)
         {
-            var token = HttpContext.Session.GetString("Token");
             var client = _httpClient.CreateClient();
             client.BaseAddress = new Uri(config["BaseAddress"]);
-            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-
-            var request = await client.DeleteAsync($"api/delete-clinic/{id}");
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+            var request = await client.DeleteAsync($"api/delete-Tool/{id}");
             if (request.IsSuccessStatusCode)
             {
-                Msg = "Deleted successfully!";
+                Msg = "Successfully Deleted !";
                 Status = "success";
-                return RedirectToPage("/DoctorPages/Clinics/DisplayClinics");
+                return RedirectToPage("");
             }
             else
             {
@@ -73,7 +71,7 @@ namespace DentistPortal_Client.Pages.DoctorPages.Clinics
             }
         }
 
-        public async Task<IActionResult> OnPostEdit(ClinicDto clinicDto, List<IFormFile>? files, Guid id)
+        public async Task<IActionResult> OnPostEdit(ToolDto toolDto, List<IFormFile>? files, Guid id)
         {
             if (files != null)
             {
@@ -87,23 +85,23 @@ namespace DentistPortal_Client.Pages.DoctorPages.Clinics
                             var fileBytes = ms.ToArray();
                             string s = Convert.ToBase64String(fileBytes);
                             // act on the Base64 data
-                            clinicDto.CasePictures.Add(s);
+                            toolDto.PicturePaths.Add(s);
+
                         }
                     }
                 }
             }
-            var token = HttpContext.Session.GetString("Token");
             var client = _httpClient.CreateClient();
             client.BaseAddress = new Uri(config["BaseAddress"]);
-            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-            var jsonCategory = JsonSerializer.Serialize(clinicDto);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+            var jsonCategory = JsonSerializer.Serialize(toolDto);
             var content = new StringContent(jsonCategory, Encoding.UTF8, "application/json");
-            var request = await client.PutAsync($"api/edit-clinic/{id}", content);
+            var request = await client.PutAsync($"api/edit-tool/{id}", content);
             if (request.IsSuccessStatusCode)
             {
                 Msg = "Edited successfully!";
                 Status = "success";
-                return RedirectToPage("/DoctorPages/Clinics/DisplayClinics");
+                return RedirectToPage("");
             }
             else
             {
@@ -114,4 +112,3 @@ namespace DentistPortal_Client.Pages.DoctorPages.Clinics
         }
     }
 }
-

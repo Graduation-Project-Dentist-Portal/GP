@@ -19,10 +19,6 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRG9jdG9yUGFnZXNcQ2xpbmljc1xEaXNwbGF5Q2xpbmljcy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FCAI/GP/DentistPortal_Client/DentistPortal_Client/Pages/DoctorPages/Clinics/EditDeleteClinic.cshtml]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRG9jdG9yUGFnZXNcQ2xpbmljc1xFZGl0RGVsZXRlQ2xpbmljLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
 [D:/FCAI/GP/DentistPortal_Client/DentistPortal_Client/Pages/DoctorPages/Clinics/ViewClinic.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRG9jdG9yUGFnZXNcQ2xpbmljc1xWaWV3Q2xpbmljLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -31,16 +27,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRG9jdG9yUGFnZXNcTWVkaWNhbENhc2VzXERpc3BsYXlNZWRpY2FsQ2FzZXMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FCAI/GP/DentistPortal_Client/DentistPortal_Client/Pages/DoctorPages/MedicalCases/EditDeleteMedicalCase.cshtml]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRG9jdG9yUGFnZXNcTWVkaWNhbENhc2VzXEVkaXREZWxldGVNZWRpY2FsQ2FzZS5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
 [D:/FCAI/GP/DentistPortal_Client/DentistPortal_Client/Pages/DoctorPages/MedicalCases/FinishCase.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRG9jdG9yUGFnZXNcTWVkaWNhbENhc2VzXEZpbmlzaENhc2UuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/FCAI/GP/DentistPortal_Client/DentistPortal_Client/Pages/DoctorPages/MedicalCases/MyMedicalCases.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRG9jdG9yUGFnZXNcTWVkaWNhbENhc2VzXE15TWVkaWNhbENhc2VzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FCAI/GP/DentistPortal_Client/DentistPortal_Client/Pages/DoctorPages/Tools/DisplayTools.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRG9jdG9yUGFnZXNcVG9vbHNcRGlzcGxheVRvb2xzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FCAI/GP/DentistPortal_Client/DentistPortal_Client/Pages/DoctorPages/Tools/MyTools.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRG9jdG9yUGFnZXNcVG9vbHNcTXlUb29scy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/FCAI/GP/DentistPortal_Client/DentistPortal_Client/Pages/Error.cshtml]

@@ -135,5 +135,73 @@ namespace DentistPortal_Client.Pages.DoctorPages
                 return RedirectToPage("");
             }
         }
+
+        public async Task<IActionResult> OnPostDelete(Guid id)
+        {
+            var token = HttpContext.Session.GetString("Token");
+            var client = _httpClient.CreateClient();
+            client.BaseAddress = new Uri(config["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+            var request = await client.DeleteAsync($"api/delete-medical-case/{id}");
+            if (request.IsSuccessStatusCode)
+            {
+                Msg = "Deleted successfully!";
+                Status = "success";
+                return RedirectToPage("/DoctorPages/MedicalCases/DisplayMedicalCases");
+            }
+            else
+            {
+                Msg = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                Status = "error";
+                return RedirectToPage("");
+            }
+        }
+
+        public async Task<IActionResult> OnPostEdit(MedicalCaseDto medicalCaseDto, List<IFormFile>? files, Guid id)
+        {
+            if (medicalCaseDto.PatientAge <= 0 || medicalCaseDto.PatientAge >= 100 || medicalCaseDto.PatientAge != (int)medicalCaseDto.PatientAge)
+            {
+                Msg = "Wrong input for Patient Age!";
+                Status = "error";
+                return RedirectToPage("", new { id });
+            }
+            if (files != null)
+            {
+                foreach (var file in files)
+                {
+                    if (file.Length > 0)
+                    {
+                        using (var ms = new MemoryStream())
+                        {
+                            await file.CopyToAsync(ms);
+                            var fileBytes = ms.ToArray();
+                            string s = Convert.ToBase64String(fileBytes);
+                            // act on the Base64 data
+                            medicalCaseDto.CasePictures.Add(s);
+                        }
+                    }
+                }
+            }
+            var token = HttpContext.Session.GetString("Token");
+            var client = _httpClient.CreateClient();
+            client.BaseAddress = new Uri(config["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            var jsonCategory = JsonSerializer.Serialize(medicalCaseDto);
+            var content = new StringContent(jsonCategory, Encoding.UTF8, "application/json");
+            var request = await client.PutAsync($"api/edit-medical-case/{id}", content);
+            if (request.IsSuccessStatusCode)
+            {
+                Msg = "Edited successfully!";
+                Status = "success";
+                return RedirectToPage("/DoctorPages/MedicalCases/DisplayMedicalCases");
+            }
+            else
+            {
+                Msg = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                Status = "error";
+                return RedirectToPage("", new { id });
+            }
+        }
     }
 }

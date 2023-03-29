@@ -1,0 +1,335 @@
+﻿* {
+    margin: 0px;
+    padding: 0px;
+}
+
+:root {
+    --main-color: #76767687;
+    --main-transition: 0.3s;
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: "Open Sans", sans-serif;
+    background-color: white;
+}
+
+.section-header {
+    padding: 50px 0 25px;
+    background-color: #ffffff;
+    text-align: center;
+}
+
+    .section-header h3 {
+        text-transform: uppercase;
+        margin: 0 auto 50px;
+        border: 2px solid black;
+        padding: 15px 30px;
+        font-size: 30px;
+        width: fit-content;
+        position: relative;
+        font-weight: bolder;
+        z-index: 1;
+        font-family: "Cairo", sans-serif;
+        transition: var(--main-transition);
+        cursor: pointer;
+    }
+
+.main-title::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    background-color: var(--main-color);
+    position: absolute;
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    left: -30px;
+}
+
+.main-title::after {
+    content: "";
+    width: 12px;
+    height: 12px;
+    background-color: var(--main-color);
+    position: absolute;
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    right: -30px;
+}
+
+.main-title:hover::before {
+    z-index: -1;
+    animation: left-move 0.5s linear forwards;
+}
+
+.main-title:hover::after {
+    z-index: -1;
+    animation: right-move 0.5s linear forwards;
+}
+/* Start Animation */
+
+@keyframes left-move {
+    50% {
+        left: 0;
+        width: 12px;
+        height: 12px;
+    }
+
+    100% {
+        left: 0;
+        border-radius: 0;
+        width: 50.5%;
+        height: 100%;
+    }
+}
+
+@keyframes right-move {
+    50% {
+        right: 0;
+        width: 12px;
+        height: 12px;
+    }
+
+    100% {
+        right: 0;
+        border-radius: 0;
+        width: 50%;
+        height: 100%;
+    }
+}
+
+/* End Animation */
+.main-title::before {
+    left: -30px;
+}
+
+.main-title::after {
+    right: -30px;
+}
+
+.section .ToolImge {
+    border-bottom: 1px solid #eeeeee;
+    position: relative;
+}
+
+.main-title:hover {
+    color: white;
+    border: 2px solid var(--main-color);
+    transition-delay: 0.5s;
+}
+
+.ToolDescription {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.24;
+    height: 34.72px;
+    margin-bottom: 8px;
+    display: inline-flex;
+}
+
+/* .box .boxcontant:hover .overlay {
+  display: block;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.6;
+  justify-content: center;
+  cursor: pointer;
+}
+.box .boxcontant .overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  display: none;
+  background-color: rgba(206, 206, 206, 0.534);
+} */
+
+.sett {
+    background: none;
+    border: 0;
+}
+
+.Headline {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 50px;
+}
+
+.MyTools,
+.addtool {
+    line-height: 1.9;
+    border-radius: 0.25rem;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    margin: 10px;
+    background-color: black;
+    width: 150px;
+    cursor: pointer;
+    color: white;
+    height: 40px;
+    text-decoration: none;
+
+}
+/* .addtool {
+  line-height: 1.9;
+  border-radius: .25rem;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  margin: 10px;
+  background-color: black;
+  cursor: pointer;
+  color: white;
+  width: 150px;
+  height: 40px;
+  position: absolute;
+  right: 10px;
+} */
+
+.addtool {
+    position: absolute;
+    right: 10px;
+}
+
+    .MyTools:hover,
+    .addtool:hover {
+        background-color: #8f8f8f;
+        border-color: black;
+        color: white;
+        text-decoration: none;
+    }
+
+.mybtn {
+    color: #fff;
+    background-color: black;
+    border-color: #8f8f8f;
+    margin-bottom: 15px;
+    /* margin: auto;
+  transform: translateY(100px);
+  transition: all 0.5s ease; */
+}
+
+    .mybtn:hover {
+        color: #fff;
+        /* background-color: #8f8f8f; */
+        background-color: #8f8f8f;
+        border-color: black;
+    }
+
+.line {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-top: 10px;
+}
+
+.formsection {
+    margin-bottom: 35px;
+    /* animation-name: fadeInUp;
+  transition: all 1s;
+  animation-delay: 50s;
+  animation-duration: 3s; */
+    background-color: #8f8f8f2b;
+    margin-top: 50px;
+}
+
+    .formsection .paragraph {
+        padding: 35px 0px;
+    }
+
+        .formsection .paragraph h4 {
+            font-size: 36px;
+            color: #000000a6;
+            position: relative;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+        }
+
+        .formsection .paragraph p:first-of-type {
+            padding: 10px 10px;
+            font-size: 15px;
+        }
+
+.ourform {
+    background-color: white;
+    padding: 30px;
+    height: 100%;
+    border-radius: 14px;
+    margin-bottom: 20px;
+}
+
+    .ourform input[type="text"] {
+        margin: 15px 0;
+    }
+
+    .ourform textarea {
+        margin: 15px 0;
+        resize: none;
+    }
+
+    .ourform button {
+        margin: 15px 0;
+        text-align: center;
+        display: block;
+        margin: auto;
+        background: black;
+        border: 0;
+        padding: 10px 30px;
+        color: #fff;
+        transition: 0.4s;
+        border-radius: 4px;
+    }
+
+        .ourform button:hover {
+            background: #8f8f8f;
+        }
+
+.setting {
+    position: absolute;
+    top: 8px;
+    z-index: 100;
+    right: 20px;
+}
+
+.dropdown-toggle::after {
+    display: none;
+}
+.ToolName {
+    font-size: 24px;
+    font-weight: 500;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+.mybtn {
+    display: block;
+    margin: 0 auto;
+}
+
+.mycard {
+    box-shadow: 0 0 10px #dddde3;
+    margin: 10px;
+}
+
+.mycardbody {
+    box-shadow: 0 0 10px #dddde3;
+    background-color: #8f8f8f2b;
+    margin-bottom: 10px;
+}
+
+.mycardimg {
+}
+
+.details .ToolPrice {
+}

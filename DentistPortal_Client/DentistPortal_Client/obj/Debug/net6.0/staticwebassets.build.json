@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "Fz1YNLKFYYg77rFdajAuZ2T2JUu2bTuhJFdsH1ohAAc=",
+  "Hash": "EuCPWuoN6TiN/Btj4hmuCQ7exQi1jobIavGEB6Tm2ZQ=",
   "Source": "DentistPortal_Client",
   "BasePath": "_content/DentistPortal_Client",
   "Mode": "Default",
@@ -729,6 +729,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\Theme.css"
+    },
+    {
+      "Identity": "D:\\FCAI\\GP\\DentistPortal_Client\\DentistPortal_Client\\wwwroot\\css\\ToolsStyleSheet.css",
+      "SourceId": "DentistPortal_Client",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\FCAI\\GP\\DentistPortal_Client\\DentistPortal_Client\\wwwroot\\",
+      "BasePath": "_content/DentistPortal_Client",
+      "RelativePath": "css/ToolsStyleSheet.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\ToolsStyleSheet.css"
     },
     {
       "Identity": "D:\\FCAI\\GP\\DentistPortal_Client\\DentistPortal_Client\\wwwroot\\favicon.ico",

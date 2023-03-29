@@ -21,6 +21,7 @@ builder.Services.AddCors(options =>
                                 .AllowCredentials();
         });
 });
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddControllers().AddJsonOptions(x =>

@@ -48,8 +48,11 @@ Tables:
     | Guid |Id | Primary Key |
 	| String | ToolName |  |
 	| String | Description |  |
-	| Float | ToolPrice |  |
-	| Guid | SellerId | Foreign Key => (Dentist.Id) |		
+	| String | SellerLocation |  |
+	| String | ContactNumber |  |
+	| String | ToolStatus |  |
+	| Double | ToolPrice |  |
+	| Guid | SellerIdDoctor | Foreign Key => (Dentist.Id) |		
 	| string | PicturePaths | |
 	| Boolean | IsActive | |
 

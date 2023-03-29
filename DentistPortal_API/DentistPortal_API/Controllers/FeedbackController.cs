@@ -36,7 +36,7 @@ namespace DentistPortal_API.Controllers
         [Route("api/add-feedback"), Authorize]
         public async Task<IActionResult> AddFeedback([FromBody] FeedbackDto feedbackDto)
         {
-            if (string.IsNullOrEmpty(feedbackDto.Comment) || feedbackDto.UserId == Guid.Empty || feedbackDto.ClinicId == Guid.Empty || string.IsNullOrEmpty(feedbackDto.AiScore) || (feedbackDto.AiScore != "0" && feedbackDto.AiScore != "1" && feedbackDto.AiScore != "-1"))
+            if (!await IsValid(feedbackDto))
                 return BadRequest("Cant be empty!");
             try
             {
@@ -95,7 +95,7 @@ namespace DentistPortal_API.Controllers
         {
             try
             {
-                if (id == Guid.Empty || string.IsNullOrEmpty(feedbackDto.Comment))
+                if (id == Guid.Empty || !await IsValid(feedbackDto))
                 {
                     return BadRequest("Cant be empty");
                 }
@@ -210,6 +210,19 @@ namespace DentistPortal_API.Controllers
             {
                 return BadRequest(e.Message);
             }
+        }
+
+        private async Task<bool> IsValid(FeedbackDto feedbackDto)
+        {
+            if (string.IsNullOrEmpty(feedbackDto.Comment) ||
+                feedbackDto.UserId == Guid.Empty ||
+                feedbackDto.ClinicId == Guid.Empty ||
+                string.IsNullOrEmpty(feedbackDto.AiScore) ||
+                (feedbackDto.AiScore != "0" &&
+                feedbackDto.AiScore != "1" &&
+                feedbackDto.AiScore != "-1"))
+                return false;
+            return true;
         }
     }
 }

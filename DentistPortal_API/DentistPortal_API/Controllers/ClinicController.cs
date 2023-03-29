@@ -4,6 +4,8 @@ using DentistPortal_API.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 
 namespace DentistPortal_API.Controllers
 {
@@ -38,11 +40,11 @@ namespace DentistPortal_API.Controllers
         {
             try
             {
-                if (string.IsNullOrEmpty(clinicDto.Name) || string.IsNullOrEmpty(clinicDto.Address) || string.IsNullOrEmpty(clinicDto.ClinicPhone) || clinicDto.DoctorId == Guid.Empty || string.IsNullOrEmpty(clinicDto.ClinicDescription) || clinicDto.OpenTime == DateTime.MinValue || clinicDto.CloseTime == DateTime.MinValue)
+                if (!await IsValid(clinicDto) || clinicDto.CasePictures.Count == 0)
                 {
                     return BadRequest("Cant be empty");
                 }
-                Clinic clinic = await _context.Clinic.FirstOrDefaultAsync(x => x.Name == clinicDto.Name && x.IsActive == true);
+                var clinic = await _context.Clinic.FirstOrDefaultAsync(x => x.Name == clinicDto.Name && x.IsActive == true);
                 if (clinic is not null)
                 {
                     return BadRequest("Already Added!");
@@ -84,7 +86,7 @@ namespace DentistPortal_API.Controllers
                     throw new InvalidOperationException("Cant be empty");
                 else
                 {
-                    Clinic clinic = await _context.Clinic.FirstOrDefaultAsync(x => x.Id == id && x.IsActive == true);
+                    var clinic = await _context.Clinic.FirstOrDefaultAsync(x => x.Id == id && x.IsActive == true);
                     if (clinic is not null)
                     {
                         clinic.IsActive = false;
@@ -110,7 +112,7 @@ namespace DentistPortal_API.Controllers
         {
             try
             {
-                if (id == Guid.Empty || string.IsNullOrEmpty(clinicDto.Name) || string.IsNullOrEmpty(clinicDto.Address) || string.IsNullOrEmpty(clinicDto.ClinicPhone) || clinicDto.DoctorId == Guid.Empty || string.IsNullOrEmpty(clinicDto.ClinicDescription) || clinicDto.OpenTime == DateTime.MinValue || clinicDto.CloseTime == DateTime.MinValue)
+                if (id == Guid.Empty || !await IsValid(clinicDto))
                 {
                     return BadRequest("Cant be empty");
                 }
@@ -179,6 +181,19 @@ namespace DentistPortal_API.Controllers
             {
                 return BadRequest(e.Message);
             }
+        }
+
+        private async Task<bool> IsValid(ClinicDto clinicDto)
+        {
+            if (string.IsNullOrEmpty(clinicDto.Name) ||
+                string.IsNullOrEmpty(clinicDto.Address) ||
+                string.IsNullOrEmpty(clinicDto.ClinicPhone) ||
+                clinicDto.DoctorId == Guid.Empty ||
+                string.IsNullOrEmpty(clinicDto.ClinicDescription) ||
+                clinicDto.OpenTime == DateTime.MinValue ||
+                clinicDto.CloseTime == DateTime.MinValue)
+                return false;
+            return true;
         }
     }
 }

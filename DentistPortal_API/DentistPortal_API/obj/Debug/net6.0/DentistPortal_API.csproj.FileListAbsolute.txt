@@ -402,3 +402,5 @@ D:\FCAI\GP\DentistPortal_API\DentistPortal_API\bin\Debug\net6.0\refs\Microsoft.E
 D:\FCAI\GP\DentistPortal_API\DentistPortal_API\bin\Debug\net6.0\refs\Microsoft.Extensions.Primitives.dll
 D:\FCAI\GP\DentistPortal_API\DentistPortal_API\bin\Debug\net6.0\refs\System.Text.Encodings.Web.dll
 D:\FCAI\GP\DentistPortal_API\DentistPortal_API\bin\Debug\net6.0\refs\System.Text.Json.dll
+D:\FCAI\GP\DentistPortal_API\DentistPortal_API\bin\Debug\net6.0\CloudinaryDotNet.dll
+D:\FCAI\GP\DentistPortal_API\DentistPortal_API\bin\Debug\net6.0\Newtonsoft.Json.dll
