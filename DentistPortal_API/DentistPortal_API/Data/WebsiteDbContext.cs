@@ -16,5 +16,8 @@ namespace DentistPortal_API.Data
         public DbSet<Feedback> Feedback { get; set; }
         public DbSet<Like> Like { get; set; }
         public DbSet<Tool> Tool { get; set; }
+        public DbSet<ToolImage> ToolImage { get; set; }
+        public DbSet<ClinicImage> ClinicImage { get; set; }
+        public DbSet<MedicalCaseImage> MedicalCaseImage { get; set; }
     }
 }

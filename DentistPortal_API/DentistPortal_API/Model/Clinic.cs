@@ -8,11 +8,8 @@
         public string ClinicDescription { get; set; } = string.Empty;
         public Guid DoctorId { get; set; }
         public string ClinicPhone { get; set; } = string.Empty;
-        //public int OpenTime { get; set; }
-        //public int CloseTime { get; set; }
         public DateTime OpenTime { get; set; }
         public DateTime CloseTime { get; set; }
-        public string PicturePaths { get; set; } = string.Empty;
         public bool IsActive { get; set; }
     }
 }

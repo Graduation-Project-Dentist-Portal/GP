@@ -10,7 +10,6 @@
         public int PatientAge { get; set; }
         public Guid DoctorId { get; set; }
         public bool IsActive { get; set; }
-        public string PicturePaths { get; set; } = string.Empty;
         public string Diagnosis { get; set; } = string.Empty;
         public string CaseStatus { get; set; } = string.Empty;
         public DateTime TimeCreated { get; set; }

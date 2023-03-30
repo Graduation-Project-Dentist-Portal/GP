@@ -6,6 +6,8 @@ using System.Text.Json;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Net.Mime;
+using System.Net.Http.Headers;
 
 namespace DentistPortal_Client.Pages.DoctorPages
 {
@@ -66,40 +68,23 @@ namespace DentistPortal_Client.Pages.DoctorPages
             }
         }
 
-        public async Task<IActionResult> OnPost(MedicalCaseDto medicalCase, List<IFormFile> files)
+        public async Task<IActionResult> OnPost(MedicalCaseDto medicalCaseDto)
         {
-            if (medicalCase.PatientAge <= 0 || medicalCase.PatientAge >= 100 || medicalCase.PatientAge != (int)medicalCase.PatientAge)
+            if (medicalCaseDto.PatientAge <= 0 || medicalCaseDto.PatientAge >= 100 || medicalCaseDto.PatientAge != (int)medicalCaseDto.PatientAge)
             {
                 Msg = "Wrong input for Patient Age!";
                 Status = "error";
                 return RedirectToPage("DisplayMedicalCases");
             }
-            if (files.Count > 0)
-            {
-                foreach (var file in files)
-                {
-                    if (file.Length > 0)
-                    {
-                        using (var ms = new MemoryStream())
-                        {
-                            await file.CopyToAsync(ms);
-                            var fileBytes = ms.ToArray();
-                            string s = Convert.ToBase64String(fileBytes);
-                            // act on the Base64 data
-                            medicalCase.CasePictures.Add(s);
-                        }
-                    }
-                }
-            }
             var token = HttpContext.Session.GetString("Token");
             var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
-            medicalCase.DoctorId = Guid.Parse(jwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            medicalCaseDto.DoctorId = Guid.Parse(jwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
             var client = _httpClient.CreateClient();
             client.BaseAddress = new Uri(config["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-            var jsonCategory = JsonSerializer.Serialize(medicalCase);
-            var content = new StringContent(jsonCategory, Encoding.UTF8, "application/json");
-            var request = await client.PostAsync("/api/create-medical-case", content);
+            var multipartContent = new MultipartFormDataContent();
+            multipartContent = await MappingContent(multipartContent, medicalCaseDto);
+            var request = await client.PostAsync("/api/create-medical-case", multipartContent);
             if (request.IsSuccessStatusCode)
             {
                 Msg = "Successfully added medical case!";
@@ -158,7 +143,7 @@ namespace DentistPortal_Client.Pages.DoctorPages
             }
         }
 
-        public async Task<IActionResult> OnPostEdit(MedicalCaseDto medicalCaseDto, List<IFormFile>? files, Guid id)
+        public async Task<IActionResult> OnPostEdit(MedicalCaseDto medicalCaseDto, Guid id)
         {
             if (medicalCaseDto.PatientAge <= 0 || medicalCaseDto.PatientAge >= 100 || medicalCaseDto.PatientAge != (int)medicalCaseDto.PatientAge)
             {
@@ -166,30 +151,13 @@ namespace DentistPortal_Client.Pages.DoctorPages
                 Status = "error";
                 return RedirectToPage("", new { id });
             }
-            if (files != null)
-            {
-                foreach (var file in files)
-                {
-                    if (file.Length > 0)
-                    {
-                        using (var ms = new MemoryStream())
-                        {
-                            await file.CopyToAsync(ms);
-                            var fileBytes = ms.ToArray();
-                            string s = Convert.ToBase64String(fileBytes);
-                            // act on the Base64 data
-                            medicalCaseDto.CasePictures.Add(s);
-                        }
-                    }
-                }
-            }
             var token = HttpContext.Session.GetString("Token");
             var client = _httpClient.CreateClient();
             client.BaseAddress = new Uri(config["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-            var jsonCategory = JsonSerializer.Serialize(medicalCaseDto);
-            var content = new StringContent(jsonCategory, Encoding.UTF8, "application/json");
-            var request = await client.PutAsync($"api/edit-medical-case/{id}", content);
+            var multipartContent = new MultipartFormDataContent();
+            multipartContent = await MappingContent(multipartContent, medicalCaseDto);
+            var request = await client.PutAsync($"api/edit-medical-case/{id}", multipartContent);
             if (request.IsSuccessStatusCode)
             {
                 Msg = "Edited successfully!";
@@ -202,6 +170,27 @@ namespace DentistPortal_Client.Pages.DoctorPages
                 Status = "error";
                 return RedirectToPage("", new { id });
             }
+        }
+
+        private async Task<MultipartFormDataContent> MappingContent(MultipartFormDataContent multipartFormDataContent, MedicalCaseDto medicalCaseDto)
+        {
+            multipartFormDataContent.Add(new StringContent(medicalCaseDto.Description, Encoding.UTF8, MediaTypeNames.Text.Plain), "Description");
+            multipartFormDataContent.Add(new StringContent(medicalCaseDto.PatientName, Encoding.UTF8, MediaTypeNames.Text.Plain), "PatientName");
+            multipartFormDataContent.Add(new StringContent(medicalCaseDto.PatientPhone, Encoding.UTF8, MediaTypeNames.Text.Plain), "PatientPhone");
+            multipartFormDataContent.Add(new StringContent(medicalCaseDto.Diagnosis, Encoding.UTF8, MediaTypeNames.Text.Plain), "Diagnosis");
+            multipartFormDataContent.Add(new StringContent(medicalCaseDto.PatientAge.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "PatientAge");
+            multipartFormDataContent.Add(new StringContent(medicalCaseDto.DoctorId.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "DoctorId");
+            multipartFormDataContent.Add(new StringContent(medicalCaseDto.AssignedToMe.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "AssignedToMe");
+            if (medicalCaseDto.CasePictures.Count > 0)
+            {
+                foreach (var file in medicalCaseDto.CasePictures)
+                {
+                    var fileContent = new StreamContent(file.OpenReadStream());
+                    fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse(file.ContentType);
+                    multipartFormDataContent.Add(fileContent, "CasePictures", file.FileName);
+                }
+            }
+            return multipartFormDataContent;
         }
     }
 }

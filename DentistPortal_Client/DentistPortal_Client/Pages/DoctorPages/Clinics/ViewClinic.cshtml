@@ -5,6 +5,7 @@
 @using System.Net.Http
 @using Microsoft.Extensions.DependencyInjection;
 @using Microsoft.AspNetCore.Http;
+@using System.Text.Json
 
 @model DentistPortal_Client.Pages.DoctorPages.Clinics.ViewClinicModel
 @{
@@ -19,9 +20,20 @@
     client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
     client.BaseAddress = new Uri(config["BaseAddress"]);
     var userId = Guid.Parse(jwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
-    string req;
-    Model.Pictures = Model.Clinic.PicturePaths.Split(",").Where(x => !string.IsNullOrEmpty(x)).ToArray();
-
+    string req = string.Empty;
+    List<string> imageUrls = new();
+    req = await client.GetStringAsync($"api/get-clinic-pics/{@Model.Clinic.Id}");
+    if (req is not null)
+    {
+        var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
+                };
+        imageUrls = JsonSerializer.Deserialize<List<string>>(req, options);
+    }
+    req = string.Empty;
 
     <!-- Display Clinic Section -->
 
@@ -55,18 +67,18 @@
             </div>
             <div id=@("carouselExampleControls") class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner text-center">
-                    @foreach (var picture in Model.Pictures)
+                    @foreach (var picture in imageUrls)
                     {
-                        if (picture == Model.Pictures[0])
+                        if (picture == imageUrls[0])
                         {
                             <div class="carousel-item active">
-                                <img src="data:image/png;base64,@picture" alt="..." width="400" height="400" />
+                                <img src=@picture alt="..." width="400" height="400" />
                             </div>
                         }
                         else
                         {
                             <div class="carousel-item">
-                                <img src="data:image/png;base64,@picture" alt="..." width="400" height="400" />
+                                <img src=@picture alt="..." width="400" height="400" />
                             </div>
                         }
                     }

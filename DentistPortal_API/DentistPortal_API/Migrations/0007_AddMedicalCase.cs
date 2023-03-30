@@ -19,7 +19,6 @@ namespace DentistPortal_API.Migrations
                 .WithColumn("PatientAge").AsInt32().NotNullable()
                 .WithColumn("Description").AsString().NotNullable()
                 .WithColumn("DoctorId").AsGuid().NotNullable().ForeignKey("Dentist", "Id").OnDelete(System.Data.Rule.Cascade)
-                .WithColumn("PicturePaths").AsString(int.MaxValue).NotNullable()
                 .WithColumn("Diagnosis").AsString().NotNullable()
                 .WithColumn("TimeCreated").AsDateTime().NotNullable()
                 .WithColumn("CaseStatus").AsString().NotNullable()

@@ -2,6 +2,8 @@ using DentistPortal_Client.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
 
@@ -19,8 +21,6 @@ namespace DentistPortal_Client.Pages.DoctorPages.MedicalCases
         [TempData]
         public string Status { get; set; } = String.Empty;
         public FinishedCaseDto FinishedCase { get; set; }
-        public IFormFile Before { get; set; }
-        public IFormFile After { get; set; }
 
         public FinishCaseModel(IHttpClientFactory httpClient)
         {
@@ -41,34 +41,17 @@ namespace DentistPortal_Client.Pages.DoctorPages.MedicalCases
             }
         }
 
-        public async Task<IActionResult> OnPost(FinishedCaseDto finishedCaseDto, IFormFile before, IFormFile after)
+        public async Task<IActionResult> OnPost(FinishedCaseDto finishedCaseDto)
         {
-            if (before is not null || after is not null)
-            {
-                using (var ms = new MemoryStream())
-                {
-                    await before.CopyToAsync(ms);
-                    var fileBytes = ms.ToArray();
-                    finishedCaseDto.BeforePicture = Convert.ToBase64String(fileBytes);
-                    // act on the Base64 data
-                }
-                using (var ms = new MemoryStream())
-                {
-                    await after.CopyToAsync(ms);
-                    var fileBytes = ms.ToArray();
-                    finishedCaseDto.AfterPicture = Convert.ToBase64String(fileBytes);
-                    // act on the Base64 data
-                }
-            }
             var token = HttpContext.Session.GetString("Token");
             var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
             finishedCaseDto.DoctorId = Guid.Parse(jwt.Claims.First().Value);
             var client = _httpClient.CreateClient();
             client.BaseAddress = new Uri(config["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-            var jsonCategory = JsonSerializer.Serialize(finishedCaseDto);
-            var content = new StringContent(jsonCategory, Encoding.UTF8, "application/json");
-            var request = await client.PostAsync("/api/finish-medical-case", content);
+            var multipartContent = new MultipartFormDataContent();
+            multipartContent = await MappingContent(multipartContent, finishedCaseDto);
+            var request = await client.PostAsync("/api/finish-medical-case", multipartContent);
             if (request.IsSuccessStatusCode)
             {
                 Msg = "Successfully finished!";
@@ -81,6 +64,20 @@ namespace DentistPortal_Client.Pages.DoctorPages.MedicalCases
                 Status = "error";
                 return RedirectToPage("", finishedCaseDto);
             }
+        }
+
+        private async Task<MultipartFormDataContent> MappingContent(MultipartFormDataContent multipartFormDataContent, FinishedCaseDto finishedCaseDto)
+        {
+            multipartFormDataContent.Add(new StringContent(finishedCaseDto.DoctorWork, Encoding.UTF8, MediaTypeNames.Text.Plain), "DoctorWork");
+            multipartFormDataContent.Add(new StringContent(finishedCaseDto.DoctorId.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "DoctorId");
+            multipartFormDataContent.Add(new StringContent(finishedCaseDto.CaseId.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "CaseId");
+            var fileContent = new StreamContent(finishedCaseDto.BeforePicture.OpenReadStream());
+            fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse(finishedCaseDto.BeforePicture.ContentType);
+            multipartFormDataContent.Add(fileContent, "BeforePicture", finishedCaseDto.BeforePicture.FileName);
+            fileContent = new StreamContent(finishedCaseDto.AfterPicture.OpenReadStream());
+            fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse(finishedCaseDto.AfterPicture.ContentType);
+            multipartFormDataContent.Add(fileContent, "AfterPicture", finishedCaseDto.AfterPicture.FileName);
+            return multipartFormDataContent;
         }
     }
 }

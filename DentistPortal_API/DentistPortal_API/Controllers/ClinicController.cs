@@ -12,10 +12,15 @@ namespace DentistPortal_API.Controllers
     public class ClinicController : Controller
     {
         private readonly WebsiteDbContext _context;
+        private Cloudinary _cloudinary;
 
-        public ClinicController(WebsiteDbContext context)
+        public ClinicController(WebsiteDbContext context, IConfiguration configuration)
         {
             _context = context;
+            Account account = new Account(configuration.GetSection("CLOUDINARY_URL").GetSection("cloudinary_name").Value,
+                                          configuration.GetSection("CLOUDINARY_URL").GetSection("my_key").Value,
+                                          configuration.GetSection("CLOUDINARY_URL").GetSection("my_secret_key").Value);
+            _cloudinary = new Cloudinary(account);
         }
 
         [HttpGet]
@@ -36,7 +41,7 @@ namespace DentistPortal_API.Controllers
 
         [HttpPost]
         [Route("api/create-clinic"), Authorize]
-        public async Task<IActionResult> AddClinic([FromBody] ClinicDto clinicDto)
+        public async Task<IActionResult> AddClinic([FromForm] ClinicDto clinicDto)
         {
             try
             {
@@ -49,6 +54,8 @@ namespace DentistPortal_API.Controllers
                 {
                     return BadRequest("Already Added!");
                 }
+                var uploadResult = new ImageUploadResult();
+                var clinicImage = new ClinicImage();
                 clinic = new();
                 clinic.Id = Guid.NewGuid();
                 clinic.Name = clinicDto.Name;
@@ -59,15 +66,27 @@ namespace DentistPortal_API.Controllers
                 clinic.OpenTime = clinicDto.OpenTime;
                 clinic.CloseTime = clinicDto.CloseTime;
                 clinic.Address = clinicDto.Address;
-                foreach (var x in clinicDto.CasePictures)
-                {
-                    if (x != clinicDto.CasePictures.Last())
-                        clinic.PicturePaths += x + ",";
-                    else
-                        clinic.PicturePaths += x;
-                }
                 await _context.Clinic.AddAsync(clinic);
                 await _context.SaveChangesAsync();
+                foreach (var image in clinicDto.CasePictures)
+                {
+                    using (var stream = image.OpenReadStream())
+                    {
+                        var uploadParams = new ImageUploadParams()
+                        {
+                            File = new FileDescription(image.Name, stream)
+                        };
+                        uploadResult = _cloudinary.Upload(uploadParams);
+                        clinicImage.Id = Guid.NewGuid();
+                        clinicImage.ClinicId = clinic.Id;
+                        clinicImage.IsActive = true;
+                        clinicImage.Url = uploadResult.Uri.ToString();
+                        await _context.ClinicImage.AddAsync(clinicImage);
+                        await _context.SaveChangesAsync();
+                        uploadResult = new();
+                        clinicImage = new();
+                    }
+                }
                 return Ok();
             }
             catch (Exception e)
@@ -108,7 +127,7 @@ namespace DentistPortal_API.Controllers
 
         [HttpPut]
         [Route("api/edit-clinic/{id}"), Authorize]
-        public async Task<IActionResult> EditClinic(Guid id, [FromBody] ClinicDto clinicDto)
+        public async Task<IActionResult> EditClinic(Guid id, [FromForm] ClinicDto clinicDto)
         {
             try
             {
@@ -121,6 +140,8 @@ namespace DentistPortal_API.Controllers
                     var oldClinic = await _context.Clinic.FirstOrDefaultAsync(x => x.Id == id && x.IsActive == true);
                     if (oldClinic != null)
                     {
+                        var uploadResult = new ImageUploadResult();
+                        var clinicImage = new ClinicImage();
                         oldClinic.ClinicDescription = clinicDto.ClinicDescription;
                         oldClinic.Name = clinicDto.Name;
                         oldClinic.ClinicPhone = clinicDto.ClinicPhone;
@@ -129,13 +150,31 @@ namespace DentistPortal_API.Controllers
                         oldClinic.CloseTime = clinicDto.CloseTime;
                         if (clinicDto.CasePictures.Count > 0)
                         {
-                            oldClinic.PicturePaths = string.Empty;
-                            foreach (var x in clinicDto.CasePictures)
+                            var oldPictures = await _context.ClinicImage.Where(x => x.ClinicId == id && x.IsActive == true).ToListAsync();
+                            foreach (var picture in oldPictures)
                             {
-                                if (x != clinicDto.CasePictures.Last())
-                                    oldClinic.PicturePaths += x + ",";
-                                else
-                                    oldClinic.PicturePaths += x;
+                                picture.IsActive = false;
+                                _context.ClinicImage.Update(picture);
+                                await _context.SaveChangesAsync();
+                            }
+                            foreach (var image in clinicDto.CasePictures)
+                            {
+                                using (var stream = image.OpenReadStream())
+                                {
+                                    var uploadParams = new ImageUploadParams()
+                                    {
+                                        File = new FileDescription(image.Name, stream)
+                                    };
+                                    uploadResult = _cloudinary.Upload(uploadParams);
+                                    clinicImage.Id = Guid.NewGuid();
+                                    clinicImage.ClinicId = oldClinic.Id;
+                                    clinicImage.IsActive = true;
+                                    clinicImage.Url = uploadResult.Uri.ToString();
+                                    await _context.ClinicImage.AddAsync(clinicImage);
+                                    await _context.SaveChangesAsync();
+                                    uploadResult = new();
+                                    clinicImage = new();
+                                }
                             }
                         }
                         _context.Clinic.Update(oldClinic);
@@ -194,6 +233,25 @@ namespace DentistPortal_API.Controllers
                 clinicDto.CloseTime == DateTime.MinValue)
                 return false;
             return true;
+        }
+
+        [HttpGet]
+        [Route("api/get-clinic-pics/{clinicId}"), Authorize]
+        public async Task<IActionResult> GetPictures(Guid clinicId)
+        {
+            if (clinicId == Guid.Empty)
+                return BadRequest("Clinic id cant be empty!");
+            try
+            {
+                return Ok(await _context.ClinicImage.
+                    Where(x => x.IsActive == true && x.ClinicId == clinicId).
+                    Select(x => x.Url).
+                    ToListAsync());
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

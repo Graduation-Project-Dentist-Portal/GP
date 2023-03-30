@@ -21,7 +21,6 @@ namespace DentistPortal_API.Migrations
                 .WithColumn("OpenTime").AsDateTime().NotNullable()
                 .WithColumn("CloseTime").AsDateTime().NotNullable()
                 .WithColumn("ClinicDescription").AsString().NotNullable()
-                .WithColumn("PicturePaths").AsString(int.MaxValue).NotNullable()
                 .WithColumn("IsActive").AsBoolean().NotNullable();
         }
     }

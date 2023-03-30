@@ -3,6 +3,8 @@ using DentistPortal_Client.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
@@ -65,34 +67,17 @@ namespace DentistPortal_Client.Pages.DoctorPages.Clinics
             }
         }
 
-        public async Task<IActionResult> OnPost(ClinicDto clinicDto, List<IFormFile> files)
+        public async Task<IActionResult> OnPost(ClinicDto clinicDto)
         {
-            if (files.Count > 0)
-            {
-                foreach (var file in files)
-                {
-                    if (file.Length > 0)
-                    {
-                        using (var ms = new MemoryStream())
-                        {
-                            await file.CopyToAsync(ms);
-                            var fileBytes = ms.ToArray();
-                            string s = Convert.ToBase64String(fileBytes);
-                            // act on the Base64 data
-                            clinicDto.CasePictures.Add(s);
-                        }
-                    }
-                }
-            }
             var token = HttpContext.Session.GetString("Token");
             var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
             clinicDto.DoctorId = Guid.Parse(jwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
             var client = _httpClient.CreateClient();
             client.BaseAddress = new Uri(config["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-            var jsonCategory = JsonSerializer.Serialize(clinicDto);
-            var content = new StringContent(jsonCategory, Encoding.UTF8, "application/json");
-            var request = await client.PostAsync("/api/create-clinic", content);
+            var multipartContent = new MultipartFormDataContent();
+            multipartContent = await MappingContent(multipartContent, clinicDto);
+            var request = await client.PostAsync("/api/create-clinic", multipartContent);
             if (request.IsSuccessStatusCode)
             {
                 Msg = "Successfully added clinic!";
@@ -129,32 +114,15 @@ namespace DentistPortal_Client.Pages.DoctorPages.Clinics
             }
         }
 
-        public async Task<IActionResult> OnPostEdit(ClinicDto clinicDto, List<IFormFile>? files, Guid id)
+        public async Task<IActionResult> OnPostEdit(ClinicDto clinicDto, Guid id)
         {
-            if (files != null)
-            {
-                foreach (var file in files)
-                {
-                    if (file.Length > 0)
-                    {
-                        using (var ms = new MemoryStream())
-                        {
-                            await file.CopyToAsync(ms);
-                            var fileBytes = ms.ToArray();
-                            string s = Convert.ToBase64String(fileBytes);
-                            // act on the Base64 data
-                            clinicDto.CasePictures.Add(s);
-                        }
-                    }
-                }
-            }
             var token = HttpContext.Session.GetString("Token");
             var client = _httpClient.CreateClient();
             client.BaseAddress = new Uri(config["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-            var jsonCategory = JsonSerializer.Serialize(clinicDto);
-            var content = new StringContent(jsonCategory, Encoding.UTF8, "application/json");
-            var request = await client.PutAsync($"api/edit-clinic/{id}", content);
+            var multipartContent = new MultipartFormDataContent();
+            multipartContent = await MappingContent(multipartContent, clinicDto);
+            var request = await client.PutAsync($"api/edit-clinic/{id}", multipartContent);
             if (request.IsSuccessStatusCode)
             {
                 Msg = "Edited successfully!";
@@ -167,6 +135,27 @@ namespace DentistPortal_Client.Pages.DoctorPages.Clinics
                 Status = "error";
                 return RedirectToPage("", new { id });
             }
+        }
+
+        private async Task<MultipartFormDataContent> MappingContent(MultipartFormDataContent multipartFormDataContent, ClinicDto clinicDto)
+        {
+            multipartFormDataContent.Add(new StringContent(clinicDto.Address, Encoding.UTF8, MediaTypeNames.Text.Plain), "Address");
+            multipartFormDataContent.Add(new StringContent(clinicDto.Name, Encoding.UTF8, MediaTypeNames.Text.Plain), "Name");
+            multipartFormDataContent.Add(new StringContent(clinicDto.ClinicDescription, Encoding.UTF8, MediaTypeNames.Text.Plain), "ClinicDescription");
+            multipartFormDataContent.Add(new StringContent(clinicDto.DoctorId.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "DoctorId");
+            multipartFormDataContent.Add(new StringContent(clinicDto.ClinicPhone, Encoding.UTF8, MediaTypeNames.Text.Plain), "ClinicPhone");
+            multipartFormDataContent.Add(new StringContent(clinicDto.OpenTime.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "OpenTime");
+            multipartFormDataContent.Add(new StringContent(clinicDto.CloseTime.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "CloseTime");
+            if (clinicDto.CasePictures.Count > 0)
+            {
+                foreach (var file in clinicDto.CasePictures)
+                {
+                    var fileContent = new StreamContent(file.OpenReadStream());
+                    fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse(file.ContentType);
+                    multipartFormDataContent.Add(fileContent, "CasePictures", file.FileName);
+                }
+            }
+            return multipartFormDataContent;
         }
     }
 }

@@ -21,7 +21,6 @@ namespace DentistPortal_API.Migrations
                 .WithColumn("ContactNumber").AsString().NotNullable()
                 .WithColumn("ToolPrice").AsDouble().NotNullable()
                 .WithColumn("SellerIdDoctor").AsGuid().NotNullable().ForeignKey("Dentist", "Id").OnDelete(System.Data.Rule.Cascade)
-                .WithColumn("PicturePaths").AsString(int.MaxValue).NotNullable()
                 .WithColumn("IsActive").AsBoolean().NotNullable();
         }
     }

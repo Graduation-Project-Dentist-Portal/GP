@@ -3,6 +3,8 @@ using DentistPortal_Client.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
@@ -71,32 +73,14 @@ namespace DentistPortal_Client.Pages.DoctorPages.Tools
             }
         }
 
-        public async Task<IActionResult> OnPostEdit(ToolDto toolDto, List<IFormFile>? files, Guid id)
+        public async Task<IActionResult> OnPostEdit(ToolDto toolDto, Guid id)
         {
-            if (files != null)
-            {
-                foreach (var file in files)
-                {
-                    if (file.Length > 0)
-                    {
-                        using (var ms = new MemoryStream())
-                        {
-                            await file.CopyToAsync(ms);
-                            var fileBytes = ms.ToArray();
-                            string s = Convert.ToBase64String(fileBytes);
-                            // act on the Base64 data
-                            toolDto.PicturePaths.Add(s);
-
-                        }
-                    }
-                }
-            }
             var client = _httpClient.CreateClient();
             client.BaseAddress = new Uri(config["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
-            var jsonCategory = JsonSerializer.Serialize(toolDto);
-            var content = new StringContent(jsonCategory, Encoding.UTF8, "application/json");
-            var request = await client.PutAsync($"api/edit-tool/{id}", content);
+            var multipartContent = new MultipartFormDataContent();
+            multipartContent = await MappingContent(multipartContent, toolDto);
+            var request = await client.PutAsync($"api/edit-tool/{id}", multipartContent);
             if (request.IsSuccessStatusCode)
             {
                 Msg = "Edited successfully!";
@@ -109,6 +93,28 @@ namespace DentistPortal_Client.Pages.DoctorPages.Tools
                 Status = "error";
                 return RedirectToPage("", new { id });
             }
+        }
+
+        private async Task<MultipartFormDataContent> MappingContent(MultipartFormDataContent multipartFormDataContent, ToolDto toolDto)
+        {
+            multipartFormDataContent.Add(new StringContent(toolDto.ToolName, Encoding.UTF8, MediaTypeNames.Text.Plain), "ToolName");
+            multipartFormDataContent.Add(new StringContent(toolDto.Description, Encoding.UTF8, MediaTypeNames.Text.Plain), "Description");
+            multipartFormDataContent.Add(new StringContent(toolDto.SellerLocation, Encoding.UTF8, MediaTypeNames.Text.Plain), "SellerLocation");
+            multipartFormDataContent.Add(new StringContent(toolDto.ContactNumber, Encoding.UTF8, MediaTypeNames.Text.Plain), "ContactNumber");
+            multipartFormDataContent.Add(new StringContent(toolDto.ToolPrice.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "ToolPrice");
+            multipartFormDataContent.Add(new StringContent(toolDto.SellerIdDoctor.ToString(), Encoding.UTF8, MediaTypeNames.Text.Plain), "SellerIdDoctor");
+            if (!string.IsNullOrEmpty(toolDto.ToolStatus))
+                multipartFormDataContent.Add(new StringContent(toolDto.ToolStatus, Encoding.UTF8, MediaTypeNames.Text.Plain), "ToolStatus");
+            if (toolDto.Pictures.Count > 0)
+            {
+                foreach (var file in toolDto.Pictures)
+                {
+                    var fileContent = new StreamContent(file.OpenReadStream());
+                    fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse(file.ContentType);
+                    multipartFormDataContent.Add(fileContent, "Pictures", file.FileName);
+                }
+            }
+            return multipartFormDataContent;
         }
     }
 }

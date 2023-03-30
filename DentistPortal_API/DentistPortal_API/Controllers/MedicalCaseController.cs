@@ -1,4 +1,6 @@
-﻿using DentistPortal_API.Data;
+﻿using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using DentistPortal_API.Data;
 using DentistPortal_API.DTO;
 using DentistPortal_API.Model;
 using Microsoft.AspNetCore.Authorization;
@@ -10,15 +12,20 @@ namespace DentistPortal_API.Controllers
     public class MedicalCaseController : Controller
     {
         private readonly WebsiteDbContext _context;
+        private Cloudinary _cloudinary;
 
-        public MedicalCaseController(WebsiteDbContext context)
+        public MedicalCaseController(WebsiteDbContext context, IConfiguration configuration)
         {
             _context = context;
+            Account account = new Account(configuration.GetSection("CLOUDINARY_URL").GetSection("cloudinary_name").Value,
+                                          configuration.GetSection("CLOUDINARY_URL").GetSection("my_key").Value,
+                                          configuration.GetSection("CLOUDINARY_URL").GetSection("my_secret_key").Value);
+            _cloudinary = new Cloudinary(account);
         }
 
         [HttpPost]
         [Route("api/create-medical-case"), Authorize]
-        public async Task<IActionResult> AddMedicalCase([FromBody] MedicalCaseDto medicalCaseDto)
+        public async Task<IActionResult> AddMedicalCase([FromForm] MedicalCaseDto medicalCaseDto)
         {
             try
             {
@@ -41,6 +48,8 @@ namespace DentistPortal_API.Controllers
                 }
                 else
                     medicalCase.CaseStatus = "Open";
+                var uploadResult = new ImageUploadResult();
+                var medicalCaseImage = new MedicalCaseImage();
                 medicalCase.Id = Guid.NewGuid();
                 medicalCase.PatientName = medicalCaseDto.PatientName;
                 medicalCase.PatientPhone = medicalCaseDto.PatientPhone;
@@ -49,16 +58,29 @@ namespace DentistPortal_API.Controllers
                 medicalCase.IsActive = true;
                 medicalCase.PatientAge = medicalCaseDto.PatientAge;
                 medicalCase.Diagnosis = medicalCaseDto.Diagnosis;
-                foreach (var x in medicalCaseDto.CasePictures)
-                {
-                    if (x != medicalCaseDto.CasePictures.Last())
-                        medicalCase.PicturePaths += x + ",";
-                    else
-                        medicalCase.PicturePaths += x;
-                }
                 medicalCase.TimeCreated = DateTime.Now;
                 await _context.MedicalCase.AddAsync(medicalCase);
                 await _context.SaveChangesAsync();
+                foreach (var image in medicalCaseDto.CasePictures)
+                {
+                    using (var stream = image.OpenReadStream())
+                    {
+                        var uploadParams = new ImageUploadParams()
+                        {
+                            File = new FileDescription(image.Name, stream)
+                        };
+                        uploadResult = _cloudinary.Upload(uploadParams);
+                        medicalCaseImage.Id = Guid.NewGuid();
+                        medicalCaseImage.MedicalCaseId = medicalCase.Id;
+                        medicalCaseImage.IsActive = true;
+                        medicalCaseImage.Url = uploadResult.Uri.ToString();
+                        await _context.MedicalCaseImage.AddAsync(medicalCaseImage);
+                        await _context.SaveChangesAsync();
+                        uploadResult = new();
+                        medicalCaseImage = new();
+                    }
+                }
+
                 return Ok();
             }
             catch (Exception e)
@@ -144,7 +166,7 @@ namespace DentistPortal_API.Controllers
 
         [HttpPut]
         [Route("api/edit-medical-case/{id}"), Authorize]
-        public async Task<IActionResult> EditMedicalCase(Guid id, [FromBody] MedicalCaseDto medicalCaseDto)
+        public async Task<IActionResult> EditMedicalCase(Guid id, [FromForm] MedicalCaseDto medicalCaseDto)
         {
             try
             {
@@ -162,15 +184,35 @@ namespace DentistPortal_API.Controllers
                         oldMedicalCase.PatientPhone = medicalCaseDto.PatientPhone;
                         oldMedicalCase.PatientAge = medicalCaseDto.PatientAge;
                         oldMedicalCase.Diagnosis = medicalCaseDto.Diagnosis;
+                        var uploadResult = new ImageUploadResult();
+                        var medicalCaseImage = new MedicalCaseImage();
                         if (medicalCaseDto.CasePictures.Count > 0)
                         {
-                            oldMedicalCase.PicturePaths = string.Empty;
-                            foreach (var x in medicalCaseDto.CasePictures)
+                            var oldPictures = await _context.MedicalCaseImage.Where(x => x.MedicalCaseId == id && x.IsActive == true).ToListAsync();
+                            foreach (var picture in oldPictures)
                             {
-                                if (x != medicalCaseDto.CasePictures.Last())
-                                    oldMedicalCase.PicturePaths += x + ",";
-                                else
-                                    oldMedicalCase.PicturePaths += x;
+                                picture.IsActive = false;
+                                _context.MedicalCaseImage.Update(picture);
+                                await _context.SaveChangesAsync();
+                            }
+                            foreach (var image in medicalCaseDto.CasePictures)
+                            {
+                                using (var stream = image.OpenReadStream())
+                                {
+                                    var uploadParams = new ImageUploadParams()
+                                    {
+                                        File = new FileDescription(image.Name, stream)
+                                    };
+                                    uploadResult = _cloudinary.Upload(uploadParams);
+                                    medicalCaseImage.Id = Guid.NewGuid();
+                                    medicalCaseImage.MedicalCaseId = oldMedicalCase.Id;
+                                    medicalCaseImage.IsActive = true;
+                                    medicalCaseImage.Url = uploadResult.Uri.ToString();
+                                    await _context.MedicalCaseImage.AddAsync(medicalCaseImage);
+                                    await _context.SaveChangesAsync();
+                                    uploadResult = new();
+                                    medicalCaseImage = new();
+                                }
                             }
                         }
                         _context.MedicalCase.Update(oldMedicalCase);
@@ -255,9 +297,9 @@ namespace DentistPortal_API.Controllers
 
         [HttpPost]
         [Route("api/finish-medical-case"), Authorize]
-        public async Task<IActionResult> FinishMedicalCase([FromBody] FinishedCaseDto finishedCaseDto)
+        public async Task<IActionResult> FinishMedicalCase([FromForm] FinishedCaseDto finishedCaseDto)
         {
-            if (finishedCaseDto.CaseId == Guid.Empty || finishedCaseDto.DoctorId == Guid.Empty || string.IsNullOrEmpty(finishedCaseDto.BeforePicture) || string.IsNullOrEmpty(finishedCaseDto.AfterPicture) || string.IsNullOrEmpty(finishedCaseDto.DoctorWork))
+            if (finishedCaseDto.CaseId == Guid.Empty || finishedCaseDto.DoctorId == Guid.Empty || finishedCaseDto.BeforePicture is null || finishedCaseDto.AfterPicture is null || string.IsNullOrEmpty(finishedCaseDto.DoctorWork))
                 return BadRequest("Cant be empty");
             try
             {
@@ -269,8 +311,26 @@ namespace DentistPortal_API.Controllers
                     medCase.CaseStatus = "Closed";
                     FinishedCases finishedCase = new();
                     finishedCase.Id = Guid.NewGuid();
-                    finishedCase.AfterPicture = finishedCaseDto.AfterPicture;
-                    finishedCase.BeforePicture = finishedCaseDto.BeforePicture;
+                    var uploadResult = new ImageUploadResult();
+                    using (var stream = finishedCaseDto.BeforePicture.OpenReadStream())
+                    {
+                        var uploadParams = new ImageUploadParams()
+                        {
+                            File = new FileDescription(finishedCaseDto.BeforePicture.Name, stream)
+                        };
+                        uploadResult = _cloudinary.Upload(uploadParams);
+                        finishedCase.BeforePicture = uploadResult.Uri.ToString();
+                    }
+                    uploadResult = new();
+                    using (var stream = finishedCaseDto.AfterPicture.OpenReadStream())
+                    {
+                        var uploadParams = new ImageUploadParams()
+                        {
+                            File = new FileDescription(finishedCaseDto.AfterPicture.Name, stream)
+                        };
+                        uploadResult = _cloudinary.Upload(uploadParams);
+                        finishedCase.AfterPicture = uploadResult.Uri.ToString();
+                    }
                     finishedCase.CaseId = finishedCaseDto.CaseId;
                     finishedCase.DoctorId = finishedCaseDto.DoctorId;
                     finishedCase.DoctorWork = finishedCaseDto.DoctorWork;
@@ -296,6 +356,25 @@ namespace DentistPortal_API.Controllers
                 string.IsNullOrEmpty(medicalCaseDto.Diagnosis))
                 return false;
             return true;
+        }
+
+        [HttpGet]
+        [Route("api/get-medical-case-pics/{medicalCaseId}"), Authorize]
+        public async Task<IActionResult> GetPictures(Guid medicalCaseId)
+        {
+            if (medicalCaseId == Guid.Empty)
+                return BadRequest("Tool id cant be empty!");
+            try
+            {
+                return Ok(await _context.MedicalCaseImage.
+                    Where(x => x.IsActive == true && x.MedicalCaseId == medicalCaseId).
+                    Select(x => x.Url).
+                    ToListAsync());
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

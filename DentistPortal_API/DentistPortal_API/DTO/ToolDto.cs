@@ -9,6 +9,6 @@
         public string ContactNumber { get; set; } = string.Empty;
         public string ToolStatus { get; set; } = string.Empty;
         public Guid SellerIdDoctor { get; set; }
-        public List<string> PicturePaths { get; set; } = new();
+        public List<IFormFile> Pictures { get; set; } = new();
     }
 }
