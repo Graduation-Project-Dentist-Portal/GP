@@ -95,7 +95,7 @@ namespace DentistPortal_API.Controllers
         {
             try
             {
-                if (id == Guid.Empty || !await IsValid(feedbackDto))
+                if (id == Guid.Empty || string.IsNullOrEmpty(feedbackDto.Comment) || feedbackDto.AiScore is null)
                 {
                     return BadRequest("Cant be empty");
                 }
@@ -105,6 +105,7 @@ namespace DentistPortal_API.Controllers
                     if (oldFeedback != null)
                     {
                         oldFeedback.Comment = feedbackDto.Comment;
+                        oldFeedback.AiScore = feedbackDto.AiScore;
                         _context.Feedback.Update(oldFeedback);
                         await _context.SaveChangesAsync();
                         return Ok();

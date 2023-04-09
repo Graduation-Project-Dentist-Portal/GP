@@ -202,5 +202,84 @@ namespace DentistPortal_Client.Pages.DoctorPages.Clinics
                 return RedirectToPage("", new { id = clinicId });
             }
         }
+
+        public async Task<IActionResult> OnPostDelete(Guid id, Guid clinicId)
+        {
+            var client = _httpClient.CreateClient();
+            client.BaseAddress = new Uri(config["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+            var request = await client.DeleteAsync($"api/delete-feedback/{id}");
+            if (request.IsSuccessStatusCode)
+            {
+                Msg = "Successfully Deleted !";
+                Status = "success";
+                return RedirectToPage("", new { id = clinicId });
+            }
+            else
+            {
+                Msg = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                Status = "error";
+                return RedirectToPage("", new { id = clinicId });
+            }
+        }
+
+        public async Task<IActionResult> OnPostEdit(FeedbackDto feedbackDto, Guid id)
+        {
+            try
+                {
+                Comment comment = new Comment
+                {
+                    comment = feedbackDto.Comment
+                };
+                var clientForAi = _httpClient.CreateClient();
+                clientForAi.BaseAddress = new Uri("http://127.0.0.1:5000");
+                var jsonComment = JsonSerializer.Serialize(comment);
+                var contentForAi = new StringContent(jsonComment, Encoding.UTF8, "application/json");
+                var requestForAi = await clientForAi.PostAsync("/api/get-score", contentForAi);
+                if (requestForAi.IsSuccessStatusCode)
+                {
+                    feedbackDto.AiScore = requestForAi.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                }
+                else
+                {
+                    Msg = requestForAi.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                    Status = "error";
+                    return RedirectToPage("", new { id = feedbackDto.ClinicId });
+                }
+            }
+            catch (Exception e)
+            {
+                Msg = e.Message;
+                Status = "error";
+                return RedirectToPage("", new { id = feedbackDto.ClinicId });
+            }
+            var client = _httpClient.CreateClient();
+            client.BaseAddress = new Uri(config["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+            var jsonCategory = JsonSerializer.Serialize(feedbackDto);
+            var content = new StringContent(jsonCategory, Encoding.UTF8, "application/json");
+            try
+            {
+                var request = await client.PutAsync($"api/edit-feedback/{id}", content);
+                if (request.IsSuccessStatusCode)
+                {
+                    Msg = "Edited successfully!";
+                    Status = "success";
+                    return RedirectToPage("", new { id = feedbackDto.ClinicId });
+                }
+                else
+                {
+                    Msg = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                    Status = "error";
+                    return RedirectToPage("", new { id = feedbackDto.ClinicId });
+                }
+            }
+            catch (Exception e)
+            {
+                Msg = e.Message;
+                Status = "error";
+                return RedirectToPage("", new { id = feedbackDto.ClinicId });
+            }
+        }
     }
 }

@@ -153,7 +153,7 @@ namespace DentistPortal_API.Controllers
             var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(3),
+                expires: DateTime.Now.AddMinutes(99),
                 signingCredentials: cred,
                 issuer: "Graduation Project Team",
                 audience: "https://localhost:7156/"

@@ -17,6 +17,9 @@ Tables:
 	| string | IdentityCardPicture | |
 	| string | UniversityCardPicture | |
 	| Boolean | IsActive | |
+	| String | IsVerified | |
+	| String | VerfiyMessage | |
+
 	
 - Patient
 
@@ -48,12 +51,11 @@ Tables:
     | Guid |Id | Primary Key |
 	| String | ToolName |  |
 	| String | Description |  |
+	| Double | ToolPrice |  |
+	| Guid | SellerIdDoctor | Foreign Key => (Dentist.Id) |		
 	| String | SellerLocation |  |
 	| String | ContactNumber |  |
 	| String | ToolStatus |  |
-	| Double | ToolPrice |  |
-	| Guid | SellerIdDoctor | Foreign Key => (Dentist.Id) |		
-	| string | PicturePaths | |
 	| Boolean | IsActive | |
 
 - Job
@@ -86,7 +88,6 @@ Tables:
 	| String | PatientName |  |
 	| String | PatientPhone |  |
 	| int | PatientAge |  |	
-	| string | PicturePaths | |
 	| string | Diagnosis | |
 	| string | CaseStatus | |
 	| Guid | DoctorId | Foreign Key => (Dentist.Id) |
@@ -106,7 +107,6 @@ Tables:
 	| DateTime | OpenTime |  |
 	| DateTime | CloseTime |  |
 	| string | ClinicDescription |  |
-	| string | PicturePaths | |
 	| Boolean | IsActive | |
 
 - Feedback
@@ -115,6 +115,7 @@ Tables:
 	| --- | --- | --- |
     | Guid | Id | Primary Key |
 	| String | Comment |  |
+	| String | AiScore |  |
 	| Guid | ClinicId | Foreign Key => (Clinic.Id) | 
 	| Guid | UserId | Foreign Key => (Patient.Id) | 
 	| int | Likes | | 
@@ -130,6 +131,7 @@ Tables:
 	| string | BeforePicture | |
 	| string | AfterPicture | |
     | Guid | CaseId | Foreign Key => (MedicalCase.Id) |
+	| Boolean | IsActive | |
 
 - Like
 
@@ -139,8 +141,33 @@ Tables:
 	| Guid | PatientId | Foreign Key => (Patient.Id) | 
     | Guid | FeedbackId | Foreign Key => (Feedback.Id) |
 	| Boolean | IsActive | |
+	
+- ToolImage
 
+	| Field Type | Field Name | Keys
+	| --- | --- | --- |
+    | Guid | Id | Primary Key |
+	| string | Url |  | 
+    | Guid | ToolId | Foreign Key => (Tool.Id) |
+	| Boolean | IsActive | |
 
+- MedicalCaseImage
+
+	| Field Type | Field Name | Keys
+	| --- | --- | --- |
+    | Guid | Id | Primary Key |
+	| string | Url |  | 
+    | Guid | MedicalCaseId | Foreign Key => (MedicalCase.Id) |
+	| Boolean | IsActive | |
+
+- ClinicImage
+
+	| Field Type | Field Name | Keys
+	| --- | --- | --- |
+    | Guid | Id | Primary Key |
+	| string | Url |  | 
+    | Guid | ClinicId | Foreign Key => (Clinic.Id) |
+	| Boolean | IsActive | |
 
 Relationships:
 
@@ -156,6 +183,9 @@ Relationships:
 | One to Many | Patient to Feedback |
 | One to Many | Feedback to Like |
 | One to Many | Clinic to Feedback |
+| One to Many | Clinic to ClinicImage |
+| One to Many | MedicalCase to MedicalCaseImage |
+| One to Many | Tool to ToolImage |
 
 Notes:
 -	jobs contact info and the job owner still missing

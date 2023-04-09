@@ -12,7 +12,6 @@ namespace DentistPortal_API.Model
         public string ContactNumber { get; set; } = string.Empty;
         public Guid SellerIdDoctor { get; set; }
         public bool IsActive { get; set; }
-        //public string PicturePaths { get; set; } = string.Empty;
         public string ToolStatus { get; set; } = string.Empty;
         [ForeignKey("SellerIdDoctor")]
         public Dentist Dentist { get; set; } = new();

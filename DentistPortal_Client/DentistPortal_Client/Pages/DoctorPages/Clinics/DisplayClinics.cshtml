@@ -5,6 +5,7 @@
 @using System.Net.Http
 @using Microsoft.Extensions.DependencyInjection;
 @using Microsoft.AspNetCore.Http;
+@using System.Security.Claims
 @model DentistPortal_Client.Pages.DoctorPages.Clinics.DisplayClinicsModel
 @{
     int counter = 0;
@@ -14,6 +15,7 @@
                   .Build();
     var httpClient = HttpContext.RequestServices.GetService<IHttpClientFactory>();
     var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
+    var role = jwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value;
     var client = httpClient.CreateClient();
     client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
     client.BaseAddress = new Uri(config["BaseAddress"]);
@@ -36,9 +38,9 @@
                 imageUrls = JsonSerializer.Deserialize<List<string>>(req, options);
             }
             <div class="col p-2">
-                <div class="card h-100 text-center m-3" style="background-color:transparent;border:groove;border-color:#66FCF1;">
+                <div class="card h-100 text-center m-3" style="background-color:transparent;border:solid;border-color:#14213d;">
                     <div class="card-body">
-                        <h5 class="card-title" style="color:black">@clinic.Name</h5>
+                        <h5 class="card-title" style="color:#000000"><i class="bi bi-geo-alt-fill" style="font-style:normal"> @clinic.Address</i></h5>
                         <br>
                         <div class="card-text" style="color:#66FCF1;text-align:left">
                             <div id=@("carouselExampleControls"+@counter) class="carousel slide" data-bs-ride="carousel">
@@ -59,11 +61,11 @@
                                         }
                                     }
                                 </div>
-                                <button class="carousel-control-prev" type="button" data-bs-target=@("#carouselExampleControls"+@counter) data-bs-slide="prev">
+                                <button class="carousel-control-prev carousel-dark" type="button" data-bs-target=@("#carouselExampleControls"+@counter) data-bs-slide="prev">
                                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                     <span class="visually-hidden">Previous</span>
                                 </button>
-                                <button class="carousel-control-next" type="button" data-bs-target=@("#carouselExampleControls"+@counter) data-bs-slide="next">
+                                <button class="carousel-control-next carousel-dark" type="button" data-bs-target=@("#carouselExampleControls"+@counter) data-bs-slide="next">
                                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                     <span class="visually-hidden">Next</span>
                                 </button>
@@ -79,7 +81,7 @@
                         }
                         else
                         {
-                            <a class="btn btn-dark" style="background-color:#1F2833;color:#C5C6C7;margin-top:10px;font-style:normal" asp-page="ViewClinic" asp-route-id="@clinic.Id"><i class="bi bi-eye" style="font-style:normal"> View</i></a>
+                            <a class="btn btn-dark" style="background-color:#14213d;color:#C5C6C7;margin-top:10px;font-style:normal" asp-page="ViewClinic" asp-route-id="@clinic.Id"><i class="bi bi-eye" style="font-style:normal"> View</i></a>
                         }
                     </div>
                 </div>
@@ -157,11 +159,11 @@
                                             }
                                         }
                                     </div>
-                                    <button class="carousel-control-prev" type="button" data-bs-target=@("#carouselExampleControls") data-bs-slide="prev">
+                                    <button class="carousel-control-prev carousel-dark" type="button" data-bs-target=@("#carouselExampleControls") data-bs-slide="prev">
                                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                         <span class="visually-hidden">Previous</span>
                                     </button>
-                                    <button class="carousel-control-next" type="button" data-bs-target=@("#carouselExampleControls") data-bs-slide="next">
+                                    <button class="carousel-control-next carousel-dark" type="button" data-bs-target=@("#carouselExampleControls") data-bs-slide="next">
                                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                         <span class="visually-hidden">Next</span>
                                     </button>
@@ -205,9 +207,14 @@
         }
     </div>
     <br />
-    <div class="text-center m-4">
-        <button style="background-color:#252f3e;color:white;" class="btn" data-bs-toggle="modal" data-bs-target="#AddClinic"><i class="bi bi-plus-circle" style="font-style:normal"> Add Clinic</i></button>
-    </div>
+
+    <!-- Create Clinic Modal Trigger-->
+    @if (role == "Dentist")
+    {
+        <div class="text-center m-4">
+            <button style="background-color:#252f3e;color:white;" class="btn" data-bs-toggle="modal" data-bs-target="#AddClinic"><i class="bi bi-plus-circle" style="font-style:normal"> Add Clinic</i></button>
+        </div>
+    }
 
     <!-- Create Clinic Modal -->
     <div class="modal fade" id="AddClinic" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
