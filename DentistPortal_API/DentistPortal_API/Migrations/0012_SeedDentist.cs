@@ -9,18 +9,20 @@ namespace DentistPortal_API.Migrations
         record dentist
         {
             public Guid Id { get; set; }
-            public string Username { get; set; } = String.Empty;
-            public string FirstName { get; set; } = String.Empty;
-            public string LastName { get; set; } = String.Empty;
-            public string PasswordHash { get; set; } = String.Empty;
+            public string Username { get; set; } = string.Empty;
+            public string FirstName { get; set; } = string.Empty;
+            public string LastName { get; set; } = string.Empty;
+            public string PasswordHash { get; set; } = string.Empty;
             public Guid RefreshTokenId { get; set; }
-            public string ProfilePicture { get; set; } = String.Empty;
+            public string ProfilePicture { get; set; } = string.Empty;
             public bool IsActive { get; set; }
             public bool Graduated { get; set; }
-            public string University { get; set; } = String.Empty;
-            public string IdentityCardPicture { get; set; } = String.Empty;
-            public string UniversityCardPicture { get; set; } = String.Empty;
+            public string University { get; set; } = string.Empty;
+            public string IdentityCardPicture { get; set; } = string.Empty;
+            public string UniversityCardPicture { get; set; } = string.Empty;
             public int Level { get; set; }
+            public string IsVerified { get; set; } = string.Empty;
+            public string? VerfiyMessage { get; set; } = string.Empty;
         }
         static PasswordHasher<dentist> hasher = new();
 
@@ -42,7 +44,9 @@ namespace DentistPortal_API.Migrations
                 University = "Helwan",
                 IdentityCardPicture = "test",
                 UniversityCardPicture = "test",
-                Level = 0
+                Level = 0,
+                IsVerified = "true",
+                VerfiyMessage = ""
             })
             .Row(new
             {
@@ -56,7 +60,9 @@ namespace DentistPortal_API.Migrations
                 University = "Helwan",
                 IdentityCardPicture = "test",
                 UniversityCardPicture = "test",
-                Level = 3
+                Level = 3,
+                IsVerified = "true",
+                VerfiyMessage = ""
             });
         }
     }

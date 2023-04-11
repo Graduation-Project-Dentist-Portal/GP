@@ -8,6 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Net.Mime;
 using System.Net.Http.Headers;
+using System.Net;
 
 namespace DentistPortal_Client.Pages.DoctorPages
 {
@@ -59,6 +60,15 @@ namespace DentistPortal_Client.Pages.DoctorPages
                 {
                     Msg = request.ToString();
                     Status = "error";
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                if (ex.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    LoginModel loginModel = new LoginModel(_httpClient);
+                    await loginModel.GetNewToken(HttpContext);
+                    await OnGet();
                 }
             }
             catch (Exception e)

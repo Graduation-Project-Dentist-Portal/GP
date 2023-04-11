@@ -3,6 +3,7 @@ using DentistPortal_Client.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Security.Claims;
@@ -58,6 +59,15 @@ namespace DentistPortal_Client.Pages.DoctorPages.Clinics
                 {
                     Msg = request.ToString();
                     Status = "error";
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                if (ex.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    LoginModel loginModel = new LoginModel(_httpClient);
+                    await loginModel.GetNewToken(HttpContext);
+                    await OnGet();
                 }
             }
             catch (Exception e)

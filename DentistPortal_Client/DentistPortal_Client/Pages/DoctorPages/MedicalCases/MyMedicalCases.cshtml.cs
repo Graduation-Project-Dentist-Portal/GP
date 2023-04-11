@@ -2,6 +2,7 @@ using DentistPortal_API.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Text.Json;
 
 namespace DentistPortal_Client.Pages.DoctorPages.MedicalCases
@@ -33,20 +34,37 @@ namespace DentistPortal_Client.Pages.DoctorPages.MedicalCases
             var client = _httpClient.CreateClient();
             client.BaseAddress = new Uri(config["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
-            var request = await client.GetStringAsync($"/api/my-medical-cases/{id}");
-            if (request is not null)
+            try
             {
-                var options = new JsonSerializerOptions
+                var request = await client.GetStringAsync($"/api/my-medical-cases/{id}");
+                if (request is not null)
                 {
-                    WriteIndented = true,
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                    DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
-                };
-                MedicalCases = JsonSerializer.Deserialize<List<MedicalCase>>(request, options);
+                    var options = new JsonSerializerOptions
+                    {
+                        WriteIndented = true,
+                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                        DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
+                    };
+                    MedicalCases = JsonSerializer.Deserialize<List<MedicalCase>>(request, options);
+                }
+                else
+                {
+                    Msg = request.ToString();
+                    Status = "error";
+                }
             }
-            else
+            catch (HttpRequestException ex)
             {
-                Msg = request.ToString();
+                if (ex.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    LoginModel loginModel = new LoginModel(_httpClient);
+                    await loginModel.GetNewToken(HttpContext);
+                    await OnGet();
+                }
+            }
+            catch (Exception e)
+            {
+                Msg = e.Message;
                 Status = "error";
             }
         }

@@ -14,6 +14,7 @@ namespace DentistPortal_Client.Pages
     public class LoginModel : PageModel
     {
         private IHttpClientFactory _httpClient;
+
         public LoginModel(IHttpClientFactory httpClient)
         {
             _httpClient = httpClient;
@@ -44,6 +45,10 @@ namespace DentistPortal_Client.Pages
                 string token = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
                 HttpContext.Session.SetString("Token", token);
+                //var timer = new System.Threading.Timer(async (e) =>
+                //{
+                //    await GetNewToken(_h);
+                //}, null, TimeSpan.Zero, TimeSpan.FromSeconds(30));
                 return RedirectToPage("/Home");
             }
             else
@@ -54,8 +59,9 @@ namespace DentistPortal_Client.Pages
             }
         }
 
-        public async Task GetNewToken(string token, HttpContext context)
+        public async Task GetNewToken(HttpContext context)
         {
+            var token = context.Session.GetString("Token");
             var client = _httpClient.CreateClient();
             client.BaseAddress = new Uri(config["BaseAddress"]);
             var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
@@ -65,7 +71,6 @@ namespace DentistPortal_Client.Pages
             if (req.IsSuccessStatusCode)
             {
                 var rT = req.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-                string idString = id.ToString().Replace("\"", "");
                 var newTokenRequest = await client.PostAsJsonAsync($"api/refresh-token/{id}", rT);
                 if (newTokenRequest.IsSuccessStatusCode)
                 {

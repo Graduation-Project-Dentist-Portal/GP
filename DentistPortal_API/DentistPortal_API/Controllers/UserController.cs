@@ -153,7 +153,7 @@ namespace DentistPortal_API.Controllers
             var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(99),
+                expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: cred,
                 issuer: "Graduation Project Team",
                 audience: "https://localhost:7156/"
@@ -163,7 +163,7 @@ namespace DentistPortal_API.Controllers
         }
 
         [HttpPost]
-        [Route("api/refresh-token/{id}"), Authorize]
+        [Route("api/refresh-token/{id}")]
         public async Task<ActionResult<string>> RefreshToken([FromBody] string rT, Guid id)
         {
             try
@@ -190,7 +190,7 @@ namespace DentistPortal_API.Controllers
         }
 
         [HttpPost]
-        [Route("api/get-rt"), Authorize]
+        [Route("api/get-rt")]
         public async Task<ActionResult<RefreshToken>> GetRefreshToken([FromBody] Guid id)
         {
             try

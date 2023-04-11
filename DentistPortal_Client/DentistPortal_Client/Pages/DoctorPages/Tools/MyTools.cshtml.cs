@@ -3,6 +3,7 @@ using DentistPortal_Client.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Security.Claims;
@@ -36,20 +37,37 @@ namespace DentistPortal_Client.Pages.DoctorPages.Tools
             var client = _httpClient.CreateClient();
             client.BaseAddress = new Uri(config["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
-            var request = await client.GetStringAsync($"/api/display-my-tools/{jwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value}");
-            if (request is not null)
+            try
             {
-                var options = new JsonSerializerOptions
+                var request = await client.GetStringAsync($"/api/display-my-tools/{jwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value}");
+                if (request is not null)
                 {
-                    WriteIndented = true,
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                    DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
-                };
-                Tools = JsonSerializer.Deserialize<List<Tool>>(request, options);
+                    var options = new JsonSerializerOptions
+                    {
+                        WriteIndented = true,
+                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                        DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
+                    };
+                    Tools = JsonSerializer.Deserialize<List<Tool>>(request, options);
+                }
+                else
+                {
+                    Msg = request.ToString();
+                    Status = "error";
+                }
             }
-            else
+            catch (HttpRequestException ex)
             {
-                Msg = request.ToString();
+                if (ex.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    LoginModel loginModel = new LoginModel(_httpClient);
+                    await loginModel.GetNewToken(HttpContext);
+                    await OnGet();
+                }
+            }
+            catch (Exception e)
+            {
+                Msg = e.Message;
                 Status = "error";
             }
         }

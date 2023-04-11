@@ -3,6 +3,7 @@ using DentistPortal_Client.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
@@ -35,26 +36,10 @@ namespace DentistPortal_Client.Pages.DoctorPages.Clinics
             var client = _httpClient.CreateClient();
             client.BaseAddress = new Uri(config["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
-            var request = await client.GetStringAsync($"/api/get-clinic/{id}");
-            if (request is not null)
+            try
             {
-                var options = new JsonSerializerOptions
-                {
-                    WriteIndented = true,
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                    DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
-                };
-                Clinic = JsonSerializer.Deserialize<Clinic>(request, options);
-            }
-            else
-            {
-                Msg = request.ToString();
-                Status = "error";
-            }
-            var req = await client.GetStringAsync($"/api/get-feedbacks/{id}");
-            if (req is not null)
-            {
-                if (req.Length > 0)
+                var request = await client.GetStringAsync($"/api/get-clinic/{id}");
+                if (request is not null)
                 {
                     var options = new JsonSerializerOptions
                     {
@@ -62,12 +47,45 @@ namespace DentistPortal_Client.Pages.DoctorPages.Clinics
                         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                         DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
                     };
-                    Feedbacks = JsonSerializer.Deserialize<List<Feedback>>(req, options);
+                    Clinic = JsonSerializer.Deserialize<Clinic>(request, options);
+                }
+                else
+                {
+                    Msg = request.ToString();
+                    Status = "error";
+                }
+                var req = await client.GetStringAsync($"/api/get-feedbacks/{id}");
+                if (req is not null)
+                {
+                    if (req.Length > 0)
+                    {
+                        var options = new JsonSerializerOptions
+                        {
+                            WriteIndented = true,
+                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                            DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
+                        };
+                        Feedbacks = JsonSerializer.Deserialize<List<Feedback>>(req, options);
+                    }
+                }
+                else
+                {
+                    Msg = request.ToString();
+                    Status = "error";
                 }
             }
-            else
+            catch (HttpRequestException ex)
             {
-                Msg = request.ToString();
+                if (ex.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    LoginModel loginModel = new LoginModel(_httpClient);
+                    await loginModel.GetNewToken(HttpContext);
+                    await OnGet(id);
+                }
+            }
+            catch (Exception e)
+            {
+                Msg = e.Message;
                 Status = "error";
             }
         }
@@ -226,7 +244,7 @@ namespace DentistPortal_Client.Pages.DoctorPages.Clinics
         public async Task<IActionResult> OnPostEdit(FeedbackDto feedbackDto, Guid id)
         {
             try
-                {
+            {
                 Comment comment = new Comment
                 {
                     comment = feedbackDto.Comment
