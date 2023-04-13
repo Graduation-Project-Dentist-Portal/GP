@@ -1,4 +1,6 @@
-﻿using DentistPortal_API.Data;
+﻿using CloudinaryDotNet.Actions;
+using CloudinaryDotNet;
+using DentistPortal_API.Data;
 using DentistPortal_API.DTO;
 using DentistPortal_API.Model;
 using Microsoft.AspNetCore.Authorization;
@@ -94,6 +96,342 @@ namespace DentistPortal_API.Controllers
         //        return Ok();
         //    }
         //}
+
+        [HttpPost]
+        [Route("api/RegisterAsDoctor")]
+        public async Task<IActionResult> RegisterAsDoctor([FromForm] DentistDto newDentist)
+        {
+            var loggedUserDentist = await _context.Dentist.FirstOrDefaultAsync(x => x.Username == newDentist.Username);
+            var loggedUserPatient = await _context.Patient.FirstOrDefaultAsync(x => x.Username == newDentist.Username);
+            if (string.IsNullOrEmpty(newDentist.Username) || string.IsNullOrEmpty(newDentist.PasswordHash) || string.IsNullOrEmpty(newDentist.LastName) || string.IsNullOrEmpty(newDentist.FirstName) || string.IsNullOrEmpty(newDentist.University))
+            {
+                return BadRequest("Cant be empty");
+            }
+            else if (loggedUserDentist != null || loggedUserPatient != null)
+            {
+                return BadRequest("Already used Username");
+            }
+            Dentist dentist = new Dentist();
+            dentist.Id = Guid.NewGuid();
+            dentist.IsActive = true;
+            dentist.Username = newDentist.Username;
+            dentist.FirstName = newDentist.FirstName;
+            dentist.LastName = newDentist.LastName;
+            var uploadResult = new ImageUploadResult();
+            if (newDentist.ProfilePicture != null)
+            {
+                using (var stream = newDentist.ProfilePicture.OpenReadStream())
+                {
+                    var uploadParams = new ImageUploadParams()
+                    {
+                        File = new FileDescription(newDentist.ProfilePicture.Name, stream)
+                    };
+                    uploadResult = _cloudinary.Upload(uploadParams);
+                    dentist.ProfilePicture = uploadResult.Uri.ToString();
+                }
+            }
+            if (newDentist.IdentityCardPicture != null)
+            {
+                using (var stream = newDentist.IdentityCardPicture.OpenReadStream())
+                {
+                    var uploadParams = new ImageUploadParams()
+                    {
+                        File = new FileDescription(newDentist.IdentityCardPicture.Name, stream)
+                    };
+                    uploadResult = _cloudinary.Upload(uploadParams);
+                    dentist.IdentityCardPicture = uploadResult.Uri.ToString();
+                }
+            }
+            if (newDentist.UniversityCardPicture != null)
+            {
+                using (var stream = newDentist.UniversityCardPicture.OpenReadStream())
+                {
+                    var uploadParams = new ImageUploadParams()
+                    {
+                        File = new FileDescription(newDentist.UniversityCardPicture.Name, stream)
+                    };
+                    uploadResult = _cloudinary.Upload(uploadParams);
+                    dentist.UniversityCardPicture = uploadResult.Uri.ToString();
+                }
+            }
+            dentist.Level = newDentist.Level;
+            dentist.Graduated = newDentist.Graduated;
+            dentist.University = newDentist.University;
+            var hasher = new PasswordHasher<Dentist>();
+            dentist.PasswordHash = hasher.HashPassword(dentist, newDentist.PasswordHash);
+            await _context.Dentist.AddAsync(dentist);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("api/RegisterAsPatient")]
+        public async Task<IActionResult> RegisterAsPatient([FromForm] PatientDTO newPatient)
+        {
+            var loggedUserDentist = await _context.Dentist.FirstOrDefaultAsync(x => x.Username == newPatient.Username);
+            var loggedUserPatient = await _context.Patient.FirstOrDefaultAsync(x => x.Username == newPatient.Username);
+            if (string.IsNullOrEmpty(newPatient.Username) || string.IsNullOrEmpty(newPatient.PasswordHash) || string.IsNullOrEmpty(newPatient.LastName) || string.IsNullOrEmpty(newPatient.FirstName))
+            {
+                return BadRequest("Cant be empty");
+            }
+            else if (loggedUserDentist != null || loggedUserPatient != null)
+            {
+                return BadRequest("Already used Username");
+            }
+            Patient patient = new Patient();
+            patient.Id = Guid.NewGuid();
+            patient.IsActive = true;
+            patient.Username = newPatient.Username;
+            patient.FirstName = newPatient.FirstName;
+            patient.LastName = newPatient.LastName;
+            var hasher = new PasswordHasher<Patient>();
+            patient.PasswordHash = hasher.HashPassword(patient, newPatient.PasswordHash);
+            var uploadResult = new ImageUploadResult();
+            if (newPatient.ProfilePicture != null)
+            {
+                using (var stream = newPatient.ProfilePicture.OpenReadStream())
+                {
+                    var uploadParams = new ImageUploadParams()
+                    {
+                        File = new FileDescription(newPatient.ProfilePicture.Name, stream)
+                    };
+                    uploadResult = _cloudinary.Upload(uploadParams);
+                    patient.ProfilePicture = uploadResult.Uri.ToString();
+                }
+            }
+            await _context.Patient.AddAsync(patient);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("api/Profile")]
+        public async Task<IActionResult> Profile([FromBody] string Id)
+        {
+            if (string.IsNullOrEmpty(Id))
+            {
+                return BadRequest("Cant be empty");
+            }
+            var GuId = Guid.Parse(Id);
+            var loggedUserDentist = await _context.Dentist.FirstOrDefaultAsync(x => x.Id == GuId && x.IsActive == true);
+            var loggedUserPatient = await _context.Patient.FirstOrDefaultAsync(x => x.Id == GuId && x.IsActive == true);
+            if (loggedUserDentist == null && loggedUserPatient == null)
+            {
+                return BadRequest("User not found!");
+            }
+            else if (loggedUserDentist != null)
+            {
+                return Ok(loggedUserDentist);
+            }
+            return Ok(loggedUserPatient);
+        }
+
+        [HttpPost]
+        [Route("api/EditPatientProfile")]
+        public async Task<IActionResult> EditPatientProfile([FromBody] Patient updatedPatient)
+        {
+            if (updatedPatient == null)
+            {
+                return BadRequest("ERROR");
+            }
+            var loggedUserPatient = await _context.Patient.FirstOrDefaultAsync(x => x.Id == updatedPatient.Id && x.IsActive == true);
+
+            if (loggedUserPatient == null)
+            {
+                return BadRequest("ERROR");
+            }
+            if (updatedPatient.Username == loggedUserPatient.Username) { }
+            else
+            {
+                var loggedUserPatientSameUserName = await _context.Patient.FirstOrDefaultAsync(x => x.Username == updatedPatient.Username);
+                var loggedUserDentistSameUserName = await _context.Dentist.FirstOrDefaultAsync(x => x.Username == updatedPatient.Username);
+                if (loggedUserDentistSameUserName != null || loggedUserPatientSameUserName != null)
+                {
+                    return BadRequest("Already used Username");
+                }
+                loggedUserPatient.Username = updatedPatient.Username;
+            }
+            if (updatedPatient.FirstName == loggedUserPatient.FirstName) { }
+            else
+            {
+                loggedUserPatient.FirstName = updatedPatient.FirstName;
+            }
+            if (updatedPatient.LastName == loggedUserPatient.LastName) { }
+            else
+            {
+                loggedUserPatient.LastName = updatedPatient.LastName;
+            }
+            if (updatedPatient.PasswordHash == loggedUserPatient.PasswordHash)
+            {
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            else
+            {
+                var hasher = new PasswordHasher<Patient>();
+                loggedUserPatient.PasswordHash = hasher.HashPassword(loggedUserPatient, updatedPatient.PasswordHash);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+        }
+
+        [HttpPost]
+        [Route("api/EditDentistProfile")]
+        public async Task<IActionResult> EditDentistProfile([FromBody] Dentist updatedDentist)
+        {
+            if (updatedDentist == null)
+            {
+                return BadRequest("ERROR");
+            }
+            var loggedUserDentist = await _context.Dentist.FirstOrDefaultAsync(x => x.Id == updatedDentist.Id && x.IsActive == true);
+
+            if (loggedUserDentist == null)
+            {
+                return BadRequest("ERROR");
+            }
+            if (updatedDentist.Username == loggedUserDentist.Username) { }
+            else
+            {
+                var loggedUserPatientSameUserName = await _context.Patient.FirstOrDefaultAsync(x => x.Username == updatedDentist.Username);
+                var loggedUserDentistSameUserName = await _context.Dentist.FirstOrDefaultAsync(x => x.Username == updatedDentist.Username);
+                if (loggedUserDentistSameUserName != null || loggedUserPatientSameUserName != null)
+                {
+                    return BadRequest("Already used Username");
+                }
+                loggedUserDentist.Username = updatedDentist.Username;
+            }
+            if (updatedDentist.FirstName == loggedUserDentist.FirstName) { }
+            else
+            {
+                loggedUserDentist.FirstName = updatedDentist.FirstName;
+            }
+            if (updatedDentist.LastName == loggedUserDentist.LastName) { }
+            else
+            {
+                loggedUserDentist.LastName = updatedDentist.LastName;
+            }
+            if (updatedDentist.Level == loggedUserDentist.Level) { }
+            else
+            {
+                loggedUserDentist.Level = updatedDentist.Level;
+            }
+            if (updatedDentist.University == loggedUserDentist.University) { }
+            else
+            {
+                loggedUserDentist.University = updatedDentist.University;
+            }
+            if (updatedDentist.Graduated == loggedUserDentist.Graduated) { }
+            else
+            {
+                loggedUserDentist.Graduated = updatedDentist.Graduated;
+            }
+            if (updatedDentist.PasswordHash == loggedUserDentist.PasswordHash)
+            {
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            else
+            {
+                var hasher = new PasswordHasher<Dentist>();
+                loggedUserDentist.PasswordHash = hasher.HashPassword(loggedUserDentist, updatedDentist.PasswordHash);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+        }
+
+        //[HttpPost]
+        //[Route("api/create-user")]
+        //public async Task<ActionResult> Register([FromBody] UserDto newUser)
+        //{
+        //    User user = await _context.User.FirstOrDefaultAsync(x => x.Username == newUser.Username);
+        //    if (string.IsNullOrEmpty(newUser.Username) || string.IsNullOrEmpty(newUser.Password) || string.IsNullOrEmpty(newUser.FirstName) || string.IsNullOrEmpty(newUser.LastName) || string.IsNullOrEmpty(newUser.Role) || (newUser.Role != "Doctor" && newUser.Role != "Student" && newUser.Role != "Patient"))
+        //        return BadRequest("Cant be empty");
+        //    else if (user is not null)
+        //    {
+        //        return BadRequest("Username already taken!");
+        //    }
+        //    else
+        //    {
+        //        user = new();
+        //        user.Id = Guid.NewGuid();
+        //        user.IsActive = true;
+        //        var hasher = new PasswordHasher<User>();
+        //        user.PasswordHash = hasher.HashPassword(user, newUser.Password);
+        //        user.FirstName = newUser.FirstName;
+        //        user.LastName = newUser.LastName;
+        //        user.Role = newUser.Role;
+        //        user.Username = newUser.Username;
+        //        user.ProfilePicture = newUser.ProfilePicture;
+        //        await _context.User.AddAsync(user);
+        //        await _context.SaveChangesAsync();
+        //        return Ok();
+        //    }
+        //}
+
+        [HttpPost]
+        [Route("api/ChangeImage")]
+        public async Task<IActionResult> ChangeImage([FromForm] ChangeImageDto Obj)
+        {
+            var loggedDentist = await _context.Dentist.FirstOrDefaultAsync(x => x.Username == Obj.username && x.IsActive == true);
+            var loggedPatient = await _context.Patient.FirstOrDefaultAsync(x => x.Username == Obj.username && x.IsActive == true);
+
+            var uploadResult = new ImageUploadResult();
+            if (loggedDentist == null)
+            {
+                if (Obj.ProfilePicture != null)
+                {
+                    using (var stream = Obj.ProfilePicture.OpenReadStream())
+                    {
+                        var uploadParams = new ImageUploadParams()
+                        {
+                            File = new FileDescription(Obj.ProfilePicture.Name, stream)
+                        };
+                        uploadResult = _cloudinary.Upload(uploadParams);
+                        loggedPatient.ProfilePicture = uploadResult.Uri.ToString();
+                    }
+                }
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            if (Obj.UniversityCardPicture != null)
+            {
+                using (var stream = Obj.UniversityCardPicture.OpenReadStream())
+                {
+                    var uploadParams = new ImageUploadParams()
+                    {
+                        File = new FileDescription(Obj.UniversityCardPicture.Name, stream)
+                    };
+                    uploadResult = _cloudinary.Upload(uploadParams);
+                    loggedDentist.UniversityCardPicture = uploadResult.Uri.ToString();
+                }
+            }
+            if (Obj.IdentityCardPicture != null)
+            {
+                using (var stream = Obj.IdentityCardPicture.OpenReadStream())
+                {
+                    var uploadParams = new ImageUploadParams()
+                    {
+                        File = new FileDescription(Obj.UniversityCardPicture.Name, stream)
+                    };
+                    uploadResult = _cloudinary.Upload(uploadParams);
+                    loggedDentist.UniversityCardPicture = uploadResult.Uri.ToString();
+                }
+            }
+            if (Obj.ProfilePicture != null)
+            {
+                using (var stream = Obj.ProfilePicture.OpenReadStream())
+                {
+                    var uploadParams = new ImageUploadParams()
+                    {
+                        File = new FileDescription(Obj.ProfilePicture.Name, stream)
+                    };
+                    uploadResult = _cloudinary.Upload(uploadParams);
+                    loggedDentist.ProfilePicture = uploadResult.Uri.ToString();
+                }
+            }
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
 
         private async Task<RefreshToken> CreateRefreshToken()
         {
