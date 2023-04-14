@@ -1,0 +1,78 @@
+﻿@page
+@model DentistPortal_Client.Pages.RegisterAsDoctorModel
+@{
+    Layout = "Shared/_LoginRegisterLayout";
+
+    <div style="margin-top:100px">
+        <form method="post" class="align-content-center col-6 w-25" style="margin:auto;text-align:center;color:#1A2238;" enctype="multipart/form-data">
+            <div class="form-floating form-outline mb-4">
+                <input asp-for="Dentist.Username" class="form-control" required>
+                <label class="form-label">Username</label>
+            </div>
+            <div class="form-floating form-outline mb-4">
+                <input asp-for="Dentist.FirstName" class="form-control" required>
+                <label class="form-label">First Name</label>
+            </div>
+            <div class="form-floating form-outline mb-4">
+                <input asp-for="Dentist.LastName" class="form-control" required>
+                <label class="form-label">Last Name</label>
+            </div>
+            <div class="form-floating form-outline mb-4">
+                <input asp-for="Dentist.PasswordHash" class="form-control" type="password" required>
+                <label class="form-label">Password</label>
+            </div>
+            <div class="form-floating form-outline mb-4">
+                <input asp-for="Dentist.IdentityCardPicture" class="form-control" type="file" required>
+                <label class="form-label">Identity Card Picture</label>
+            </div>
+            <div class="form-floating form-outline mb-4">
+                <input asp-for="Dentist.UniversityCardPicture" class="form-control" type="file" required>
+                <label class="form-label">University Card Picture</label>
+            </div>
+            <div class="form-floating form-outline mb-4">
+                <input asp-for="Dentist.ProfilePicture" class="form-control" type="file" required>
+                <label class="form-label">Profile Picture</label>
+            </div>
+            <div class="form-floating form-outline mb-4">
+                <input asp-for="Dentist.Graduated" type="checkbox">
+                <label class="form-label">IS Graduated</label>
+            </div>
+            <div class="form-floating form-outline mb-4">
+                <input asp-for="Dentist.University" class="form-control" required>
+                <label class="form-label">university</label>
+            </div>
+            <div class="form-floating form-outline mb-4">
+                <input asp-for="Dentist.Level" class="form-control" min="0" max="5" required>
+                <label class="form-label">Level</label>
+            </div>
+            <!--<div class="input-group mb-3">
+                <label class="input-group-text">Profession</label>
+                <select class="form-select" asp-for="User.Role">
+                    <option value="Doctor">Doctor</option>
+                    <option value="Patient">Patient</option>
+                    <option value="Student">Student</option>
+                </select>
+            </div>-->
+            <button type="submit" class="btn btn-success btn-block mb-3"><i class="bi bi-patch-plus"> Sign up</i></button>
+            <div class="text-center">
+                <p style="color:#66FCF1">Already have an account? <a class="btn btn-outline-primary" asp-page="/Login">Sign in</a></p>
+            </div>
+        </form>
+    </div>
+}
+
+
+@if (@Model.Msg != null)
+{
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    if (@Model.Status == "error")
+    {
+        <script type="text/javascript">
+            Swal.fire({
+                icon: 'error',
+                title: '@Model.Msg',
+                showConfirmButton: true
+            })
+        </script>
+    }
+}

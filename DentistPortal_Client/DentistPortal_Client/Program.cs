@@ -10,6 +10,7 @@ builder.Services.AddRazorPages(options =>
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 builder.Services.AddSweetAlert2();
 builder.Services.AddSession();
+builder.Services.AddDistributedMemoryCache();
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
