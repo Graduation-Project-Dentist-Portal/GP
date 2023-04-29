@@ -2,40 +2,101 @@
 @model DentistPortal_Client.Pages.DentistProfileModel
 @{
     @Html.AntiForgeryToken()
-    Layout = "Shared/_Layout";
+    Layout = "";
 
-    <div style="margin-top:100px">
-        <div>
+    <head>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="/js/DentistProfile.js"></script>
+        <link rel="stylesheet" href="~/css/EditProfile.css">
+    </head>
+
+    <div class="container">
+        <div class="content">
+            <img src="@Model.LoggedDentist.ProfilePicture" alt="header-image" class="cld-responsive">
+            <h1 class="form-title">Edit</h1>
+            <div style="padding: 50px;">
+                <div style="padding:5px">
+                    <label class="form-label">Username</label>
+                    <input class="ForEdit" id="username" value="@Model.LoggedDentist.Username" disabled>
+                    <input type="submit" value="update" class="Submit" disabled>
+                    <input type="submit" value="edit" class="edit">
+                </div>
+                <div style="padding:4px">
+                    <label class="form-label">First Name</label>
+                    <input class="ForEdit" id="firstname" value="@Model.LoggedDentist.FirstName" disabled>
+                    <input type="submit" value="update" class="Submit" disabled>
+                    <input type="submit" value="edit" class="edit">
+                </div>
+                <div style="padding:4px">
+                    <label class="form-label">Last Name</label>
+                    <input class="ForEdit" id="lastname" value="@Model.LoggedDentist.LastName" disabled>
+                    <input type="submit" value="update" class="Submit" disabled>
+                    <input type="submit" value="edit" class="edit">
+                </div>
+                <div style="padding:5px">
+                    <label class="form-label">Password</label>
+                    <input class="ForEdit" id="password" value="password" type="password" disabled>
+                    <input type="submit" value="update" class="Submit" disabled>
+                    <input type="submit" value="edit" class="edit">
+                </div>
+                <div style="padding:4px">
+                    <label class="form-label">University</label>
+                    <input class="ForEdit" id="university" value="@Model.LoggedDentist.University" disabled>
+                    <input type="submit" value="update" class="Submit" disabled>
+                    <input type="submit" value="edit" class="edit">
+                </div>
+                <div style="padding:4px">
+                    <label class="form-label">Level</label>
+                    <input class="ForEdit" id="level" value="@Model.LoggedDentist.Level" disabled>
+                    <input type="submit" value="update" class="Submit" disabled>
+                    <input type="submit" value="edit" class="edit">
+                </div>
+                <div style="padding:3px">
+                    <form style="display: contents;" method="post" enctype="multipart/form-data">
+                        <label class="form-label">Change Image</label>
+                        <input id="newimage" asp-for="obj.ProfilePicture" type="file" style="width: 185px;">
+                        <input type="submit" value="update" class="Submit">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    /*<div style="margin-top:100px">
+            <div>
             <label class="form-label">Username</label>
             <input class="ForEdit" id="username" value="@Model.LoggedDentist.Username" disabled>
             <input type="submit" value="update" class="Submit" disabled>
             <input type="submit" value="edit" class="edit">
         </div>
-        <div>
+            <div>
             <label class="form-label">First Name</label>
             <input class="ForEdit" id="firstname" value="@Model.LoggedDentist.FirstName" disabled>
             <input type="submit" value="update" class="Submit" disabled>
             <input type="submit" value="edit" class="edit">
         </div>
-        <div>
+            <div>
             <label class="form-label">Last Name</label>
             <input class="ForEdit" id="lastname" value="@Model.LoggedDentist.LastName" disabled>
             <input type="submit" value="update" class="Submit" disabled>
             <input type="submit" value="edit" class="edit">
         </div>
-        <div>
+            <div>
             <label class="form-label">University</label>
             <input class="ForEdit" id="university" value="@Model.LoggedDentist.University" disabled>
             <input type="submit" value="update" class="Submit" disabled>
             <input type="submit" value="edit" class="edit">
         </div>
-        <div>
+            <div>
             <label class="form-label">Level</label>
             <input class="ForEdit" id="level" value="@Model.LoggedDentist.Level" disabled>
             <input type="submit" value="update" class="Submit" disabled>
             <input type="submit" value="edit" class="edit">
         </div>
-        <div>
+            <div>
             <label class="form-label">Password</label>
             <input class="ForEdit" id="password" value="password" type="password" disabled>
             <input type="submit" value="update" class="Submit" disabled>
@@ -57,11 +118,11 @@
                     <img src="@Model.LoggedDentist.IdentityCardPicture" alt="..." width="400" height="400" />
                     <input asp-for="obj.IdentityCardPicture" class="form-control" type="file" >
                     <label class="form-label">Change Image</label>
-                </div>
+            </div>
             </div>
             <button type="submit" class="btn btn-success btn-block mb-3"><i class="bi bi-patch-plus"> Save Changes</i></button>
-        </form>
-    </div>
+    </form>
+    </div>*/
 }
 
 
