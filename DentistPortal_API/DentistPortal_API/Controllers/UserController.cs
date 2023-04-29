@@ -19,11 +19,16 @@ namespace DentistPortal_API.Controllers
     {
         private readonly WebsiteDbContext _context;
         private readonly IConfiguration _configuration;
+        private Cloudinary _cloudinary;
 
         public UserController(WebsiteDbContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
+            Account account = new Account(configuration.GetSection("CLOUDINARY_URL").GetSection("cloudinary_name").Value,
+                              configuration.GetSection("CLOUDINARY_URL").GetSection("my_key").Value,
+                              configuration.GetSection("CLOUDINARY_URL").GetSection("my_secret_key").Value);
+            _cloudinary = new Cloudinary(account);
         }
 
         [HttpPost]
