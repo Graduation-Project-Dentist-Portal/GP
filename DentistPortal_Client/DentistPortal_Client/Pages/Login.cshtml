@@ -2,8 +2,50 @@
 @using DentistPortal_Client.Pages.Shared
 @model DentistPortal_Client.Pages.LoginModel
 @{
-    Layout = "Shared/_LoginRegisterLayout";
-    <div style="margin-top:200px">
+
+    Layout = "";
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+        <title>Document</title>
+        <link rel="stylesheet" href="~/css/Login.css">
+    </head>
+
+
+    <body>
+        <div class="card">
+            <div class="form">
+                <h3>Login</h3>
+                <form method="post">
+                    <div class="input-field">
+                        <i class="fa fa-envelope"></i>
+                        <input asp-for="User.Username" type="text" placeholder="Enter your username" required>
+                    </div>
+                    <div class="input-field">
+                        <i class="fa fa-lock"></i>
+                        <input asp-for="User.Password" type="password" placeholder="Enter your password" required>
+                    </div>
+                    <br>
+                    <button>Login</button>
+                </form>
+                <pre>Don't have an account? 
+                <div><a asp-page="/RegisterAsDoctor">Signup as a doctor</a> or <a asp-page="/RegisterAsPatient">Signup as a patient</a></div>
+                    </pre>
+            </div>
+            <div class="image">
+                <div class="overlay">
+                </div>
+            </div>
+        </div>
+    </body>
+
+
+    /*<div style="margin-top:200px">
         <form method="post" class="align-content-center col-6 w-25 needs-validation" style="margin:auto;text-align:center;color:#1A2238;">
             <div class="form-floating form-outline mb-4">
                 <Input id="floatingUsername" asp-for="User.Username" class="form-control" placeholder="Username" required />
@@ -25,7 +67,7 @@
         <div class="text-center">
             <p style="color:#66FCF1">Not a member? <a class="btn btn-outline-primary" asp-page="/RegisterAsDoctor">RegisterAsDoctor</a> OR <a class="btn btn-outline-primary" asp-page="/RegisterAsPatient">RegisterAsPatient</a></p>
         </div>
-    </div>
+    </div>*/
 }
 `@if (@Model.Msg != null)
 {

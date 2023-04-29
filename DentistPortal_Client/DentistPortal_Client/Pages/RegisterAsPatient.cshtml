@@ -1,10 +1,19 @@
 ﻿@page
 @model DentistPortal_Client.Pages.RegisterAsPatientModel
 @{
-    Layout = "Shared/_LoginRegisterLayout";
+    Layout = "";
 
-    <div style="margin-top:100px">
-        <form method="post" class="align-content-center col-6 w-25" style="margin:auto;text-align:center;color:#1A2238;" enctype="multipart/form-data">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+        <title>Register</title>
+        <link rel="stylesheet" href="~/css/Register.css">
+    </head>
+    <body>
+        <!--<form method="post" class="align-content-center col-6 w-25" style="margin:auto;text-align:center;color:#1A2238;" enctype="multipart/form-data">
             <div class="form-floating form-outline mb-4">
                 <input asp-for="patient.Username" class="form-control" required>
                 <label class="form-label">Username</label>
@@ -29,8 +38,46 @@
             <div class="text-center">
                 <p style="color:#66FCF1">Already have an account? <a class="btn btn-outline-primary" asp-page="/Login">Sign in</a></p>
             </div>
+        </form>-->
+
+        <form method="post" enctype="multipart/form-data">
+            <div class="card">
+                <div class="form">
+                    <h3>Register</h3>
+                    <div class="input-field">
+                        <i class="fa fa-envelope"></i>
+                        <input asp-for="patient.Username" required placeholder="Username">
+                    </div>
+
+                    <div class="input-field">
+                        <i class="fa fa-envelope"></i>
+                        <input asp-for="patient.FirstName" required placeholder="First Name">
+                    </div>
+                    <div class="input-field">
+                        <i class="fa fa-envelope"></i>
+                        <input asp-for="patient.LastName" required placeholder="Last Name">
+                    </div>
+                    <div class="input-field">
+                        <input asp-for="patient.ProfilePicture" type="file">
+                    </div>
+                    <div class="input-field">
+                        <i class="fa fa-lock"></i>
+                        <input asp-for="patient.PasswordHash" type="password" required placeholder="Enter your password">
+                    </div>
+                    <br>
+                    <button type="submit">Register</button>
+                    <p>Already have an account? <a asp-page="/Login">Sign in</a></p>
+                </div>
+                <div class="image">
+                    <div class="overlay">
+                        <!--  <h3>Every new friend is a<br>new adventure</h3>
+                          <p>let's get connected</p> -->
+                    </div>
+                </div>
+            </div>
         </form>
-    </div>
+
+    </body>
 }
 
 @if (@Model.Msg != null)

@@ -3,45 +3,93 @@
 @{
     @Html.AntiForgeryToken()
     //Model.ProfilePicture = Model.Loggedpatient.ProfilePicture;
-    Layout = "Shared/_Layout";
+    Layout = "";
+    <head>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="/js/PatientProfile.js"></script>
+        <link rel="stylesheet" href="~/css/EditProfile.css">
+    </head>
 
-    <div style="margin-top:100px">
-        <div>
-            <label class="form-label">Username</label>
-            <input class="ForEdit" id="username" value="@Model.Loggedpatient.Username" disabled>
-            <input type="submit" value="update" class="Submit" disabled>
-            <input type="submit" value="edit" class="edit">
-        </div>
-        <div>
-            <label class="form-label">First Name</label>
-            <input class="ForEdit" id="firstname" value="@Model.Loggedpatient.FirstName" disabled>
-            <input type="submit" value="update" class="Submit" disabled>
-            <input type="submit" value="edit" class="edit">
-        </div>
-        <div>
-            <label class="form-label">Last Name</label>
-            <input class="ForEdit" id="lastname" value="@Model.Loggedpatient.LastName" disabled>
-            <input type="submit" value="update" class="Submit" disabled>
-            <input type="submit" value="edit" class="edit">
-        </div>
-        <div>
-            <label class="form-label">Password</label>
-            <input class="ForEdit" id="password" value="password" type="password" disabled>
-            <input type="submit" value="update" class="Submit" disabled>
-            <input type="submit" value="edit" class="edit">
-        </div>
-        <div class="carousel-item active">
-            <label class="form-label">Profile Picture</label>
-            <img src="@Model.Loggedpatient.ProfilePicture" alt="..." width="400" height="400" />
-            <form method="post" class="align-content-center col-6 w-25" style="margin:auto;text-align:center;color:#1A2238;" enctype="multipart/form-data">
-            <div class="form-floating form-outline mb-4">
-                    <input asp-for="obj.ProfilePicture" class="form-control" type="file" id="newimage">
-                <label class="form-label">Change Image</label>
-                <button type="submit" class="btn btn-success btn-block mb-3"><i class="bi bi-patch-plus"> Save Changes</i></button>
+
+
+    <div class="container">
+        <div class="content">
+            <img src="@Model.Loggedpatient.ProfilePicture" alt="header-image" class="cld-responsive">
+            <h1 class="form-title">Edit</h1>
+            <div style="padding: 50px;">
+                <div style="padding:5px">
+                    <label class="form-label">Username</label>
+                    <input class="ForEdit" id="username" value="@Model.Loggedpatient.Username" disabled>
+                    <input type="submit" value="update" class="Submit" disabled>
+                    <input type="submit" value="edit" class="edit">
+                </div>
+                <div style="padding:4px">
+                    <label class="form-label">First Name</label>
+                    <input class="ForEdit" id="firstname" value="@Model.Loggedpatient.FirstName" disabled>
+                    <input type="submit" value="update" class="Submit" disabled>
+                    <input type="submit" value="edit" class="edit">
+                </div>
+                <div style="padding:4px">
+                    <label class="form-label">Last Name</label>
+                    <input class="ForEdit" id="lastname" value="@Model.Loggedpatient.LastName" disabled>
+                    <input type="submit" value="update" class="Submit" disabled>
+                    <input type="submit" value="edit" class="edit">
+                </div>
+                <div style="padding:5px">
+                    <label class="form-label">Password</label>
+                    <input class="ForEdit" id="password" value="password" type="password" disabled>
+                    <input type="submit" value="update" class="Submit" disabled>
+                    <input type="submit" value="edit" class="edit">
+                </div>
+                <div style="padding:3px">
+                    <form style="display: contents;" method="post" enctype="multipart/form-data">
+                        <label class="form-label">Change Image</label>
+                        <input id="newimage" asp-for="obj.ProfilePicture" type="file" style="width: 185px;">
+                        <input type="submit" value="update" class="Submit">
+                    </form>
+                </div>
             </div>
-            </form>
         </div>
     </div>
+
+
+    <!--<div style="margin-top:100px">
+    <div>
+    <label class="form-label">Username</label>
+    <input class="ForEdit" id="username" value="@Model.Loggedpatient.Username" disabled>
+    <input type="submit" value="update" class="Submit" disabled>
+    <input type="submit" value="edit" class="edit">
+    </div>
+    <div>
+    <label class="form-label">First Name</label>
+    <input class="ForEdit" id="firstname" value="@Model.Loggedpatient.FirstName" disabled>
+    <input type="submit" value="update" class="Submit" disabled>
+    <input type="submit" value="edit" class="edit">
+    </div>
+    <div>
+    <label class="form-label">Last Name</label>
+    <input class="ForEdit" id="lastname" value="@Model.Loggedpatient.LastName" disabled>
+    <input type="submit" value="update" class="Submit" disabled>
+    <input type="submit" value="edit" class="edit">
+    </div>
+    <div>
+    <label class="form-label">Password</label>
+    <input class="ForEdit" id="password" value="password" type="password" disabled>
+    <input type="submit" value="update" class="Submit" disabled>
+    <input type="submit" value="edit" class="edit">
+    </div>
+    <div class="carousel-item active">
+    <label class="form-label">Profile Picture</label>
+    <img src="@Model.Loggedpatient.ProfilePicture" alt="..." width="400" height="400" />
+    <form method="post" class="align-content-center col-6 w-25" style="margin:auto;text-align:center;color:#1A2238;" enctype="multipart/form-data">
+    <div class="form-floating form-outline mb-4">
+    <input asp-for="obj.ProfilePicture" class="form-control" type="file" id="newimage">
+    <label class="form-label">Change Image</label>
+    <button type="submit" class="btn btn-success btn-block mb-3"><i class="bi bi-patch-plus"> Save Changes</i></button>
+    </div>
+    </form>
+    </div>
+    </div>-->
 
 }
 
