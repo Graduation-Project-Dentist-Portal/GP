@@ -16,100 +16,7 @@ body {
     background-color: white;
 }
 
-.section-header {
-    padding: 50px 0 25px;
-    background-color: #ffffff;
-    text-align: center;
-}
 
-    .section-header h3 {
-        text-transform: uppercase;
-        margin: 0 auto 50px;
-        border: 2px solid black;
-        padding: 15px 30px;
-        font-size: 30px;
-        width: fit-content;
-        position: relative;
-        font-weight: bolder;
-        z-index: 1;
-        font-family: "Cairo", sans-serif;
-        transition: var(--main-transition);
-        cursor: pointer;
-    }
-
-.main-title::before {
-    content: "";
-    width: 12px;
-    height: 12px;
-    background-color: var(--main-color);
-    position: absolute;
-    border-radius: 50%;
-    top: 50%;
-    transform: translateY(-50%);
-    left: -30px;
-}
-
-.main-title::after {
-    content: "";
-    width: 12px;
-    height: 12px;
-    background-color: var(--main-color);
-    position: absolute;
-    border-radius: 50%;
-    top: 50%;
-    transform: translateY(-50%);
-    right: -30px;
-}
-
-.main-title:hover::before {
-    z-index: -1;
-    animation: left-move 0.5s linear forwards;
-}
-
-.main-title:hover::after {
-    z-index: -1;
-    animation: right-move 0.5s linear forwards;
-}
-/* Start Animation */
-
-@keyframes left-move {
-    50% {
-        left: 0;
-        width: 12px;
-        height: 12px;
-    }
-
-    100% {
-        left: 0;
-        border-radius: 0;
-        width: 50.5%;
-        height: 100%;
-    }
-}
-
-@keyframes right-move {
-    50% {
-        right: 0;
-        width: 12px;
-        height: 12px;
-    }
-
-    100% {
-        right: 0;
-        border-radius: 0;
-        width: 50%;
-        height: 100%;
-    }
-}
-
-/* End Animation */
-.main-title::before {
-    left: -30px;
-}
-
-.main-title::after {
-    right: -30px;
-}
 
 .section .ToolImge {
     border-bottom: 1px solid #eeeeee;
@@ -130,6 +37,7 @@ body {
     margin-bottom: 8px;
     display: inline-flex;
 }
+
 
 .sett {
     background: none;
@@ -175,16 +83,20 @@ body {
     }
 
 .mybtn {
-    color: #fff;
-    background-color: black;
-    border-color: #8f8f8f;
-    margin-bottom: 15px;
+    color: #E9EDF8;
+    background-color: #657A97;
+    border-color: #E9EDF8;
+    border-radius: 32px;
+    /* margin: auto;
+  transform: translateY(100px);
+  transition: all 0.5s ease; */
 }
 
     .mybtn:hover {
-        color: #fff;
-        background-color: #8f8f8f;
-        border-color: black;
+        color: #657A97;
+        /* background-color: #8f8f8f; */
+        background-color: #E9EDF8;
+        border-color: #657A97;
     }
 
 .line {
@@ -196,8 +108,12 @@ body {
 
 .formsection {
     margin-bottom: 35px;
-    background-color: #8f8f8f2b;
-    margin-top: 50px;
+    /* animation-name: fadeInUp;
+  transition: all 1s;
+  animation-delay: 50s;
+  animation-duration: 3s; */
+    box-shadow: 0 0 10px #C9CFDF;
+    background-color: #E9EDF8;
 }
 
     .formsection .paragraph {
@@ -239,16 +155,21 @@ body {
         text-align: center;
         display: block;
         margin: auto;
-        background: black;
-        border: 0;
+        
         padding: 10px 30px;
-        color: #fff;
+       
         transition: 0.4s;
-        border-radius: 4px;
+        
+        color: #E9EDF8;
+        background-color: #657A97;
+        border-color: #E9EDF8;
+        border-radius: 32px;
     }
 
         .ourform button:hover {
-            background: #8f8f8f;
+            color: #657A97;
+            background-color: #E9EDF8;
+            border-color: #657A97;
         }
 
 .setting {
@@ -279,8 +200,9 @@ body {
 }
 
 .mycardbody {
-    box-shadow: 0 0 10px #dddde3;
-    background-color: #8f8f8f2b;
+    
+    box-shadow: 0 0 10px #C9CFDF;
+    background-color: #E9EDF8;
     margin-bottom: 10px;
 }
 
