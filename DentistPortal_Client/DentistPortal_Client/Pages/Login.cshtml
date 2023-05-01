@@ -35,7 +35,7 @@
                 </form>
                 <pre>Don't have an account? 
                 <div><a asp-page="/RegisterAsDoctor">Signup as a doctor</a> or <a asp-page="/RegisterAsPatient">Signup as a patient</a></div>
-                    </pre>
+                                        </pre>
             </div>
             <div class="image">
                 <div class="overlay">
@@ -46,30 +46,30 @@
 
 
     /*<div style="margin-top:200px">
-        <form method="post" class="align-content-center col-6 w-25 needs-validation" style="margin:auto;text-align:center;color:#1A2238;">
-            <div class="form-floating form-outline mb-4">
-                <Input id="floatingUsername" asp-for="User.Username" class="form-control" placeholder="Username" required />
-                <label class="form-label" for="floatingUsername">Username</label>
-                <div class="invalid-feedback">
-                    Please enter your username.
-                </div>
-            </div>
-            <div class="form-floating form-outline mb-4">
-                <Input id="floatingPassword" asp-for="User.Password" type="password" class="form-control" placeholder="Passowrd" required />
-                <label class="form-label" for="floatingPassword">Password</label>
-                <div class="invalid-feedback">
-                    Please enter your password
-                </div>
-            </div>
-            <button type="submit" class="btn btn-success"><i class="bi bi-door-open"> Sign in</i></button>
+    <form method="post" class="align-content-center col-6 w-25 needs-validation" style="margin:auto;text-align:center;color:#1A2238;">
+        <div class="form-floating form-outline mb-4">
+            <Input id="floatingUsername" asp-for="User.Username" class="form-control" placeholder="Username" required />
+            <label class="form-label" for="floatingUsername">Username</label>
+        <div class="invalid-feedback">
+        Please enter your username.
+        </div>
+        </div>
+        <div class="form-floating form-outline mb-4">
+            <Input id="floatingPassword" asp-for="User.Password" type="password" class="form-control" placeholder="Passowrd" required />
+            <label class="form-label" for="floatingPassword">Password</label>
+        <div class="invalid-feedback">
+        Please enter your password
+        </div>
+        </div>
+        <button type="submit" class="btn btn-success"><i class="bi bi-door-open"> Sign in</i></button>
         </form>
         <br /><br />
         <div class="text-center">
-            <p style="color:#66FCF1">Not a member? <a class="btn btn-outline-primary" asp-page="/RegisterAsDoctor">RegisterAsDoctor</a> OR <a class="btn btn-outline-primary" asp-page="/RegisterAsPatient">RegisterAsPatient</a></p>
-        </div>
+        <p style="color:#66FCF1">Not a member? <a class="btn btn-outline-primary" asp-page="/RegisterAsDoctor">RegisterAsDoctor</a> OR <a class="btn btn-outline-primary" asp-page="/RegisterAsPatient">RegisterAsPatient</a></p>
+    </div>
     </div>*/
 }
-`@if (@Model.Msg != null)
+@if (@Model.Msg != null)
 {
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     if (@Model.Status == "error")
