@@ -42,6 +42,7 @@ namespace DentistPortal_API.Migrations
                 IsActive = true,
                 Graduated = true,
                 University = "Helwan",
+                ProfilePicture = "https://res.cloudinary.com/djrj0pmt0/image/upload/v1682929737/b1o0ehuiolf5p3gicsdt.jpg",
                 IdentityCardPicture = "test",
                 UniversityCardPicture = "test",
                 Level = 0,

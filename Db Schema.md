@@ -33,6 +33,15 @@ Tables:
 	| Guid | RefreshTokenId | Foreign Key => (RefreshToken.Id) |
 	| String | ProfilePicture | |
 	| Boolean | IsActive | |
+	
+- Admin
+
+	| Field Type | Field Name | Keys
+	| --- | --- | --- |
+    | Guid | Id | Primary Key |
+	| String | Username |  |
+	| String | PasswordHash | |
+	| Boolean | IsActive | |
 
 - RefreshToken
 
