@@ -6,6 +6,48 @@
 @using Microsoft.Extensions.DependencyInjection;
 @using Microsoft.AspNetCore.Http;
 @model DentistPortal_Client.Pages.DoctorPages.Tools.DisplayToolsModel
+
+<header class>
+    <div class="website-search">
+        <form id="live-search" action="" method="post">
+            <div>
+                <input type="text" placeholder="Search" class="text" id="diagnosisInput">
+              
+            </div>
+        </form>
+        <div class="menu-main-menu-container">
+            <ul id="menu-main-menu" class="menu">
+                <li id="menu-item-680"
+                    class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-680">
+                    <a href="#">
+                        My
+                        Cases
+                    </a>
+                </li>
+                <li id="menu-item-693"
+                    class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-693">
+                    <a href="../MedicalCases/DisplayMedicalCases">Medical Cases</a>
+                </li>
+                <li id="menu-item-31652"
+                    class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-31652">
+                    <a href="../Tools/MyTools">
+                        My
+                        Tools
+                    </a>
+                </li>
+                <li id="menu-item-2763"
+                    class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-2763">
+                    <a data-section=".formsection">Add a Tool</a>
+                </li>
+                <li id="menu-item-2763"
+                    class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-2763">
+                    <a href="../DoctorPages/Clinics/DisplayClinics">Clinics</a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</header>
 @{
     int counter = 0;
     IConfiguration config = new ConfigurationBuilder()
@@ -19,21 +61,13 @@
     client.BaseAddress = new Uri(config["BaseAddress"]);
     string req;
     List<string> imageUrls = new();
+    
 
-    <!--Headline-->
-    <div class="Headline">
-        <a class="MyTools " type="submit" asp-page="MyTools">
-            My Tools
-        </a>
-        <div class="addtool" data-section=".formsection">
-            Share a Tool
-        </div>
-    </div>
-    <!--Headline-->
 
-    <section class="section">
+    <section class="section" style="margin-bottom:50px;">
         <div class="container">
-            <div class="row gy-4 d-flex justify-content-between">
+            <div class="row gy-4 d-flex justify-content-between"  id="myList">
+         
                 @foreach (var tool in Model.Tools)
                 {
                     imageUrls = new();
@@ -49,96 +83,107 @@
                     };
                         imageUrls = JsonSerializer.Deserialize<List<string>>(req, options);
                     }
-                    <div class="card col-lg-4  col-md-6 mycard" style="width: 20rem;">
-                        <div id=@("carouselExampleControls"+@counter) class="carousel slide" data-bs-ride="carousel">
-                            <div class="carousel-inner text-center mt-2">
-                                @foreach (var image in imageUrls)
-                                {
-                                    if (image == imageUrls[0])
-                                    {
-                                        <div class="carousel-item active">
-                                            <img src=@image class="card-img-top" alt="Card image cap" style="height: 293px; max-width:100%" />
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="carousel-item">
-                                            <img src=@image class="card-img-top" alt="Card image cap" style="height: 293px; max-width:100%" />
-                                        </div>
-                                    }
-                                }
-                            </div>
-                            <button class="carousel-control-prev" type="button" data-bs-target=@("#carouselExampleControls"+@counter) data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
-                            </button>
-                            <button class="carousel-control-next" type="button" data-bs-target=@("#carouselExampleControls"+@counter) data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
-                            </button>
-                        </div>
-                        <div class="setting">
-                            <div class="dropdown">
-                                <button class="dropdown-toggle sett" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="bi bi-three-dots-vertical"></i>
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
 
-                                    <!-- Button trigger delete modal -->
-                                    <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target=@("#deleteToolModal"+@counter)>Delete</button></li>
+                   
+                        
+                            <div class="card col-lg-4  col-md-6 mycard li" style="width: 20rem;">
 
-                                    <!-- Button trigger edit modal -->
-                                    <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target=@("#editToolModal"+@counter)>Edit</button></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="card-body mycardbody">
-                            <div class=" card-text ToolName">@tool.ToolName</div>
-
-                            <!-- Button trigger view modal -->
-                            <button type="button" class="btn mybtn" data-bs-toggle="modal" data-bs-target=@("#viewToolModal"+@counter)>
-                                More Details
-                            </button>
-
-                            <!-- View Modal -->
-                            <div class="modal fade" id=@("viewToolModal"+@counter) tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLongTitle" style="color:black">Tool Details</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="details">
-                                                <div class="ToolDescription">
-                                                    @tool.Description
+                                <div id=@("carouselExampleControls"+@counter) class="carousel slide" data-bs-ride="carousel">
+                                    <div class="carousel-inner text-center mt-2">
+                                        @foreach (var image in imageUrls)
+                                        {
+                                            if (image == imageUrls[0])
+                                            {
+                                                <div class="carousel-item active">
+                                                    <img src=@image class="card-img-top" alt="Card image cap" style="height: 293px; max-width:100%" />
                                                 </div>
-                                                <div class="ToolPrice">
-                                                    <span style="font-size: larger; font-weight: 400;">Price:</span>
-                                                    <span>@tool.ToolPrice</span>
-                                                    <span style="font-size: larger; font-weight: 400;">LE</span>
+                                            }
+                                            else
+                                            {
+                                                <div class="carousel-item">
+                                                    <img src=@image class="card-img-top" alt="Card image cap" style="height: 293px; max-width:100%" />
                                                 </div>
-                                                <div class="line">
-                                                    <div class="sellername">
-                                                        <i class="fa-solid fa-user-doctor-hair"></i>
-                                                        <span>@tool.Dentist.Username</span>
-                                                    </div>
-                                                    <div class="contactNumb">
-                                                        <i class="bi bi-telephone-fill"></i>
-                                                        <span> @tool.ContactNumber</span>
-                                                    </div>
-                                                    <div class="loction">
-                                                        <i class="bi bi-geo-alt-fill"></i>
-                                                        <span>@tool.SellerLocation</span>
+                                            }
+                                        }
+                                    </div>
+                                    <button class="carousel-control-prev" type="button" data-bs-target=@("#carouselExampleControls" + @counter) data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button" data-bs-target=@("#carouselExampleControls" + @counter) data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
+                                </div>
+                                <div class="setting">
+                                    <div class="dropdown">
+                                        <button class="dropdown-toggle sett" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="bi bi-three-dots-vertical"></i>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+
+                                            <!-- Button trigger delete modal -->
+                                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target=@("#deleteToolModal" + @counter)>Delete</button></li>
+
+                                            <!-- Button trigger edit modal -->
+                                            <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target=@("#editToolModal" + @counter)>Edit</button></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="card-body mycardbody">
+                                    <div class=" card-text ToolName">@tool.ToolName</div>
+
+                                    <!-- Button trigger view modal -->
+                                    <button type="button" class="btn mybtn" data-bs-toggle="modal" data-bs-target=@("#viewToolModal" + @counter)>
+                                        More Details
+                                    </button>
+
+                                    <!-- View Modal -->
+                                    <div class="modal fade" id=@("viewToolModal"+@counter) tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLongTitle" style="color:black">Tool Details</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="details">
+                                                        <div class="ToolDescription">
+                                                            @tool.Description
+                                                        </div>
+                                                        <div class="ToolPrice">
+                                                            <span style="font-size: larger; font-weight: 400;">Price:</span>
+                                                            <span>@tool.ToolPrice</span>
+                                                            <span style="font-size: larger; font-weight: 400;">LE</span>
+                                                        </div>
+                                                        <div class="line">
+                                                            <div class="sellername">
+                                                                <i class="fa-solid fa-user-doctor-hair"></i>
+                                                                <span>@tool.Dentist.Username</span>
+                                                            </div>
+                                                            <div class="contactNumb">
+                                                                <i class="bi bi-telephone-fill"></i>
+                                                                <span> @tool.ContactNumber</span>
+                                                            </div>
+                                                            <div class="loction">
+                                                                <i class="bi bi-geo-alt-fill"></i>
+                                                                <span>@tool.SellerLocation</span>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
+
                             </div>
-                        </div>
-                    </div>
+
+                        
+                 
+                     
+                    
 
                     <!-- Edit Modal -->
                     <div class="modal fade" id=@("editToolModal"+@counter) tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -265,6 +310,8 @@
                         <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
                             <div class="row gy-3">
                                 <div class="col-sm-6">
+                                    <input type="text" class="form-control" name="toolDto.ToolStatus" value="Avaliable"  hidden>
+
                                     <input type="text" class="form-control" name="toolDto.ToolName" placeholder="ToolName" required>
                                     <div class="invalid-feedback">
                                         Please fill the tool name.
@@ -339,17 +386,29 @@
 }
 @section styles{
     <link rel="stylesheet" href="~/css/ToolsStyleSheet.css" />
+    <link rel="stylesheet" href="~/css/SearchbarStyleSheet.css" />
     }
     <script>
-        const alllinks = document.querySelectorAll('.Headline .addtool')
-        function navigate(elements) {
-            alllinks.forEach(element => {
-                element.addEventListener("click", (e) => {
-                    e.preventDefault();
-                    document.querySelector(e.target.dataset.section).scrollIntoView({
-                        behavior: "smooth"
-                    })
+    const alllinks = document.querySelectorAll('.menu-main-menu-container #menu-item-2763')
+    function navigate(elements) {
+        alllinks.forEach(element => {
+            element.addEventListener("click", (e) => {
+                e.preventDefault();
+                document.querySelector(e.target.dataset.section).scrollIntoView({
+                    behavior: "smooth"
                 })
             })
-        } navigate(alllinks)
+        })
+    } navigate(alllinks)
     </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#diagnosisInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myList .li").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>

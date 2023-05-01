@@ -16,15 +16,16 @@ namespace DentistPortal_Client.Pages.DoctorPages.Tools
     {
         private IHttpClientFactory _httpClient;
         IConfiguration config = new ConfigurationBuilder()
-             .AddJsonFile("appsettings.json")
-             .AddEnvironmentVariables()
-             .Build();
+              .AddJsonFile("appsettings.json")
+              .AddEnvironmentVariables()
+              .Build();
         [TempData]
         public string Msg { get; set; } = String.Empty;
         [TempData]
         public string Status { get; set; } = String.Empty;
         public List<Tool> Tools = new();
         public string[] Pictures { get; set; }
+        public Tool tool1;
 
         public MyToolsModel(IHttpClientFactory httpClient)
         {
