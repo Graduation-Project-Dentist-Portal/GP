@@ -3,215 +3,93 @@
 @inject IHttpContextAccessor HttpContextAccessor
 @model DentistPortal_Client.Pages.HomeModel
 @{
-    <!DOCTYPE html>
-    <html lang="en" dir="ltr">
-    <head>
-        <meta charset="utf-8">
-        <title>Dentist</title>
-        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="Home.css">
-
-        <!--footer head-->
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Responsive Footer - Sagar Developer</title>
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-        <link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">
-
-        <!--end od head footer-->
-
-    </head>
-
-    <body>
-
-        <nav>
-            <div class="logo">Dentist Portal</div>
-            <input type="checkbox" id="click">
-            <label for="click" class="menu-btn">
-                <i class="fas fa-bars"></i>
-            </label>
-            <ul>
-                <li><a class="active" href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Services</a></li>
-                <li><a href="#">Gallery</a></li>
-                <li><a href="#">Feedback</a></li>
-            </ul>
-        </nav>
-    </body>
-
-
     <!-- Cards -->
     <div class="box">
-        <div class="inner">
-            <figure>
-                <div class="container2">
-                    <img src="https://brightsmiledentalguwahati.in/wp-content/uploads/2020/04/male-dentist-with-plastic-jaw-model-light-surface-closeup-scaled-450x450.jpg" height="450" width="455" alt="Mountains">
-                    <div class="top-left"></div>
-                </div>
-                <figcaption>The Day</figcaption>
-            </figure>
-            <figure style="--c:#fff5">
-                <!--	<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRao9D-7jvvwvC6DEjAvWb9yYVqI1D31ZkSZw&usqp=CAU" height="450" width="455" alt="Mountains">
-                -->
-                <img src="https://auroraeppingdental.com.au/wp-content/uploads/2022/01/Teeth-Whitening-3.jpg" height="450" width="455" alt="Mountains">
-                <figcaption>The Night</figcaption>
-            </figure>
-
-            <figure>
-                <img src="https://www.dentalgroupatpolaris.com/assets/images/family-dentistry-2.jpg" height="450" width="445" alt="Mountains">
-                <figcaption>The Day</figcaption>
-            </figure>
-
+        <div class="inner row g-0">
+            <a href="#" class="col" style="text-decoration:none;max-height:350px;">
+                <figure>
+                    <img src="~/Pictures/Doctor.jpg" width="100%" height="100%" alt="Mountains" style="max-height:350px;min-height:350px;">
+                    <figcaption>Describe your pain and find a doctor to fix it</figcaption>
+                </figure>
+            </a>
+            <a href="DoctorPages/MedicalCases/DisplayMedicalCases" class="col" style="text-decoration:none;max-height:350px;">
+                <figure>
+                    <img src="~/Pictures/Patients.jpg" width="100%" height="100%" alt="Mountains" style="max-height:350px;min-height:350px;">
+                    <figcaption>Find Patients to work on</figcaption>
+                </figure>
+            </a>
+            <a href="DoctorPages/Tools/DisplayTools" class="col" style="text-decoration:none;max-height:350px;">
+                <figure>
+                    <img src="~/Pictures/Tools.jpg" width="100%" height="100%" alt="Mountains" style="max-height:350px;min-height:350px;">
+                    <figcaption>Check Tools</figcaption>
+                </figure>
+            </a>
         </div>
     </div>
+
     <!-- Qoute -->
     <div class="mozaa">
-        <p class="quote"><span>A</span> <span>Better Life Starts With A Beautiful Smile ツ</span></p>
+        <p class="quote"><span>Why should you use dentist portal</span><span> ?</span></p>
     </div>
 
-    <!-- Before and after Teeth Photo -->
-    <div class="img-comp-container">
-        <div class="img-comp-img">
-            <img class="fofo" src="https://tulipdentalcenter.com/uploads/aboutStrucs/source/52957.webp" width="500" height="500">
-        </div>
-        <div class="img-comp-img img-comp-overlay">
-            <img class="fofo" src="https://tulipdentalcenter.com/uploads/aboutStrucs/source/64272.webp" width="500" height="500">
-        </div>
-    </div>
-    <script>
-        initComparisons();
-    </script>
     <header>
-
         <!-- Paragraphs -->
         <div class="container">
             <div class="image">
-                <img class="toto" src="https://www.denplan.co.uk/content/dam/denplan/images/cards-450-x-x300/Looking%20after%20teeth-The%20life%20of%20your%20teeth-cards.png">
+                <img class="toto" src="~/Pictures/DentalStudent.jpg">
             </div>
             <div class="text">
-                <h2>Why should you brush your teeth twice a day</h2>
+                <h2>As a dental Student</h2>
                 <p>
-                    Brushing your teeth twice a day is important because it helps remove plaque,
-                    a sticky film of bacteria that forms on your teeth. Plaque can cause tooth decay
-                    and gum disease if it is not removed.
-                    Bacteria is produced in your mouth in a short period of time and it keeps producing after very short periods of time.
-                    When you brush your teeth twice a day, you basically destroy the bacteria from your mouth in order to make it clean.
-                    Bacteria, if left in your mouth for twenty-four hours, results in damaging the enamel of your tooth that gradually weakens the gums and roots resulting in the decay of teeth.
-                    Moreover, the removal of bacteria also results in the removal of bad breath and thus you can smile and laugh anytime.
+                    We shorten the space between you and your patient,
+                    as on our website you can find a case to work on or even add a case to your fellow students,
+                    and you can also find and sell dental tools, find trainings, and find job offers.
+                    You can also make your own portfolio so others can see your work and achievements.
                 </p>
             </div>
         </div>
-
-
-
-
+        <br>
         <div class="contn">
             <div class="image">
-                <img class="soso" src="https://us.123rf.com/450wm/paladjai/paladjai1802/paladjai180200016/95059270-scaling-teeth-illustration-vector-on-blue-background-dental-concept.jpg?ver=6">
+                <img class="soso" src="~/Pictures/Patient.jpg">
             </div>
             <div class="text2">
-                <h2>Don’t Skip Dental Cleanings</h2>
+                <h2>As a Patient</h2>
                 <p>
-                    You may have a good oral hygiene routine at home that promotes having a healthy mouth.
-                    However, regular dental cleanings are essential to your oral health.
-                    Plaque and tartar will build up on your teeth no matter how thoroughly you brush and floss.
-                    Once tartar forms, you can’t remove it on your own.
-                    This is why the American Dental Association recommends that you have a professional dental cleaning every six months.
-
+                    You can get your teeth fixed by great doctors for free or for a small amount of money by posting a description of what is bothering you and taking a photo of your teeth,
+                    and then a doctor will contact you to fix them.
+                    Our website can assure you that the doctor is verified and we have all his legal data.
                 </p>
             </div>
         </div>
-
-
+        <br>
         <div class="conta">
             <div class="image">
-                <img class="nono" src="https://www.dentalhealthcareofwoburn.com/wp-content/uploads/2021/09/older-woman-in-dental-chair.jpg">
+                <img class="nono" src="https://allesleyparkdental.co.uk/wp-content/uploads/2022/09/AP-Dental-Team-Photo.jpg">
             </div>
             <div class="text3">
-                <h2>Did you know that healthy teeth can make you live longer?</h2>
+                <h2>As a Doctor</h2>
                 <p>
-                    It's true. Research has established a direct correlation between good oral health and good physical health.
-                    Conversely, having poor oral health can contribute to an early demise.
-                    The reason for these seemingly unconnected statistics is that poor oral health causes inflammation due to the bacteria present.
-                    Then, the bloodstream carries the bacteria to the major organs and throughout the body.
-                    Poor oral health has been shown to contribute to diabetes, dementia, heart disease, and more.
-                    So if you want to live a longer and healthier life, make sure your teeth and gums are healthy.
-
+                    You can sell or buy dental tools,
+                    and you can also post job offers and training for dental students,
+                    as you can see their portfolios and check their work before contacting them.
                 </p>
             </div>
         </div>
     </header>
-    <!--footer-->
-    <footer class="footer-distributed">
-
-        <div class="footer-left">
-            <h3>Dentist<span>portal</span></h3>
-
-            <p class="footer-links">
-                <a href="#">Home</a>
-                |
-                <a href="#">About</a>
-                |
-                <a href="#">Contact</a>
-                |
-                <a href="#">Blog</a>
-            </p>
-
-            <p class="footer-company-name">Copyright © 2023 <strong>DentistPortal</strong> All rights reserved</p>
-        </div>
-
-        <div class="footer-center">
-            <div>
-                <i class="fa fa-map-marker"></i>
-                <p>
-                    <span>helwan</span>
-                    university
-                </p>
-            </div>
-
-            <div>
-                <i class="fa fa-phone"></i>
-                <p>+91 74**9**258</p>
-            </div>
-            <div>
-                <i class="fa fa-envelope"></i>
-                <p><a href="http://www.helwan.edu.eg/">helwan@gmail.com</a></p>
-            </div>
-        </div>
-        <div class="footer-right">
-            <p class="footer-company-about">
-                <span>About the helwan university </span>
-                <strong>DentistPortal</strong> is a website that helps you to cure your teeth ,
-                make them shiney & help dental students in the year of privilege.
-            </p>
-            <div class="footer-icons">
-                <a href="#"><i class="fa fa-facebook"></i></a>
-                <a href="#"><i class="fa fa-instagram"></i></a>
-                <a href="#"><i class="fa fa-linkedin"></i></a>
-                <a href="#"><i class="fa fa-twitter"></i></a>
-                <a href="#"><i class="fa fa-youtube"></i></a>
-            </div>
-        </div>
-    </footer>
-    <!--end of footer-->
-
-</html>
-
 }
-@*@if (@Model.Msg != null)
+@if (@Model.Msg != null)
+{
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    if (@Model.Status == "success")
     {
-        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        if (@Model.Status == "success")
-        {
-            <script type="text/javascript">
-                Swal.fire({
-                    icon: 'success',
-                    title: '@Model.Msg',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-            </script>
-        }
-    }*@
+        <script type="text/javascript">
+            Swal.fire({
+                icon: 'success',
+                title: '@Model.Msg',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        </script>
+    }
+}

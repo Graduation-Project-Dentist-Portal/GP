@@ -5,7 +5,7 @@ builder.Services.AddHttpClient();
 // Add services to the container.
 builder.Services.AddRazorPages(options =>
 {
-    options.Conventions.AddPageRoute("/Login", "");
+    options.Conventions.AddPageRoute("/Home", "");
 });
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 builder.Services.AddSweetAlert2();

@@ -21,9 +21,9 @@ namespace DentistPortal_Client.Pages.DoctorPages.Clinics
                .AddEnvironmentVariables()
                .Build();
         [TempData]
-        public string Msg { get; set; } = String.Empty;
+        public string Msg { get; set; } = string.Empty;
         [TempData]
-        public string Status { get; set; } = String.Empty;
+        public string Status { get; set; } = string.Empty;
         public List<Clinic> Clinics = new();
         public string[] Pictures { get; set; }
 
