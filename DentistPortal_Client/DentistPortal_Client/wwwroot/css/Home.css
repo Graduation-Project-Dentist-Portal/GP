@@ -175,7 +175,7 @@ body {
     display: grid;
 }
 
-.container {
+.container-home {
     display: flex;
     align-items: center;
     justify-content: center

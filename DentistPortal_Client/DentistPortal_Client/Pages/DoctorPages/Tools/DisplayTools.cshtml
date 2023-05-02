@@ -15,7 +15,7 @@
               
             </div>
         </form>
-        <div class="menu-main-menu-container">
+@*        <div class="menu-main-menu-container">
             <ul id="menu-main-menu" class="menu">
                 <li id="menu-item-680"
                     class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-680">
@@ -24,16 +24,17 @@
                         Cases
                     </a>
                 </li>
-                <li id="menu-item-693"
-                    class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-693">
-                    <a href="../MedicalCases/DisplayMedicalCases">Medical Cases</a>
-                </li>
+              
                 <li id="menu-item-31652"
                     class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-31652">
                     <a href="../Tools/MyTools">
                         My
                         Tools
                     </a>
+                </li>
+                 <li id="menu-item-693"
+                class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-693">
+                <a href="../MedicalCases/DisplayMedicalCases">Medical Cases</a>
                 </li>
                 <li id="menu-item-2763"
                     class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-2763">
@@ -46,7 +47,7 @@
 
             </ul>
         </div>
-    </div>
+*@    </div>
 </header>
 @{
     int counter = 0;
@@ -148,15 +149,16 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <div class="details">
-                                                        <div class="ToolDescription">
+                                                        <div class="ToolDescription" style="height:auto">
                                                             @tool.Description
                                                         </div>
-                                                        <div class="ToolPrice">
-                                                            <span style="font-size: larger; font-weight: 400;">Price:</span>
-                                                            <span>@tool.ToolPrice</span>
-                                                            <span style="font-size: larger; font-weight: 400;">LE</span>
-                                                        </div>
-                                                        <div class="line">
+                                                <div class="ToolPrice text-center"> 
+                                                    <span style="font-size: larger; font-weight: 400;">Price:</span>
+                                                    <span>@tool.ToolPrice</span>
+                                                    <span style="font-size: larger; font-weight: 400;">LE</span>
+                                                </div>
+                                                        <div class="line" style="column-gap:20px;">
+                                                   
                                                             <div class="sellername">
                                                                 <i class="fa-solid fa-user-doctor-hair"></i>
                                                                 <span>@tool.Dentist.Username</span>
@@ -200,31 +202,47 @@
                                             <input name="id" value="@tool.Id" hidden>
 
                                             <div class="col-sm-6">
+                                                <label class="form-label" for="floatingPatientName">Tool Name</label>
+
                                                 <input type="text" class="form-control" name="toolDto.ToolName" value="@tool.ToolName" required>
+
                                                 <div class="invalid-feedback">
                                                     Please fill the tool name.
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
+                                                <label class="form-label" for="floatingPatientName">Tool Price</label>
+
                                                 <input type="text" class="form-control" name="toolDto.ToolPrice" value="@tool.ToolPrice" required>
+
                                                 <div class="invalid-feedback">
                                                     Please fill the tool price.
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
+                                                <label class="form-label" for="floatingPatientName">
+                                                    Your Contact Number</label>
+                                                    
+
                                                 <input type="text" class="form-control" name="toolDto.ContactNumber" value="@tool.ContactNumber" required>
+
                                                 <div class="invalid-feedback">
                                                     Please fill your contact number.
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
                                                 <input type="text" class="form-control" name="toolDto.SellerLocation" value="@tool.SellerLocation" required>
+                                                <label class="form-label" for="floatingPatientName">Your Location</label>
+
                                                 <div class="invalid-feedback">
                                                     Please fill your location.
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
+                                                <label class="form-label" for="floatingPatientName">Description</label>
+
                                                 <textarea name="toolDto.Description" class="form-control" required>@tool.Description</textarea>
+
                                                 <div class="invalid-feedback">
                                                     Please fill the tool Description.
                                                 </div>
@@ -256,7 +274,7 @@
                                                 <input name="toolDto.Pictures" class="form-control" type="file" multiple>
                                             </div>
                                             <div class="col-md-12">
-                                                <button asp-page-handler="Edit" type="submit">Submit</button>
+                                                <button asp-page-handler="Edit" type="submit" class="mybtn" style="width:120px;">Submit</button>
                                             </div>
                                         </div>
                                     </form>
@@ -299,9 +317,9 @@
                     <div class=" paragraph">
                         <h4>Share your tools with others</h4>
                         <p>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis nisi impedit velit neque eaque
-                            consectetur dolores facilis maiores ut optio est ducimus rem corporis, expedita aspernatur quidem vel
-                            placeat nostrum.
+                            We tried to make it easy for students
+                            By helping them sharing their tools with each other (Rent or sale)
+                            From here you can share your used tools to help your Colleagues.
                         </p>
                     </div>
                 </div>

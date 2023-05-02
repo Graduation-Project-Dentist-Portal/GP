@@ -10,11 +10,10 @@ body {
 }
 
 header {
-    background-color: #ffffff;
+    /*background-color: #ffffff;*/
     display: flex;
     width: 100%;
     margin-bottom: 10px;
-    position: fixed;
     transition: font-size 0.5s, height 0.5s;
     -webkit-transition: font-size 0.5s, height 0.5s;
     -moz-transition: font-size 0.5s, height 0.5s;
@@ -28,6 +27,7 @@ header {
     text-align: center;
     margin: 0 auto;
     box-sizing: border-box;
+    transform: translate(11px, -17px);
 }
 
     .website-search input {
@@ -42,7 +42,7 @@ header {
         background-repeat: no-repeat;
         background-position: right 12px center;
         background-size: 18px;
-        background-color: #E9EDF8;
+        background-color: White;
         border: solid 1px #e5e5e5;
         transition: all 0.3s ease 0s;
     }
