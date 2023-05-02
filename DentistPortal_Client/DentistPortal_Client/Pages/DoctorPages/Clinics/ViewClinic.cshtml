@@ -16,219 +16,226 @@
     var counter = 0;
     bool isLiked;
     var httpClient = HttpContext.RequestServices.GetService<IHttpClientFactory>();
-    var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
-    var client = httpClient.CreateClient();
-    client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
-    client.BaseAddress = new Uri(config["BaseAddress"]);
-    var userId = Guid.Parse(jwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
-    string req = string.Empty;
-    List<string> imageUrls = new();
-    req = await client.GetStringAsync($"api/get-clinic-pics/{@Model.Clinic.Id}");
-    if (req is not null)
+    if (HttpContext.Session.GetString("Token") == null)
     {
-        var options = new JsonSerializerOptions
-                {
-                    WriteIndented = true,
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                    DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
-                };
-        imageUrls = JsonSerializer.Deserialize<List<string>>(req, options);
+        Response.Redirect($"https://localhost:7156/Login?url={$"DoctorPages/Clinics/ViewClinic?id={Model.ClinicId}"}");
     }
-    req = string.Empty;
-
-    <!-- Display Clinic Section -->
-    <div class="container">
-        <div class="about">
-            <h1>Clinic <span>Details</span></h1>
-            <div class="about_main row">
-                <div class="about_image col">
-                    <div class="about_small_image">
-                        @foreach (var picture in imageUrls)
-                        {
-                            <img src=@picture alt="..." onclick="changeImage(this)" />
-                        }
-                    </div>
-                    <div class="image_container col">
-                        <img src=@imageUrls[0] alt="..." id="imageBox" />
-                    </div>
-                </div>
-                <div class="about_text col">
-                    <div class="form-floating form-outline mb-4">
-                        <input class="form-control" id="floatingClinicName" placeholder="clinicName" value="@Model.Clinic.Name" disabled readonly>
-                        <label class="form-label" for="floatingClinicName">Clinic Name</label>
-                    </div>
-                    <div class="form-floating form-outline mb-4">
-                        <input class="form-control" id="floatingClinicPhone" placeholder="ClinicPhone" value="@Model.Clinic.ClinicPhone" disabled readonly>
-                        <label class="form-label" for="floatingClinicPhone">Clinic Phone</label>
-                    </div>
-                    <div class="form-floating form-outline mb-4">
-                        <input class="form-control" id="floatingClinicAdress" placeholder="ClinicAdress" value="@Model.Clinic.Address" disabled readonly>
-                        <label class="form-label" for="floatingClinicAdress">Clinic Adress</label>
-                    </div>
-                    <div class="form-floating form-outline mb-4">
-                        <input type="time" class="form-control" id="floatingClinicOpenTime" placeholder="ClinicOpenTime" value="@Model.Clinic.OpenTime.TimeOfDay" disabled readonly>
-                        <label class="form-label" for="floatingClinicOpenTime">Open Time</label>
-                    </div>
-                    <div class="form-floating form-outline mb-4">
-                        <input type="time" class="form-control" rows="5" id="floatingClinicCloseTime" placeholder="ClinicCloseTime" value="@Model.Clinic.CloseTime.TimeOfDay" disabled readonly>
-                        <label class="form-label" for="floatingClinicCloseTime">Close Time</label>
-                    </div>
-                    <div class="form-floating form-outline mb-4">
-                        <textarea class="form-control resize" rows="5" id="floatingClinicDescription" placeholder="ClinicDescription" disabled readonly>@Model.Clinic.ClinicDescription</textarea>
-                        <label class="form-label" for="floatingClinicDescription">Description</label>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!--Comments Section-->
-
-        <div class="row d-flex justify-content-center comments">
-            <div class="col-md-8 col-lg-6">
-                <div class="card shadow-0 border" style="background-color: #f0f2f5;">
-                    <div class="card-body p-4">
-                        <form asp-page-handler="AddComment" class="needs-validation" novalidate>
-                            <div class="form-floating form-outline mb-4">
-                                <input name="feedbackDto.ClinicId" id="addANote" value="@Model.Clinic.Id" hidden>
-                                <input type="text" name="feedbackDto.Comment" for="addANote" class="form-control" placeholder="Type comment..." required />
-                                <label class="form-label" for="addANote">Type comment then press enter...</label>
-                                <div class="invalid-feedback">
-                                    Please add comment.
-                                </div>
-                            </div>
-                            <button type="submit" hidden>Add</button>
-                        </form>
-                        @foreach (var feedback in Model.Feedbacks)
-                        {
-                            req = string.Empty;
-                            req = await client.GetStringAsync($"api/is-liked/{feedback.Id}/{userId}");
-                            <div class="card mb-4">
-                                @if (feedback.UserId == userId)
-                                {
-                                    <div class="setting">
-                                        <div class="dropdown">
-                                            <button class="dropdown-toggle sett" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="bi bi-three-dots-vertical"></i>
-                                            </button>
-                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-
-                                                <!-- Button trigger delete modal -->
-                                                <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target=@("#deleteFeedbackModal"+@counter)>Delete</button></li>
-
-                                                <!-- Button trigger edit modal -->
-                                                <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target=@("#editFeedbackModal"+@counter)>Edit</button></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                }
-                                <div class="card-body">
-                                    <div class="feedback-emoji" style="position:relative">
-                                        <div style="position:absolute;right:30px;">
-                                            @if (feedback.AiScore == "1")
-                                            {
-                                                <h3 style="color:black"><i class="bi bi-emoji-smile-fill"></i></h3>
-                                            }
-                                            else if (feedback.AiScore == "-1")
-                                            {
-                                                <h3 style="color:black"><i class="bi bi-emoji-frown-fill"></i></h3>
-                                            }
-                                            else
-                                            {
-                                                <h3 style="color:black"><i class="bi bi-emoji-neutral-fill"></i></h3>
-                                            }
-                                        </div>
-                                    </div>
-                                    <p class="feedback-text">@feedback.Comment</p>
-
-                                    <div class="d-flex justify-content-between">
-                                        <div class="d-flex flex-row align-items-center">
-                                            <img src="data:image/png;base64,@feedback.Patient.ProfilePicture" alt="avatar" width="25" height="25" />
-                                            <p class="small mb-0 ms-2">@feedback.Patient.FirstName @feedback.Patient.LastName</p>
-                                        </div>
-                                        @if (req == "false")
-                                        {
-                                            <form method="post" asp-page-handler="Like" asp-route-id="@feedback.Id" asp-route-clinicId="@Model.Clinic.Id">
-                                                <div class="d-flex flex-row align-items-center">
-                                                    <button type="submit" class="small text-muted mb-0">Upvote?</button>
-                                                    <i class="bi bi-hand-thumbs-up mx-2 fa-xs text-black" style="margin-top: -0.16rem;"></i>
-                                                    <p class="small text-muted mb-0">@feedback.Likes</p>
-                                                </div>
-                                            </form>
-                                        }
-                                        else if (req == "true")
-                                        {
-                                            <form method="post" asp-page-handler="UnLike" asp-route-id="@feedback.Id" asp-route-clinicId="@Model.Clinic.Id">
-                                                <div class="d-flex flex-row align-items-center text-primary">
-                                                    <button type="submit" class="small mb-0 text-primary">Upvoted</button>
-                                                    <i class="bi bi-hand-thumbs-up-fill mx-2 fa-xs" style="margin-top: -0.16rem;"></i>
-                                                    <p class="small mb-0">@feedback.Likes</p>
-                                                </div>
-                                            </form>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Delete Modal -->
-                            <div class="modal fade" id=@("deleteFeedbackModal"+@counter) tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Delete Feedback</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            Are you sure you want to delete this feedback?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <form method="post">
-                                                <button asp-page-handler="Delete" asp-route-id=@feedback.Id asp-route-clinicId=@feedback.ClinicId type="submit" class="btn btn-danger">Yes!</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Edit Modal -->
-                            <div class="modal fade" id=@("editFeedbackModal"+@counter) tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLongTitle" style="color:black">Feedback</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form method="post" enctype="multipart/form-data" class="align-content-center col-6 w-100 needs-validation" style="margin:auto;text-align:center;color:#1A2238;" novalidate>
-                                                <input name="feedbackDto.ClinicId" value="@feedback.ClinicId" hidden>
-                                                <input name="id" value="@feedback.Id" hidden>
-                                                <div class="form-floating form-outline mb-4">
-                                                    <textarea name="feedbackDto.Comment" class="form-control resize" rows="5" id="floatingClinicDescription" placeholder="ClinicDescription" required>@feedback.Comment</textarea>
-                                                    <label class="form-label" for="floatingClinicDescription">Feedback</label>
-                                                    <div class="invalid-feedback">
-                                                        Please fill the feedback.
-                                                    </div>
-                                                </div>
-                                                <button asp-page-handler="Edit" type="submit" class="btn btn-success btn-block mb-3 align-center"><i class="bi bi-pencil-square"> Edit</i></button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            counter++;
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script>
-        function changeImage(smallImage) {
-            var fullImage = document.getElementById("imageBox")
-            fullImage.src = smallImage.src
+    else
+    {
+        var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
+        var client = httpClient.CreateClient();
+        client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+        client.BaseAddress = new Uri(config["BaseAddress"]);
+        var userId = Guid.Parse(jwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+        string req = string.Empty;
+        List<string> imageUrls = new();
+        req = await client.GetStringAsync($"api/get-clinic-pics/{@Model.Clinic.Id}");
+        if (req is not null)
+        {
+            var options = new JsonSerializerOptions
+                    {
+                        WriteIndented = true,
+                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                        DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
+                    };
+            imageUrls = JsonSerializer.Deserialize<List<string>>(req, options);
         }
-    </script>
+        req = string.Empty;
+
+        <!-- Display Clinic Section -->
+        <div class="container">
+            <div class="about">
+                <h1>Clinic <span>Details</span></h1>
+                <div class="about_main row">
+                    <div class="about_image col">
+                        <div class="about_small_image">
+                            @foreach (var picture in imageUrls)
+                            {
+                                <img src=@picture alt="..." onclick="changeImage(this)" />
+                            }
+                        </div>
+                        <div class="image_container col">
+                            <img src=@imageUrls[0] alt="..." id="imageBox" />
+                        </div>
+                    </div>
+                    <div class="about_text col">
+                        <div class="form-floating form-outline mb-4">
+                            <input class="form-control" id="floatingClinicName" placeholder="clinicName" value="@Model.Clinic.Name" disabled readonly>
+                            <label class="form-label" for="floatingClinicName">Clinic Name</label>
+                        </div>
+                        <div class="form-floating form-outline mb-4">
+                            <input class="form-control" id="floatingClinicPhone" placeholder="ClinicPhone" value="@Model.Clinic.ClinicPhone" disabled readonly>
+                            <label class="form-label" for="floatingClinicPhone">Clinic Phone</label>
+                        </div>
+                        <div class="form-floating form-outline mb-4">
+                            <input class="form-control" id="floatingClinicAdress" placeholder="ClinicAdress" value="@Model.Clinic.Address" disabled readonly>
+                            <label class="form-label" for="floatingClinicAdress">Clinic Adress</label>
+                        </div>
+                        <div class="form-floating form-outline mb-4">
+                            <input type="time" class="form-control" id="floatingClinicOpenTime" placeholder="ClinicOpenTime" value="@Model.Clinic.OpenTime.TimeOfDay" disabled readonly>
+                            <label class="form-label" for="floatingClinicOpenTime">Open Time</label>
+                        </div>
+                        <div class="form-floating form-outline mb-4">
+                            <input type="time" class="form-control" rows="5" id="floatingClinicCloseTime" placeholder="ClinicCloseTime" value="@Model.Clinic.CloseTime.TimeOfDay" disabled readonly>
+                            <label class="form-label" for="floatingClinicCloseTime">Close Time</label>
+                        </div>
+                        <div class="form-floating form-outline mb-4">
+                            <textarea class="form-control resize" rows="5" id="floatingClinicDescription" placeholder="ClinicDescription" disabled readonly>@Model.Clinic.ClinicDescription</textarea>
+                            <label class="form-label" for="floatingClinicDescription">Description</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Comments Section-->
+
+            <div class="row d-flex justify-content-center comments">
+                <div class="col-md-8 col-lg-6">
+                    <div class="card shadow-0 border" style="background-color: #f0f2f5;">
+                        <div class="card-body p-4">
+                            <form asp-page-handler="AddComment" class="needs-validation" novalidate>
+                                <div class="form-floating form-outline mb-4">
+                                    <input name="feedbackDto.ClinicId" id="addANote" value="@Model.Clinic.Id" hidden>
+                                    <input type="text" name="feedbackDto.Comment" for="addANote" class="form-control" placeholder="Type comment..." required />
+                                    <label class="form-label" for="addANote">Type comment then press enter...</label>
+                                    <div class="invalid-feedback">
+                                        Please add comment.
+                                    </div>
+                                </div>
+                                <button type="submit" hidden>Add</button>
+                            </form>
+                            @foreach (var feedback in Model.Feedbacks)
+                            {
+                                req = string.Empty;
+                                req = await client.GetStringAsync($"api/is-liked/{feedback.Id}/{userId}");
+                                <div class="card mb-4">
+                                    @if (feedback.UserId == userId)
+                                    {
+                                        <div class="setting">
+                                            <div class="dropdown">
+                                                <button class="dropdown-toggle sett" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="bi bi-three-dots-vertical"></i>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+
+                                                    <!-- Button trigger delete modal -->
+                                                    <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target=@("#deleteFeedbackModal"+@counter)>Delete</button></li>
+
+                                                    <!-- Button trigger edit modal -->
+                                                    <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target=@("#editFeedbackModal"+@counter)>Edit</button></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="card-body">
+                                        <div class="feedback-emoji" style="position:relative">
+                                            <div style="position:absolute;right:30px;">
+                                                @if (feedback.AiScore == "1")
+                                                {
+                                                    <h3 style="color:black"><i class="bi bi-emoji-smile-fill"></i></h3>
+                                                }
+                                                else if (feedback.AiScore == "-1")
+                                                {
+                                                    <h3 style="color:black"><i class="bi bi-emoji-frown-fill"></i></h3>
+                                                }
+                                                else
+                                                {
+                                                    <h3 style="color:black"><i class="bi bi-emoji-neutral-fill"></i></h3>
+                                                }
+                                            </div>
+                                        </div>
+                                        <p class="feedback-text">@feedback.Comment</p>
+
+                                        <div class="d-flex justify-content-between">
+                                            <div class="d-flex flex-row align-items-center">
+                                                <img src="data:image/png;base64,@feedback.Patient.ProfilePicture" alt="avatar" width="25" height="25" />
+                                                <p class="small mb-0 ms-2">@feedback.Patient.FirstName @feedback.Patient.LastName</p>
+                                            </div>
+                                            @if (req == "false")
+                                            {
+                                                <form method="post" asp-page-handler="Like" asp-route-id="@feedback.Id" asp-route-clinicId="@Model.Clinic.Id">
+                                                    <div class="d-flex flex-row align-items-center">
+                                                        <button type="submit" class="small text-muted mb-0">Upvote?</button>
+                                                        <i class="bi bi-hand-thumbs-up mx-2 fa-xs text-black" style="margin-top: -0.16rem;"></i>
+                                                        <p class="small text-muted mb-0">@feedback.Likes</p>
+                                                    </div>
+                                                </form>
+                                            }
+                                            else if (req == "true")
+                                            {
+                                                <form method="post" asp-page-handler="UnLike" asp-route-id="@feedback.Id" asp-route-clinicId="@Model.Clinic.Id">
+                                                    <div class="d-flex flex-row align-items-center text-primary">
+                                                        <button type="submit" class="small mb-0 text-primary">Upvoted</button>
+                                                        <i class="bi bi-hand-thumbs-up-fill mx-2 fa-xs" style="margin-top: -0.16rem;"></i>
+                                                        <p class="small mb-0">@feedback.Likes</p>
+                                                    </div>
+                                                </form>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Delete Modal -->
+                                <div class="modal fade" id=@("deleteFeedbackModal"+@counter) tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Delete Feedback</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to delete this feedback?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <form method="post">
+                                                    <button asp-page-handler="Delete" asp-route-id=@feedback.Id asp-route-clinicId=@feedback.ClinicId type="submit" class="btn btn-danger">Yes!</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Edit Modal -->
+                                <div class="modal fade" id=@("editFeedbackModal"+@counter) tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle" style="color:black">Feedback</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form method="post" enctype="multipart/form-data" class="align-content-center col-6 w-100 needs-validation" style="margin:auto;text-align:center;color:#1A2238;" novalidate>
+                                                    <input name="feedbackDto.ClinicId" value="@feedback.ClinicId" hidden>
+                                                    <input name="id" value="@feedback.Id" hidden>
+                                                    <div class="form-floating form-outline mb-4">
+                                                        <textarea name="feedbackDto.Comment" class="form-control resize" rows="5" id="floatingClinicDescription" placeholder="ClinicDescription" required>@feedback.Comment</textarea>
+                                                        <label class="form-label" for="floatingClinicDescription">Feedback</label>
+                                                        <div class="invalid-feedback">
+                                                            Please fill the feedback.
+                                                        </div>
+                                                    </div>
+                                                    <button asp-page-handler="Edit" type="submit" class="btn btn-success btn-block mb-3 align-center"><i class="bi bi-pencil-square"> Edit</i></button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                counter++;
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            function changeImage(smallImage) {
+                var fullImage = document.getElementById("imageBox")
+                fullImage.src = smallImage.src
+            }
+        </script>
+    }
 }
 @if (@Model.Msg != null)
 {

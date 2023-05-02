@@ -25,15 +25,18 @@ namespace DentistPortal_Client.Pages
                .AddEnvironmentVariables()
                .Build();
         [TempData]
-        public string Msg { get; set; } = String.Empty;
+        public string Msg { get; set; } = string.Empty;
         [TempData]
-        public string Status { get; set; } = String.Empty;
+        public string Status { get; set; } = string.Empty;
+        public string Url = string.Empty;
 
         public void OnGet()
         {
+            var url = Request.Query["url"];
+            Url = url;
         }
 
-        public async Task<IActionResult> OnPost(UserDto user)
+        public async Task<IActionResult> OnPost(UserDto user, string? url)
         {
             var client = _httpClient.CreateClient();
             client.BaseAddress = new Uri(config["BaseAddress"]);
@@ -54,6 +57,10 @@ namespace DentistPortal_Client.Pages
                 //{
                 //    await GetNewToken(_h);
                 //}, null, TimeSpan.Zero, TimeSpan.FromSeconds(30));
+                if (url != string.Empty && url is not null)
+                {
+                    return RedirectToPage(url);
+                }
                 return RedirectToPage("/Home");
             }
             else

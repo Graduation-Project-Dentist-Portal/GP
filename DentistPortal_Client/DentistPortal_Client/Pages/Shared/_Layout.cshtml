@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8">
-    <title>Dentist Portal</title>
+    <title>DentalHub</title>
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="~/css/Home.css">
@@ -27,21 +27,21 @@
 </head>
 <body>
     <nav>
-        <div class="logo">Dentist Portal</div>
+        <div class="logo">DentalHub</div>
         <input type="checkbox" id="click">
         <label for="click" class="menu-btn">
             <i class="fas fa-bars"></i>
         </label>
         <ul>
             <li><a class="active" href="/Home">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Gallery</a></li>
-            <li><a href="#">Feedback</a></li>
+            <li><a href="/DoctorPages/Clinics/DisplayClinics">Clinics</a></li>
+            <li><a href="/DoctorPages/MedicalCases/DisplayMedicalCases">Medical Cases</a></li>
+            <li><a href="/DoctorPages/Tools/DisplayTools">Tools</a></li>
+            <li><a href="#">Post My Case</a></li>
         </ul>
     </nav>
 
-    <div>
+    <div style="overflow-x:hidden;height:100%">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -51,7 +51,7 @@
     <footer class="footer-distributed">
 
         <div class="footer-left">
-            <h3>Dentist<span>Portal</span></h3>
+            <h3>Dental<span>Hub</span></h3>
 
             <p class="footer-links">
                 <a href="/Home">Home</a>
@@ -87,7 +87,7 @@
         <div class="footer-right">
             <p class="footer-company-about">
                 <span>About our website </span>
-                <strong>DentistPortal</strong> is a website that provides a platform for dental dentists, doctors, and patients.
+                <strong>DentalHub</strong> is a website that provides a platform for dental dentists, doctors, and patients.
             </p>
             <div class="footer-icons">
                 <a href="#"><i class="bi bi-facebook"></i></a>
