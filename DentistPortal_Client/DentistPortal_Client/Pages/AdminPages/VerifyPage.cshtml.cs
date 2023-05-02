@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace DentistPortal_Client.Pages.AdminPages
@@ -28,7 +29,6 @@ namespace DentistPortal_Client.Pages.AdminPages
         public async Task OnGet()
         {
             var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
-            //DoctorId = Guid.Parse(jwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
             var client = _httpClient.CreateClient();
             client.BaseAddress = new Uri(config["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
@@ -67,6 +67,48 @@ namespace DentistPortal_Client.Pages.AdminPages
             {
                 Msg = e.Message;
                 Status = "error";
+            }
+        }
+
+        public async Task<IActionResult> OnPostUnverifyUser(Guid id, string msg)
+        {
+            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
+            var client = _httpClient.CreateClient();
+            client.BaseAddress = new Uri(config["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+            var request = await client.PutAsJsonAsync($"api/un-verify-user/{msg}", id);
+            if (request.IsSuccessStatusCode)
+            {
+                Msg = "Edited successfully";
+                Status = "success";
+                return RedirectToPage("");
+            }
+            else
+            {
+                Msg = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                Status = "error";
+                return RedirectToPage("");
+            }
+        }
+
+        public async Task<IActionResult> OnPostVerifyUser(Guid id)
+        {
+            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
+            var client = _httpClient.CreateClient();
+            client.BaseAddress = new Uri(config["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+            var request = await client.PutAsJsonAsync($"api/verify-user", id);
+            if (request.IsSuccessStatusCode)
+            {
+                Msg = "Verified successfully";
+                Status = "success";
+                return RedirectToPage("");
+            }
+            else
+            {
+                Msg = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                Status = "error";
+                return RedirectToPage("");
             }
         }
     }

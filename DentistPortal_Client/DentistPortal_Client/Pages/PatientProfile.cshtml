@@ -5,6 +5,7 @@
     //Model.ProfilePicture = Model.Loggedpatient.ProfilePicture;
     Layout = "";
     <head>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="/js/PatientProfile.js"></script>
         <link rel="stylesheet" href="~/css/EditProfile.css">
@@ -20,26 +21,30 @@
                 <div style="padding:5px">
                     <label class="form-label">Username</label>
                     <input class="ForEdit" id="username" value="@Model.Loggedpatient.Username" disabled>
-                    <input type="submit" value="update" class="Submit" disabled>
-                    <input type="submit" value="edit" class="edit">
+                    <!--<input type="submit" value="update" class="Submit" disabled>
+                    <input type="submit" value="edit" class="edit">-->
+                    <div style="display:inline; cursor:pointer; text-decoration:underline;" class="edit">Edit</div>
                 </div>
                 <div style="padding:4px">
                     <label class="form-label">First Name</label>
                     <input class="ForEdit" id="firstname" value="@Model.Loggedpatient.FirstName" disabled>
-                    <input type="submit" value="update" class="Submit" disabled>
-                    <input type="submit" value="edit" class="edit">
+                    <!--<input type="submit" value="update" class="Submit" disabled>
+                    <input type="submit" value="edit" class="edit">-->
+                    <div style="display:inline; cursor:pointer; text-decoration:underline;" class="edit">Edit</div>
                 </div>
                 <div style="padding:4px">
                     <label class="form-label">Last Name</label>
                     <input class="ForEdit" id="lastname" value="@Model.Loggedpatient.LastName" disabled>
-                    <input type="submit" value="update" class="Submit" disabled>
-                    <input type="submit" value="edit" class="edit">
+                    <!--<input type="submit" value="update" class="Submit" disabled>
+                    <input type="submit" value="edit" class="edit">-->
+                    <div style="display:inline; cursor:pointer; text-decoration:underline;" class="edit">Edit</div>
                 </div>
                 <div style="padding:5px">
                     <label class="form-label">Password</label>
                     <input class="ForEdit" id="password" value="password" type="password" disabled>
-                    <input type="submit" value="update" class="Submit" disabled>
-                    <input type="submit" value="edit" class="edit">
+                    <!--<input type="submit" value="update" class="Submit" disabled>
+                    <input type="submit" value="edit" class="edit">-->
+                    <div style="display:inline; cursor:pointer; text-decoration:underline;" class="edit">Edit</div>
                 </div>
                 <div style="padding:3px">
                     <form style="display: contents;" method="post" enctype="multipart/form-data">

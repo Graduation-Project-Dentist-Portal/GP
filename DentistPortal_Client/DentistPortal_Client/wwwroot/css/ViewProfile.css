@@ -1,0 +1,446 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+nav {
+    display: flex;
+    height: 80px;
+    width: 100%;
+    background: #2B4F71;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 50px 0 100px;
+    flex-wrap: wrap;
+    position: fixed;
+    z-index: 4;
+}
+
+    nav .logo {
+        color: #fff;
+        font-size: 35px;
+        font-weight: 600;
+    }
+
+    nav .first ul {
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
+    }
+
+        nav .first ul li {
+            margin: 0 5px;
+        }
+
+            nav .first ul li a {
+                color: #f2f2f2;
+                text-decoration: none;
+                font-size: 18px;
+                font-weight: 500;
+                padding: 8px 15px;
+                border-radius: 5px;
+                letter-spacing: 1px;
+                transition: all 0.3s ease;
+            }
+
+                nav .first ul li a.active,
+                nav ul li a:hover {
+                    color: #111;
+                    background: #fff;
+                }
+
+    nav .menu-btn i {
+        color: #fff;
+        font-size: 22px;
+        cursor: pointer;
+        display: none;
+    }
+
+input[type="checkbox"] {
+    display: none;
+}
+
+@media (max-width: 1000px) {
+    nav {
+        padding: 0 40px 0 50px;
+    }
+}
+
+@media (max-width: 920px) {
+    nav .menu-btn i {
+        display: block;
+    }
+
+    #click:checked ~ .menu-btn i:before {
+        content: "\f00d";
+    }
+
+    nav .first ul {
+        position: fixed;
+        top: 80px;
+        left: -100%;
+        background: #111;
+        height: 100vh;
+        width: 100%;
+        text-align: center;
+        display: block;
+        transition: all 0.3s ease;
+    }
+
+    #click:checked ~ .first ul {
+        left: 0;
+    }
+
+    nav .first ul li {
+        width: 100%;
+        margin: 40px 0;
+    }
+
+        nav .first ul li a {
+            width: 100%;
+            margin-left: -100%;
+            display: block;
+            font-size: 20px;
+            transition: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+    #click:checked ~ .first ul.four li a {
+        margin-left: 0px;
+    }
+
+    nav .first ul li a.active,
+    nav.first ul li a:hover {
+        background: none;
+        color: cyan;
+    }
+}
+
+
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #E9EDF8;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    scroll-behavior: smooth;
+}
+
+#fixedarrow {
+    position: fixed;
+    bottom: 10px;
+    right: 20px;
+    border: 1px solid rgb(43, 79, 113);
+    background-color: rgb(43, 79, 113);
+    border-radius: 50%;
+    padding: 15px;
+    font-size: 20px;
+    cursor: pointer;
+    z-index:999;
+}
+
+
+a,
+.third li {
+    text-decoration: none;
+    list-style: none;
+    color: #E9EDF8;
+}
+
+    .third li:hover {
+        color: rgb(36, 86, 136);
+        background-color: rgb(36, 86, 136);
+        /*  opacity: 0.9; */
+        border-radius: 30px;
+        width: 200px;
+        cursor: pointer;
+        text-align: center;
+    }
+
+.tooth {
+    background: url('https://api.iconify.design/mdi/tooth.svg?color=white&flip=horizontal') no-repeat center center / contain;
+    content: url('https://api.iconify.design/mdi/tooth-outline.svg?color=white&width=37&height=37');
+    margin-top: 85px;
+}
+
+
+
+#twittericon {
+    color: white;
+    font-size: 25px;
+    margin-left: 75px;
+}
+
+/* #twittericon:hover {
+    color: royalblue;
+} */
+
+
+.leftverticalmenu {
+    height: 100vh;
+    width: 300px;
+    text-align: left;
+    line-height: 60px;
+    font-size: 20px;
+    border-right: 1px solid rgb(155, 157, 160);
+    position: fixed;
+    background-color: #2B4F71;
+}
+
+.sec ul {
+    margin: auto;
+    width: 50%;
+    margin-top: -10px;
+}
+
+.profileimage {
+    border-radius: 50%;
+    border: 2px solid rgb(43, 43, 223);
+    width: 25px;
+    margin-right: 10px;
+    margin-bottom: -5px;
+}
+
+figure {
+    border-radius: 50px;
+    height: 55px;
+    background-color: #E9EDF8;
+    font-weight: bold;
+    width: 200px;
+    text-align: center;
+    margin: auto;
+    font-size: 15px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+    figure:hover {
+        opacity: 0.9;
+    }
+
+/* MIDDLE AND RIGHT CONTAINERS */
+
+.flexcontainer {
+    position: absolute;
+    left: 300px;
+}
+
+.middlecontainer {
+    width: 1210px;
+    border-right: 1px solid rgb(155, 157, 160);
+    height: 100%;
+}
+
+
+
+span {
+    filter: brightness(50%)
+}
+
+.t1 {
+    color: #657A97;
+}
+
+.headerprofileimage {
+    margin-top: 10px;
+    position: relative;
+}
+
+#headerimage {
+    width: 990px;
+    height: 300px;
+}
+
+#profilepic {
+    /* border-radius: 400px;
+     width: 200px;
+    height:200px
+    position: absolute;
+    top: 130px;
+    left: 20px;
+    border: 4px solid rgb(21, 32, 43);*/
+    width: 150px;
+    border-radius: 50%;
+    height: 150px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.editprofile {
+    margin-top: 150px;
+    float: right;
+    border: 1px solid rgb(43, 79, 113);
+    border-radius: 20px;
+    padding: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-right: 10px;
+    background-color: rgb(43, 79, 113);
+}
+
+.bio {
+    margin-top: 55px;
+    margin-left: 20px;
+    line-height: 40px;
+    font-size: 15px;
+}
+
+.handle {
+    line-height: 19px;
+    margin-bottom: 10px;
+    color: #657A97;
+}
+
+.followers {
+    margin-right: 15px;
+}
+
+.nawa {
+    display: flex;
+}
+
+.heading {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 1px solid #657A97;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+
+
+.avi {
+    width: 50px;
+    border-radius: 50%;
+    height: 50px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.caption {
+    color: black;
+    margin-left: 20px;
+    position: absolute;
+    width: 650px;
+    font-size: 14px;
+}
+
+/* post */
+
+
+.opp {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Poppins;
+}
+
+.hi {
+    display: flex;
+    /* justify-content: center;
+     align-items: center; */
+    /* max-height: 1000px; */
+    /* background: #eee;  */
+    margin: 70px;
+    padding: 70px;
+}
+
+.card {
+    /* position: relative; */
+    width: 700px;
+    max-height: 600px;
+    background: #fff;
+    box-shadow: 15px 15px 60px rgba(0, 0, 0, 1);
+    /* padding: 20px; */
+    border-radius: 10px;
+}
+
+    .card .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .card .top .userDeatils {
+            display: flex;
+            align-items: center;
+            margin: 10px;
+        }
+
+            .card .top .userDeatils .profileImg {
+                position: relative;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                margin-right: 8px;
+                overflow: hidden;
+            }
+
+.cover1 {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    cursor: pointer;
+}
+
+.cover {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    cursor: pointer;
+    margin-top: 50px;
+}
+
+.card .top .userDeatils h3 {
+    font-size: 18px;
+    color: #4d4d4f;
+    font-weight: 700;
+    line-height: 1rem;
+    cursor: pointer;
+}
+
+.card .top .userDeatils span {
+    font-size: 0.75em;
+}
+
+.card .top .dot {
+    transform: scale(0.6);
+    cursor: pointer;
+}
+
+.imgBg {
+    position: relative;
+    width: 300px;
+    height: 420px;
+    margin: -15px;
+}
+
+.column {
+    float: left;
+    width: 33.33%;
+    padding: 20px;
+    margin: 38px;
+}
+
+/* Clear floats after image containers */
+.row::after {
+    content: "";
+    clear: both;
+    display: table;
+}

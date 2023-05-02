@@ -11,8 +11,14 @@ namespace DentistPortal_Client.Pages
         [TempData]
         public string Status { get; set; } = String.Empty;
 
-        public void OnGet()
+        public async Task OnGet(string? clear)
         {
+            if (clear == "yes")
+            {
+                HttpContext.Session.Clear();
+                Msg = "Logged out successfully!";
+                Status = "success";
+            }
         }
     }
 }

@@ -58,11 +58,12 @@
                         <input asp-for="patient.LastName" required placeholder="Last Name">
                     </div>
                     <div class="input-field">
-                        <input asp-for="patient.ProfilePicture" type="file">
-                    </div>
-                    <div class="input-field">
                         <i class="fa fa-lock"></i>
                         <input asp-for="patient.PasswordHash" type="password" required placeholder="Enter your password">
+                    </div>
+                    <div class="input-field">
+                        <label>Profile Picture</label>
+                        <input asp-for="patient.ProfilePicture" type="file">
                     </div>
                     <br>
                     <button type="submit">Register</button>

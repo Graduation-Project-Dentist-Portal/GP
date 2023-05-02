@@ -1,10 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8">
-    <title>Dentist Portal</title>
+    <title>DentalHub</title>
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="~/css/Home.css">
@@ -27,24 +29,40 @@
 </head>
 <body>
     <nav>
-        <div class="logo">Dentist Portal</div>
+        <div class="logo">DentalHub</div>
         <input type="checkbox" id="click">
         <label for="click" class="menu-btn">
             <i class="fas fa-bars"></i>
         </label>
         <ul>
             <li><a class="active" href="/Home">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Gallery</a></li>
-            <li><a href="#">Feedback</a></li>
+            <li><a href="/DoctorPages/Clinics/DisplayClinics">Clinics</a></li>
+            <li><a href="/DoctorPages/MedicalCases/DisplayMedicalCases">Medical Cases</a></li>
+            <li><a href="/DoctorPages/Tools/DisplayTools">Tools</a></li>
+            <li><a href="#">Post My Case</a></li>
+            @if (HttpContextAccessor.HttpContext.Session.GetString("Token") == null)
+            {
+                <li><a href="/Login">Login</a></li>
+            }
+            else
+            {
+                <div class="dropdown">
+                    <a class="nav-profile-picture dropdown-toggle btn-danger" role="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><img class="nav-profile-picture" src="@HttpContextAccessor.HttpContext.Session.GetString("profilePicture")" /></a>
+
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" href="/ViewProfile"><i class="bi bi-person-circle" style="font-style:normal"> Profile</i></a></li>
+                        <li><a class="dropdown-item" href="/Home?clear=yes"><i class="bi bi-box-arrow-in-right" style="font-style:normal"> Log Out</i></a></li>
+                    </ul>
+                </div>
+            }
         </ul>
     </nav>
    
  
 
-    <div>
-        <main role="main">
+
+    <div style="overflow-x:hidden;height:100%">
+        <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
@@ -53,7 +71,7 @@
     <footer class="footer-distributed">
 
         <div class="footer-left">
-            <h3>Dentist<span>Portal</span></h3>
+            <h3>Dental<span>Hub</span></h3>
 
             <p class="footer-links">
                 <a href="/Home">Home</a>
@@ -65,7 +83,7 @@
                 <a href="#">Blog</a>
             </p>
 
-            <p class="footer-company-name">Copyright © 2023 <strong>DentistPortal</strong> All rights reserved</p>
+            <p class="footer-company-name">Copyright © 2023 <strong>DentalHub</strong> All rights reserved</p>
         </div>
 
         <div class="footer-center">
@@ -89,7 +107,7 @@
         <div class="footer-right">
             <p class="footer-company-about">
                 <span>About our website </span>
-                <strong>DentistPortal</strong> is a website that provides a platform for dental dentists, doctors, and patients.
+                <strong>DentalHub</strong> is a website that provides a platform for dental dentists, doctors, and patients.
             </p>
             <div class="footer-icons">
                 <a href="#"><i class="bi bi-facebook"></i></a>

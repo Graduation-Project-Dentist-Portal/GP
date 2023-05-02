@@ -6,6 +6,7 @@
 
     <head>
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="/js/DentistProfile.js"></script>
         <link rel="stylesheet" href="~/css/EditProfile.css">
     </head>
@@ -13,43 +14,48 @@
     <div class="container">
         <div class="content">
             <img src="@Model.LoggedDentist.ProfilePicture" alt="header-image" class="cld-responsive">
-            <h1 class="form-title">Edit</h1>
             <div style="padding: 50px;">
                 <div style="padding:5px">
                     <label class="form-label">Username</label>
                     <input class="ForEdit" id="username" value="@Model.LoggedDentist.Username" disabled>
-                    <input type="submit" value="update" class="Submit" disabled>
-                    <input type="submit" value="edit" class="edit">
+                    <!--<input type="submit" value="update" class="Submit" disabled>
+                    <input type="submit" value="edit" class="edit">-->
+                    <div style="display:inline; cursor:pointer; text-decoration:underline;" class="edit">Edit</div>
                 </div>
                 <div style="padding:4px">
                     <label class="form-label">First Name</label>
                     <input class="ForEdit" id="firstname" value="@Model.LoggedDentist.FirstName" disabled>
-                    <input type="submit" value="update" class="Submit" disabled>
-                    <input type="submit" value="edit" class="edit">
+                    <!--<input type="submit" value="update" class="Submit" disabled>
+                    <input type="submit" value="edit" class="edit">-->
+                    <div style="display:inline; cursor:pointer; text-decoration:underline;" class="edit">Edit</div>
                 </div>
                 <div style="padding:4px">
                     <label class="form-label">Last Name</label>
                     <input class="ForEdit" id="lastname" value="@Model.LoggedDentist.LastName" disabled>
-                    <input type="submit" value="update" class="Submit" disabled>
-                    <input type="submit" value="edit" class="edit">
+                    <!--<input type="submit" value="update" class="Submit" disabled>
+                    <input type="submit" value="edit" class="edit">-->
+                    <div style="display:inline; cursor:pointer; text-decoration:underline;" class="edit">Edit</div>
                 </div>
                 <div style="padding:5px">
                     <label class="form-label">Password</label>
                     <input class="ForEdit" id="password" value="password" type="password" disabled>
-                    <input type="submit" value="update" class="Submit" disabled>
-                    <input type="submit" value="edit" class="edit">
+                    <!--<input type="submit" value="update" class="Submit" disabled>
+                    <input type="submit" value="edit" class="edit">-->
+                    <div style="display:inline; cursor:pointer; text-decoration:underline;" class="edit">Edit</div>
                 </div>
                 <div style="padding:4px">
                     <label class="form-label">University</label>
                     <input class="ForEdit" id="university" value="@Model.LoggedDentist.University" disabled>
-                    <input type="submit" value="update" class="Submit" disabled>
-                    <input type="submit" value="edit" class="edit">
+                    <!--<input type="submit" value="update" class="Submit" disabled>
+                    <input type="submit" value="edit" class="edit">-->
+                    <div style="display:inline; cursor:pointer; text-decoration:underline;" class="edit">Edit</div>
                 </div>
                 <div style="padding:4px">
                     <label class="form-label">Level</label>
                     <input class="ForEdit" id="level" value="@Model.LoggedDentist.Level" disabled>
-                    <input type="submit" value="update" class="Submit" disabled>
-                    <input type="submit" value="edit" class="edit">
+                    <!--<input type="submit" value="update" class="Submit" disabled>
+                    <input type="submit" value="edit" class="edit">-->
+                    <div style="display:inline; cursor:pointer; text-decoration:underline;" class="edit">Edit</div>
                 </div>
                 <div style="padding:3px">
                     <form style="display: contents;" method="post" enctype="multipart/form-data">

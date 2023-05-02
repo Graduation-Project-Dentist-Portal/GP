@@ -12,7 +12,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
-        <title>Document</title>
+        <title>Login</title>
         <link rel="stylesheet" href="~/css/Login.css">
     </head>
 
@@ -22,6 +22,7 @@
             <div class="form">
                 <h3>Login</h3>
                 <form method="post">
+                    <input name="url" value="@Model.Url" hidden>
                     <div class="input-field">
                         <i class="fa fa-envelope"></i>
                         <input asp-for="User.Username" type="text" placeholder="Enter your username" required>
@@ -35,7 +36,7 @@
                 </form>
                 <pre>Don't have an account? 
                 <div><a asp-page="/RegisterAsDoctor">Signup as a doctor</a> or <a asp-page="/RegisterAsPatient">Signup as a patient</a></div>
-                                        </pre>
+                 </pre>
             </div>
             <div class="image">
                 <div class="overlay">

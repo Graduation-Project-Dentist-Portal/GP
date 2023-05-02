@@ -1,4 +1,109 @@
 ﻿@page
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 @model DentistPortal_Client.Pages.ViewProfileModel
 @{
+    Layout = "";
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <link rel='stylesheet' type='text/css' media='screen' href='twitterprofile.css'>
+        <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="~/css/ViewProfile.css">
+        <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    </head>
+
+    <div id="totop"></div>
+    <a href="#totop" class="fa fa-arrow-up" id="fixedarrow"></a>
+    <!-- LEFT VERTICAL FIXED MENU -->
+
+    <div class="leftverticalmenu">
+        <iconify-icon icon="mdi:tooth" style="color:white;" flip="horizontal" class="tooth" id="twittericon"></iconify-icon>
+
+        <div class="sec">
+            <ul>
+                <div class="third">
+                <li><a href="/Home"><i id="icons"></i>Home</a></li>
+                <li><a href="/DoctorPages/Tools/MyTools"><i id="icons"></i>My tools</a></li>
+                <li><a href="/DoctorPages/MedicalCases/MyMedicalCases"><i id="icons"></i>medical cases</a></li>
+        </div>
+        </ul>
+    </div>
+    <figure> <a href="/DoctorPages/MedicalCases/MyMedicalCases"><span style="color: #fff;">Add post</span></a></figure>
+    </div>
+
+    <!-- END OF LEFT FIXED MENU -->
+
+    <div class="flexcontainer">
+        <div class="middlecontainer">
+
+            <section class="twitterprofile">
+                <div class="headerprofileimage">
+                    <br> <br> <br> <br>
+                    <img src="@Model.profileData.dentist.ProfilePicture" alt="profile pic" id="profilepic">
+                    <a href="/DentistProfile"><div class="editprofile">Edit Profile</div></a>
+                </div>
+                <div class="bio">
+                    <div class="handle">
+                        <h3>@Model.profileData.dentist.FirstName @Model.profileData.dentist.LastName</h3>
+                        <span>@Model.profileData.dentist.Username</span>
+                    </div>
+
+                    <div class="t1">
+                        <p>Dentist Student</p>
+                        <p>University| @Model.profileData.dentist.University</p>
+                        <p>Level| @Model.profileData.dentist.Level</p>
+                    </div>
+                    <br>
+            </section>
+
+            <section class="tweets">
+                <div class="heading">
+                </div>
+            </section>
+
+
+            <!-- post -->
+            @foreach (var item in Model.profileData.dentistcases)
+            {
+                <section class="opp">
+                    <div class="hi">
+                        <div class="card">
+                            <div class="top">
+                                <div class="userDeatils">
+                                    <div class="profileImg">
+                                        <img src="@Model.profileData.dentist.ProfilePicture" alt="user" class="cover1">
+                                    </div>
+                                    <h3>@Model.profileData.dentist.FirstName @Model.profileData.dentist.LastName<br><span>@HttpContextAccessor.HttpContext.Session.GetString("role")</span></h3>
+                                </div>
+
+                            </div>
+                            <div class="caption">
+                                @item.DoctorWork
+                            </div>
+                            <div class="row">
+                                <div class="column">
+                                    <div class="imgBg">
+                                        <img src="@item.BeforePicture" alt="bg" class="cover">
+                                    </div>
+                                </div>
+
+                                <div class="column">
+                                    <div class="imgBg">
+                                        <img src="@item.AfterPicture" alt="bg" class="cover">
+                                    </div>
+                                </div>
+                            </div>  <br><br><br>
+                        </div>
+                    </div>
+                </section>
+            }
+    </html>
+
 }
