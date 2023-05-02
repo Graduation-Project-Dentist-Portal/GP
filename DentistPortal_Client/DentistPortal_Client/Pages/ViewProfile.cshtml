@@ -7,7 +7,6 @@
 
     <!DOCTYPE html>
     <html>
-
     <head>
         <meta charset='utf-8'>
         <meta http-equiv='X-UA-Compatible' content='IE=edge'>
@@ -20,22 +19,17 @@
         <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
     </head>
 
-
-
-
-
     <div id="totop"></div>
     <a href="#totop" class="fa fa-arrow-up" id="fixedarrow"></a>
     <!-- LEFT VERTICAL FIXED MENU -->
 
     <div class="leftverticalmenu">
-
         <iconify-icon icon="mdi:tooth" style="color:white;" flip="horizontal" class="tooth" id="twittericon"></iconify-icon>
 
         <div class="sec">
             <ul>
                 <div class="third">
-                <li><a href="#"><i id="icons"></i>Home</a></li>
+                <li><a href="/Home"><i id="icons"></i>Home</a></li>
                 <li><a href="/DoctorPages/Tools/MyTools"><i id="icons"></i>My tools</a></li>
                 <li><a href="/DoctorPages/MedicalCases/MyMedicalCases"><i id="icons"></i>medical cases</a></li>
         </div>
@@ -62,8 +56,6 @@
                     </div>
 
                     <div class="t1">
-
-
                         <p>Dentist Student</p>
                         <p>University| @Model.profileData.dentist.University</p>
                         <p>Level| @Model.profileData.dentist.Level</p>
@@ -78,40 +70,39 @@
 
 
             <!-- post -->
-            @foreach(var item in Model.profileData.dentistcases)
+            @foreach (var item in Model.profileData.dentistcases)
             {
-            <section class="opp">
-                <div class="hi">
-                    <div class="card">
-                        <div class="top">
-                            <div class="userDeatils">
-                                <div class="profileImg">
-                                    <img src="@Model.profileData.dentist.ProfilePicture" alt="user" class="cover1">
-                                </div>
+                <section class="opp">
+                    <div class="hi">
+                        <div class="card">
+                            <div class="top">
+                                <div class="userDeatils">
+                                    <div class="profileImg">
+                                        <img src="@Model.profileData.dentist.ProfilePicture" alt="user" class="cover1">
+                                    </div>
                                     <h3>@Model.profileData.dentist.FirstName @Model.profileData.dentist.LastName<br><span>@HttpContextAccessor.HttpContext.Session.GetString("role")</span></h3>
-                            </div>
-
-                        </div>
-                        <div class="caption">
-                            @item.DoctorWork
-                        </div>
-                        <div class="row">
-                            <div class="column">
-
-                                <div class="imgBg">
-                                    <img src="@item.BeforePicture" alt="bg" class="cover">
                                 </div>
-                            </div>
 
-                            <div class="column">
-                                <div class="imgBg">
-                                    <img src="@item.AfterPicture" alt="bg" class="cover">
-                                </div>
                             </div>
-                        </div>  <br><br><br>
+                            <div class="caption">
+                                @item.DoctorWork
+                            </div>
+                            <div class="row">
+                                <div class="column">
+                                    <div class="imgBg">
+                                        <img src="@item.BeforePicture" alt="bg" class="cover">
+                                    </div>
+                                </div>
+
+                                <div class="column">
+                                    <div class="imgBg">
+                                        <img src="@item.AfterPicture" alt="bg" class="cover">
+                                    </div>
+                                </div>
+                            </div>  <br><br><br>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
             }
     </html>
 
