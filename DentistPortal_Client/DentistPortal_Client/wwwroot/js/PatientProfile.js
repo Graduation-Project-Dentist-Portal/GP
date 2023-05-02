@@ -1,6 +1,6 @@
 ﻿$('body').on('click', '.Submit', function () {
     //debugger;
-    $(this).parent('div').find('.Submit').prop('disabled', (i, v) => !v)
+    //$(this).parent('div').find('.Submit').prop('disabled', (i, v) => !v)
     var userName = $('#username').val();
     var firstName = $('#firstname').val();
     var lastName = $('#lastname').val();
@@ -15,6 +15,11 @@
         LastName: lastName,
         PasswordHash: Password
     }
+    $(this).toggleClass('edit Submit')
+    if ($(this).text() == "Edit")
+        $(this).text('Update')
+    else
+        $(this).text('Edit')
     //debugger;
     $.ajax({
         type: "POST",
@@ -38,11 +43,15 @@
             });
         }
     });
-    $(this).parent('div').find('.ForEdit').attr('disabled' , true);
+    $(this).parent('div').find('.ForEdit').attr('disabled', true)
 });
 
-$('body').on('click', '.edit', function () {
-    debugger
-    $(this).parent('div').find('.ForEdit').prop('disabled', (i, v) => !v)
-    $(this).parent('div').find('.Submit').prop('disabled', (i, v) => !v)
+$('body').on('click', '.edit', function () {        
+    $(this).parent('div').find('.ForEdit').removeAttr('disabled')
+    //$(this).parent('div').find('.Submit').prop('disabled', (i, v) => !v)
+    $(this).toggleClass('edit Submit')
+    if ($(this).text() == "Edit")
+        $(this).text('Update')
+    else
+        $(this).text('Edit')
 });
