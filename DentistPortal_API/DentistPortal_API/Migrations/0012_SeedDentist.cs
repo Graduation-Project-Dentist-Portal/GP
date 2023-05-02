@@ -43,7 +43,7 @@ namespace DentistPortal_API.Migrations
                 Graduated = false,
                 University = "Helwan",
                 ProfilePicture = "https://res.cloudinary.com/djrj0pmt0/image/upload/v1682929737/b1o0ehuiolf5p3gicsdt.jpg",
-                IdentityCardPicture = "https://res.cloudinary.com/djrj0pmt0/image/upload/v1683039619/202507999_970893653705998_8733185517908665071_n_v1y0qu.jpg",
+                IdentityCardPicture = "https://res.cloudinary.com/djrj0pmt0/image/upload/v1683047655/Blured_oriln7.jpg",
                 UniversityCardPicture = "https://res.cloudinary.com/djrj0pmt0/image/upload/v1683039718/WhatsApp_Image_2023-05-02_at_5.01.39_PM_ej2kyl.jpg",
                 Level = 4,
                 IsVerified = "false",
