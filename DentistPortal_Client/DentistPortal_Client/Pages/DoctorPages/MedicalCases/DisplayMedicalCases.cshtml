@@ -11,18 +11,17 @@
 @section styles{
     <link rel="stylesheet" href="~/css/MedicalCaseStyleSheet.css">
     }
-    <header class>
-        <div class="website-search">
-            <form id="live-search" action="" method="post">
-                <div>
-                    <input type="text" placeholder="Search" class="text" id="diagnosisInput">
-                    @*                <input type="submit" class="submit button" asp-page-handler="Search">
-                *@
-                </div>
-            </form>
-            <div class="menu-main-menu-container">
-                <ul id="menu-main-menu" class="menu">
-                    <li id="menu-item-680"
+<header class>
+    <div class="website-search">
+        <form id="live-search" action="" method="post">
+            <div >
+                <input type="text" placeholder="Search" class="text" id="diagnosisInput">
+@*                <input type="submit" class="submit button" asp-page-handler="Search">
+*@            </div>
+        </form>
+@*        <div class="menu-main-menu-container">
+            <ul id="menu-main-menu" class="menu">
+                <li id="menu-item-680"
                     class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-680">
                         <a href="../MedicalCases/MyMedicalCases">
                             My
@@ -52,7 +51,9 @@
                 </ul>
             </div>
         </div>
-    </header>
+*@    </div>
+</header>
+
 
 
 
@@ -86,9 +87,7 @@
                             <div class=" paragraph">
                                 <h4>Search to find the Case you Need .......</h4>
                                 <p>
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis nisi impedit velit neque eaque
-                                    consectetur dolores facilis maiores ut optio est ducimus rem corporis, expedita aspernatur quidem vel
-                                    placeat nostrum.
+                                These cases were found by junior dentists during their journey of looking for cases but were not compatible to their needs. So, they decided to add it in our website so that another junior student looking for a case with the same description could help them. By doing so, we will help both patient and junior dentist.
                                 </p>
                             </div>
                         </div>
@@ -432,13 +431,13 @@
                             </div>
                         </div>
                         <div class="form-check form-outline mb-1">
-                            <input class="form-check-input" type="checkbox" name="medicalCaseDto.AssignedToMe" value="true">
-                            <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" name="medicalCaseDto.AssignedToMe" value="true" style="display:block;">
+                            <label class="form-check-label" style=" transform: translate(-291px, 0px);">
                                 Assign Case to me
                             </label>
                         </div>
                         <div style="text-align:center">
-                            <button type="submit" class="btn btn-success btn-block mb-3">
+                            <button type="submit" class="btn mybtn btn-block mb-3" style="width:120px;">
                                 <i class="bi bi-patch-plus text-center" style="font-style:normal;"> Add</i>
                             </button>
                         </div>

@@ -33,9 +33,10 @@ body {
     font-size: 14px;
     font-weight: 600;
     line-height: 1.24;
-    height: 34.72px;
+    height: auto;
     margin-bottom: 8px;
     display: inline-flex;
+
 }
 
 
@@ -104,6 +105,7 @@ body {
     flex-direction: row;
     justify-content: center;
     padding-top: 10px;
+    column-gap: 20px;
 }
 
 .formsection {

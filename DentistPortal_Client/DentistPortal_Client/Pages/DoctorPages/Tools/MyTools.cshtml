@@ -15,7 +15,7 @@
                 *@
             </div>
         </form>
-        <div class="menu-main-menu-container">
+      @*  <div class="menu-main-menu-container">
             <ul id="menu-main-menu" class="menu">
                 <li id="menu-item-680"
                     class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-680">
@@ -45,7 +45,7 @@
                 </li>
 
             </ul>
-        </div>
+        </div>*@
     </div>
 </header>
 @{
@@ -142,15 +142,15 @@
                                             </div>
                                             <div class="modal-body">
                                                 <div class="details">
-                                                    <div class="ToolDescription">
+                                                    <div class="ToolDescription" style="height:auto">
                                                         @tool.Description
                                                     </div>
-                                                    <div class="ToolPrice">
+                                                    <div class="ToolPrice text-center">
                                                         <span style="font-size: larger; font-weight: 400;">Price:</span>
                                                         <span>@tool.ToolPrice</span>
                                                         <span style="font-size: larger; font-weight: 400;">LE</span>
                                                     </div>
-                                                    <div class="line">
+                                                    <div class="line" style="column-gap:20px;">
                                                         <div class="sellername">
                                                             <i class="fa-solid fa-user-doctor-hair"></i>
                                                             <span>@tool.Dentist.Username</span>

@@ -17,6 +17,7 @@
     padding: 10px 0;
     text-align: center;
     margin: 0 auto;
+    transform: translate(1%, -14%);
     box-sizing: border-box;
 }
 
@@ -47,6 +48,12 @@
         transition: all 0.3s ease 0s;
     }
 
+    .website-search input:focus {
+        background-color: #000;
+        transition: all 0.3s ease 0s;
+        color: white;
+        text-align: center;
+    }
 .menu {
     margin: 9px 0 0 0;
     color: #191919;
