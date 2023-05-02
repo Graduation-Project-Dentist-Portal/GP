@@ -48,11 +48,13 @@ namespace DentistPortal_Client.Pages
                 string token = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
                 var role = jwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value;
+                var profilePicture = jwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Uri).Value;
 
                 HttpContext.Session.SetString("Token", token);
                 HttpContext.Session.SetString("username", user.Username);
                 HttpContext.Session.SetString("token", token);
                 HttpContext.Session.SetString("role", role);
+                HttpContext.Session.SetString("profilePicture", profilePicture);
                 //var timer = new System.Threading.Timer(async (e) =>
                 //{
                 //    await GetNewToken(_h);

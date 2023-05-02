@@ -58,6 +58,13 @@ nav {
         display: none;
     }
 
+.nav-profile-picture {
+    display: block;
+    height: 30px;
+    width: 30px;
+    border-radius: 50px;
+}
+
 input[type="checkbox"] {
     display: none;
 }

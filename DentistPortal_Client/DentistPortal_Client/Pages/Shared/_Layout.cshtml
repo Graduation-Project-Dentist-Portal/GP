@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -38,6 +40,21 @@
             <li><a href="/DoctorPages/MedicalCases/DisplayMedicalCases">Medical Cases</a></li>
             <li><a href="/DoctorPages/Tools/DisplayTools">Tools</a></li>
             <li><a href="#">Post My Case</a></li>
+            @if (HttpContextAccessor.HttpContext.Session.GetString("Token") == null)
+            {
+                <li><a href="/Login">Login</a></li>
+            }
+            else
+            {
+                <div class="dropdown">
+                    <a class="nav-profile-picture dropdown-toggle btn-danger" role="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><img class="nav-profile-picture" src="@HttpContextAccessor.HttpContext.Session.GetString("profilePicture")" /></a>
+
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" href="/DentistProfile"><i class="bi bi-person-circle" style="font-style:normal"> Profile</i></a></li>
+                        <li><a class="dropdown-item" href="/Home?clear=yes"><i class="bi bi-box-arrow-in-right" style="font-style:normal"> Log Out</i></a></li>
+                    </ul>
+                </div>
+            }
         </ul>
     </nav>
 
@@ -63,7 +80,7 @@
                 <a href="#">Blog</a>
             </p>
 
-            <p class="footer-company-name">Copyright © 2023 <strong>DentistPortal</strong> All rights reserved</p>
+            <p class="footer-company-name">Copyright © 2023 <strong>DentalHub</strong> All rights reserved</p>
         </div>
 
         <div class="footer-center">
