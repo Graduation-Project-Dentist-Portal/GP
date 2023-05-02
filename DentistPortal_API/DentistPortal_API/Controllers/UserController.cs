@@ -159,6 +159,7 @@ namespace DentistPortal_API.Controllers
                     dentist.UniversityCardPicture = uploadResult.Uri.ToString();
                 }
             }
+            dentist.IsVerified = "false";
             dentist.Level = newDentist.Level;
             dentist.Graduated = newDentist.Graduated;
             dentist.University = newDentist.University;
@@ -436,6 +437,30 @@ namespace DentistPortal_API.Controllers
             }
             await _context.SaveChangesAsync();
             return Ok();
+        }
+
+
+        [HttpPost]
+        [Route("api/DentistProfileData")]
+        public async Task<IActionResult> DentistProfileData([FromBody] string Id)
+        {
+            if (Id == null) 
+            {
+                return BadRequest("Can not be empty");
+            }
+            var GuId = Guid.Parse(Id);
+            var Dentist = await _context.Dentist.FirstOrDefaultAsync(x => x.Id == GuId && x.IsActive == true);
+            if (Dentist == null) 
+            { 
+                return BadRequest("no doctor"); 
+            }
+            List<FinishedCases> Dentistcases = await _context.FinishedCases.Where(x=>x.DoctorId == GuId).ToListAsync();
+            object obj = new
+            {
+                dentist = Dentist,
+                dentistcases = Dentistcases
+            };
+            return Ok(obj);
         }
 
         private async Task<RefreshToken> CreateRefreshToken()

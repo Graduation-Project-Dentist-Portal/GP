@@ -33,13 +33,8 @@
                         <input asp-for="Dentist.LastName" required placeholder="Last Name">
                     </div>
                     <div class="input-field">
-                        <input asp-for="Dentist.ProfilePicture" type="file">
-                    </div>
-                    <div class="input-field">
-                        <input asp-for="Dentist.UniversityCardPicture" type="file">
-                    </div>
-                    <div class="input-field">
-                        <input asp-for="Dentist.IdentityCardPicture" type="file">
+                        <i class="fa fa-lock"></i>
+                        <input asp-for="Dentist.PasswordHash" type="password" required placeholder="Enter your password">
                     </div>
                     <div class="input-field">
                         <i class="fa fa-envelope"></i>
@@ -49,13 +44,23 @@
                         <i class="fa fa-envelope"></i>
                         <input asp-for="Dentist.Level" required placeholder="Level" min="0" max="5">
                     </div>
+                    
                     <div class="input-field">
-                        <i class="fa fa-envelope"></i>
-                        <input asp-for="Dentist.Graduated" required placeholder="Is Graduated" type="checkbox">
+                        <label>Profile Picture</label>
+                        <input asp-for="Dentist.ProfilePicture" type="file">
                     </div>
                     <div class="input-field">
-                        <i class="fa fa-lock"></i>
-                        <input asp-for="Dentist.PasswordHash" type="password" required placeholder="Enter your password">
+                        <label>University Card Picture</label>
+                        <input asp-for="Dentist.UniversityCardPicture" type="file">
+                    </div>
+                    <div class="input-field">
+                        <label>Identity Card Picture</label>
+                        <input asp-for="Dentist.IdentityCardPicture" type="file">
+                    </div>
+                    <div class="input-field">
+
+                        <label style="position:relative ; top:8px ; left:22px">IS Graduated ?</label>
+                        <input style="position:relative ; bottom:8px;" asp-for="Dentist.Graduated" required placeholder="Is Graduated" type="checkbox">
                     </div>
                     <br>
                     <button type="submit">Register</button>
