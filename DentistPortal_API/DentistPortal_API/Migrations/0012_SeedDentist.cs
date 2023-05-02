@@ -40,13 +40,13 @@ namespace DentistPortal_API.Migrations
                 LastName = "Abady",
                 PasswordHash = hasher.HashPassword(new dentist(), "123"),
                 IsActive = true,
-                Graduated = true,
+                Graduated = false,
                 University = "Helwan",
                 ProfilePicture = "https://res.cloudinary.com/djrj0pmt0/image/upload/v1682929737/b1o0ehuiolf5p3gicsdt.jpg",
-                IdentityCardPicture = "test",
-                UniversityCardPicture = "test",
-                Level = 0,
-                IsVerified = "true",
+                IdentityCardPicture = "https://res.cloudinary.com/djrj0pmt0/image/upload/v1683039619/202507999_970893653705998_8733185517908665071_n_v1y0qu.jpg",
+                UniversityCardPicture = "https://res.cloudinary.com/djrj0pmt0/image/upload/v1683039718/WhatsApp_Image_2023-05-02_at_5.01.39_PM_ej2kyl.jpg",
+                Level = 4,
+                IsVerified = "false",
                 VerfiyMessage = ""
             })
             .Row(new
@@ -62,7 +62,7 @@ namespace DentistPortal_API.Migrations
                 IdentityCardPicture = "test",
                 UniversityCardPicture = "test",
                 Level = 3,
-                IsVerified = "true",
+                IsVerified = "false",
                 VerfiyMessage = ""
             });
         }
