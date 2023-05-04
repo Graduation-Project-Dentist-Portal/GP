@@ -12,43 +12,11 @@
         <form id="live-search" action="" method="post">
             <div>
                 <input type="text" placeholder="Search" class="text" id="diagnosisInput">
-
             </div>
         </form>
-@*        <div class="menu-main-menu-container">
-            <ul id="menu-main-menu" class="menu">
-                <li id="menu-item-680"
-                    class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-680">
-                    <a href="#">
-                        My
-                        Cases
-                    </a>
-                </li>
-              
-                <li id="menu-item-31652"
-                    class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-31652">
-                    <a href="../Tools/MyTools">
-                        My
-                        Tools
-                    </a>
-                </li>
-                 <li id="menu-item-693"
-                class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-693">
-                <a href="../MedicalCases/DisplayMedicalCases">Medical Cases</a>
-                </li>
-                <li id="menu-item-2763"
-                    class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-2763">
-                    <a data-section=".formsection">Add a Tool</a>
-                </li>
-                <li id="menu-item-2763"
-                    class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-2763">
-                    <a href="../DoctorPages/Clinics/DisplayClinics">Clinics</a>
-                </li>
-
-            </ul>
-        </div>
-*@    </div>
+    </div>
 </header>
+
 @{
     int counter = 0;
     IConfiguration config = new ConfigurationBuilder()
@@ -63,6 +31,7 @@
     else
     {
         var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
+        var id = Guid.Parse(jwt.Claims.First().Value);
         var client = httpClient.CreateClient();
         client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
         client.BaseAddress = new Uri(config["BaseAddress"]);
@@ -72,7 +41,6 @@
         <section class="section" style="margin-bottom:50px;">
             <div class="container">
                 <div class="row gy-4 d-flex justify-content-between" id="myList">
-
                     @foreach (var tool in Model.Tools)
                     {
                         imageUrls = new();
@@ -88,11 +56,7 @@
                         };
                             imageUrls = JsonSerializer.Deserialize<List<string>>(req, options);
                         }
-
-
-
                         <div class="card col-lg-4  col-md-6 mycard li" style="width: 20rem;">
-
                             <div id=@("carouselExampleControls"+@counter) class="carousel slide" data-bs-ride="carousel">
                                 <div class="carousel-inner text-center mt-2">
                                     @foreach (var image in imageUrls)
@@ -111,30 +75,36 @@
                                         }
                                     }
                                 </div>
-                                <button class="carousel-control-prev" type="button" data-bs-target=@("#carouselExampleControls" + @counter) data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target=@("#carouselExampleControls" + @counter) data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </button>
-                            </div>
-                            <div class="setting">
-                                <div class="dropdown">
-                                    <button class="dropdown-toggle sett" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="bi bi-three-dots-vertical"></i>
+                                @if (imageUrls.Count > 1)
+                                {
+                                    <button class="carousel-control-prev carousel-dark" type="button" data-bs-target=@("#carouselExampleControls" + @counter) data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
                                     </button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-
-                                        <!-- Button trigger delete modal -->
-                                        <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target=@("#deleteToolModal" + @counter)>Delete</button></li>
-
-                                        <!-- Button trigger edit modal -->
-                                        <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target=@("#editToolModal" + @counter)>Edit</button></li>
-                                    </ul>
-                                </div>
+                                    <button class="carousel-control-next carousel-dark" type="button" data-bs-target=@("#carouselExampleControls" + @counter) data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
+                                }
                             </div>
+                            @if (tool.SellerIdDoctor == id)
+                            {
+                                <div class="setting">
+                                    <div class="dropdown">
+                                        <button class="dropdown-toggle sett" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="bi bi-three-dots-vertical"></i>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+
+                                            <!-- Button trigger delete modal -->
+                                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target=@("#deleteToolModal" + @counter)>Delete</button></li>
+
+                                            <!-- Button trigger edit modal -->
+                                            <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target=@("#editToolModal" + @counter)>Edit</button></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            }
                             <div class="card-body mycardbody">
                                 <div class=" card-text ToolName">@tool.ToolName</div>
 
@@ -143,38 +113,36 @@
                                     More Details
                                 </button>
 
-                                    <!-- View Modal -->
-                                    <div class="modal fade" id=@("viewToolModal"+@counter) tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLongTitle" style="color:black">Tool Details</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="details">
-                                                        <div class="ToolDescription" style="height:auto">
-                                                            @tool.Description
+                                <!-- View Modal -->
+                                <div class="modal fade" id=@("viewToolModal"+@counter) tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle" style="color:black">Tool Details</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="details">
+                                                    <div class="ToolDescription">
+                                                        @tool.Description
+                                                    </div>
+                                                    <div class="ToolPrice">
+                                                        <span style="font-size: larger; font-weight: 400;">Price:</span>
+                                                        <span>@tool.ToolPrice</span>
+                                                        <span style="font-size: larger; font-weight: 400;">LE</span>
+                                                    </div>
+                                                    <div class="line">
+                                                        <div class="sellername">
+                                                            <i class="fa-solid fa-user-doctor-hair"></i>
+                                                            <span>@tool.Dentist.Username</span>
                                                         </div>
-                                                <div class="ToolPrice text-center"> 
-                                                    <span style="font-size: larger; font-weight: 400;">Price:</span>
-                                                    <span>@tool.ToolPrice</span>
-                                                    <span style="font-size: larger; font-weight: 400;">LE</span>
-                                                </div>
-                                                        <div class="line" style="column-gap:20px;">
-                                                   
-                                                            <div class="sellername">
-                                                                <i class="fa-solid fa-user-doctor-hair"></i>
-                                                                <span>@tool.Dentist.Username</span>
-                                                            </div>
-                                                            <div class="contactNumb">
-                                                                <i class="bi bi-telephone-fill"></i>
-                                                                <span> @tool.ContactNumber</span>
-                                                            </div>
-                                                            <div class="loction">
-                                                                <i class="bi bi-geo-alt-fill"></i>
-                                                                <span>@tool.SellerLocation</span>
-                                                            </div>
+                                                        <div class="contactNumb">
+                                                            <i class="bi bi-telephone-fill"></i>
+                                                            <span> @tool.ContactNumber</span>
+                                                        </div>
+                                                        <div class="loction">
+                                                            <i class="bi bi-geo-alt-fill"></i>
+                                                            <span>@tool.SellerLocation</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -183,87 +151,94 @@
                                     </div>
                                 </div>
                             </div>
-
-
                         </div>
 
-                                            <div class="col-sm-6">
-                                                <label class="form-label" for="floatingPatientName">Tool Name</label>
+                        <!-- Edit Modal -->
+                        <div class="modal fade" id=@("editToolModal"+@counter) tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle" style="color:black">Tool Details</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                                            <div class="row gy-3">
+                                                <input name="toolDto.SellerIdDoctor" value="@tool.SellerIdDoctor" hidden>
+                                                <input name="id" value="@tool.Id" hidden>
+                                                <div class="col-sm-6">
+                                                    <label class="form-label" for="floatingPatientName">Tool Name</label>
+                                                    <input type="text" class="form-control" name="toolDto.ToolName" value="@tool.ToolName" required>
+                                                    <div class="invalid-feedback">
+                                                        Please fill the tool name.
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label class="form-label" for="floatingPatientName">Tool Price</label>
+                                                    <input type="text" class="form-control" name="toolDto.ToolPrice" value="@tool.ToolPrice" required>
 
-                                                <input type="text" class="form-control" name="toolDto.ToolName" value="@tool.ToolName" required>
+                                                    <div class="invalid-feedback">
+                                                        Please fill the tool price.
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <label class="form-label" for="floatingPatientName">
+                                                        Your Contact Number
+                                                    </label>
+                                                    <input type="text" class="form-control" name="toolDto.ContactNumber" value="@tool.ContactNumber" required>
 
-                                                <div class="invalid-feedback">
-                                                    Please fill the tool name.
+                                                    <div class="invalid-feedback">
+                                                        Please fill your contact number.
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <label class="form-label" for="floatingPatientName">Your Location</label>
+                                                    <input type="text" class="form-control" name="toolDto.SellerLocation" value="@tool.SellerLocation" required>
+                                                    <div class="invalid-feedback">
+                                                        Please fill your location.
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <label class="form-label" for="floatingPatientName">Description</label>
+
+                                                    <textarea name="toolDto.Description" class="form-control" required>@tool.Description</textarea>
+
+                                                    <div class="invalid-feedback">
+                                                        Please fill the tool Description.
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    @if (tool.ToolStatus == "Available")
+                                                    {
+                                                        <label>Tool Status</label>
+                                                        <input type="radio" name="toolDto.ToolStatus" id="Available" value="Available" checked="checked" required>
+                                                        <label id="Avaliable">Avaliable</label>
+                                                        <input type="radio" name="toolDto.ToolStatus" id="Sold" value="Sold" required>
+                                                        <label id="Sold">sold</label>
+                                                    }
+                                                    else
+                                                    {
+                                                        <label>Tool Status</label>
+                                                        <input type="radio" name="toolDto.ToolStatus" id="Available" value="Available" required>
+                                                        <label id="Avaliable">Avaliable</label>
+                                                        <input type="radio" name="toolDto.ToolStatus" id="Sold" value="Sold" checked="checked" required>
+                                                        <label id="Sold">sold</label>
+                                                    }
+                                                </div>
+                                                <div class="col-sm">
+                                                    @foreach (var image in imageUrls)
+                                                    {
+                                                        <img src=@image alt="..." width="90" height="90" />
+                                                    }
+                                                    <label>Upload new Tool pictures</label>
+                                                    <input name="toolDto.Pictures" class="form-control" type="file" multiple>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <button asp-page-handler="Edit" type="submit" class="mybtn" style="width:120px;">Submit</button>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-6">
-                                                <label class="form-label" for="floatingPatientName">Tool Price</label>
-
-                                                <input type="text" class="form-control" name="toolDto.ToolPrice" value="@tool.ToolPrice" required>
-
-                                                <div class="invalid-feedback">
-                                                    Please fill the tool price.
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <label class="form-label" for="floatingPatientName">
-                                                    Your Contact Number</label>
-                                                    
-
-                                                <input type="text" class="form-control" name="toolDto.ContactNumber" value="@tool.ContactNumber" required>
-
-                                                <div class="invalid-feedback">
-                                                    Please fill your contact number.
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <input type="text" class="form-control" name="toolDto.SellerLocation" value="@tool.SellerLocation" required>
-                                                <label class="form-label" for="floatingPatientName">Your Location</label>
-
-                                                <div class="invalid-feedback">
-                                                    Please fill your location.
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <label class="form-label" for="floatingPatientName">Description</label>
-
-                                                <textarea name="toolDto.Description" class="form-control" required>@tool.Description</textarea>
-
-                                                <div class="invalid-feedback">
-                                                    Please fill the tool Description.
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                @if (tool.ToolStatus == "Available")
-                                                {
-                                                    <label>Tool Status</label>
-                                                    <input type="radio" name="toolDto.ToolStatus" id="Available" value="Available" checked="checked" required>
-                                                    <label id="Avaliable">Avaliable</label>
-                                                    <input type="radio" name="toolDto.ToolStatus" id="Sold" value="Sold" required>
-                                                    <label id="Sold">sold</label>
-                                                }
-                                                else
-                                                {
-                                                    <label>Tool Status</label>
-                                                    <input type="radio" name="toolDto.ToolStatus" id="Available" value="Available" required>
-                                                    <label id="Avaliable">Avaliable</label>
-                                                    <input type="radio" name="toolDto.ToolStatus" id="Sold" value="Sold" checked="checked" required>
-                                                    <label id="Sold">sold</label>
-                                                }
-                                            </div>
-                                            <div class="col-sm">
-                                                @foreach (var image in imageUrls)
-                                                {
-                                                    <img src=@image alt="..." width="90" height="90" />
-                                                }
-                                                <label>Upload new Tool pictures</label>
-                                                <input name="toolDto.Pictures" class="form-control" type="file" multiple>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <button asp-page-handler="Edit" type="submit" class="mybtn" style="width:120px;">Submit</button>
-                                            </div>
-                                        </div>
-                                    </form>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -294,18 +269,19 @@
             </div>
         </section>
 
-    <!--Create-->
-    <section class="formsection">
-        <div class="container">
-            <div class="row justify-content-between gy-4 ">
-                <div class=" col-lg-6 d-flex align-items-center ">
-                    <div class=" paragraph">
-                        <h4>Share your tools with others</h4>
-                        <p>
-                            We tried to make it easy for students
-                            By helping them sharing their tools with each other (Rent or sale)
-                            From here you can share your used tools to help your Colleagues.
-                        </p>
+        <!--Create-->
+        <section class="formsection">
+            <div class="container">
+                <div class="row justify-content-between gy-4 ">
+                    <div class=" col-lg-6 d-flex align-items-center ">
+                        <div class=" paragraph">
+                            <h4>Share your tools with others</h4>
+                            <p>
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis nisi impedit velit neque eaque
+                                consectetur dolores facilis maiores ut optio est ducimus rem corporis, expedita aspernatur quidem vel
+                                placeat nostrum.
+                            </p>
+                        </div>
                     </div>
                     <div class=" col-lg-5 d-flex align-items-center ">
                         <div class="ourform">
@@ -344,7 +320,7 @@
                                         </div>
                                     </div>
                                     <div class="col-sm">
-                                        <input type="file" class="form-control" name="toolDto.Pictures" required multiple>
+                                        <input type="file" class="form-control" name="toolDto.Pictures" placeholder="Choose tool pictures" required multiple>
                                         <div class="invalid-feedback">
                                             Please add the tool pictures.
                                         </div>
@@ -390,7 +366,7 @@
 @section styles{
     <link rel="stylesheet" href="~/css/ToolsStyleSheet.css" />
     <link rel="stylesheet" href="~/css/SearchbarStyleSheet.css" />
-    }
+                        }
     <script>
         const alllinks = document.querySelectorAll('.menu-main-menu-container #menu-item-2763')
         function navigate(elements) {

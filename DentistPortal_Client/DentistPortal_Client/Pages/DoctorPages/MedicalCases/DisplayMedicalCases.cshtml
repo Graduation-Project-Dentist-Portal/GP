@@ -11,52 +11,25 @@
 @section styles{
     <link rel="stylesheet" href="~/css/MedicalCaseStyleSheet.css">
     }
-<header class>
-    <div class="website-search">
-        <form id="live-search" action="" method="post">
-            <div >
-                <input type="text" placeholder="Search" class="text" id="diagnosisInput">
-@*                <input type="submit" class="submit button" asp-page-handler="Search">
-*@            </div>
-        </form>
-@*        <div class="menu-main-menu-container">
-            <ul id="menu-main-menu" class="menu">
-                <li id="menu-item-680"
+    <header>
+        <div class="website-search">
+            <form id="live-search" action="" method="post">
+                <div>
+                    <input type="text" placeholder="Search" class="text" id="diagnosisInput">
+                </div>
+            </form>
+@*            <div class="menu-main-menu-container">
+                <ul id="menu-main-menu" class="menu">
+                    <li id="menu-item-680"
                     class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-680">
-                        <a href="../MedicalCases/MyMedicalCases">
-                            My
-                            Cases
+                        <a href="/MyMedicalCases">
+                            My Cases
                         </a>
                     </li>
-                    <li id="menu-item-693"
-                    class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-693">
-                        <a href="#">Medical Cases</a>
-                    </li>
-                    <li id="menu-item-31652"
-                    class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-31652">
-                        <a href="../Tools/MyTools">
-                            My
-                            Tools
-                        </a>
-                    </li>
-                    <li id="menu-item-2763"
-                    class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-2763">
-                        <a href="../Tools/DisplayTools">Add a Tool</a>
-                    </li>
-                    <li id="menu-item-2763"
-                    class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-2763">
-                        <a href="../Clinics/DisplayClinics">Clinics</a>
-                    </li>
-
                 </ul>
-            </div>
+            </div>*@
         </div>
-*@    </div>
-</header>
-
-
-
-
+    </header>
 
     @{
     int counter = 0;
@@ -87,7 +60,7 @@
                             <div class=" paragraph">
                                 <h4>Search to find the Case you Need .......</h4>
                                 <p>
-                                These cases were found by junior dentists during their journey of looking for cases but were not compatible to their needs. So, they decided to add it in our website so that another junior student looking for a case with the same description could help them. By doing so, we will help both patient and junior dentist.
+                                    These cases were found by junior dentists during their journey of looking for cases but were not compatible to their needs. So, they decided to add it in our website so that another junior student looking for a case with the same description could help them. By doing so, we will help both patient and junior dentist.
                                 </p>
                             </div>
                         </div>

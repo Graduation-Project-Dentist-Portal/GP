@@ -148,7 +148,7 @@
 
                                         <div class="d-flex justify-content-between">
                                             <div class="d-flex flex-row align-items-center">
-                                                <img src="data:image/png;base64,@feedback.Patient.ProfilePicture" alt="avatar" width="25" height="25" />
+                                                <img src="@feedback.Patient.ProfilePicture" alt="avatar" width="25" height="25" style="border-radius:15px"/>
                                                 <p class="small mb-0 ms-2">@feedback.Patient.FirstName @feedback.Patient.LastName</p>
                                             </div>
                                             @if (req == "false")

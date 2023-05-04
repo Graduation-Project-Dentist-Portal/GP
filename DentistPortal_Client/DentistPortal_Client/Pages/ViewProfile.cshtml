@@ -52,13 +52,16 @@
                 <div class="bio">
                     <div class="handle">
                         <h3>@Model.profileData.dentist.FirstName @Model.profileData.dentist.LastName</h3>
-                        <span>@Model.profileData.dentist.Username</span>
+                        <span>@@@Model.profileData.dentist.Username</span>
                     </div>
 
                     <div class="t1">
                         <p>Dentist Student</p>
                         <p>University| @Model.profileData.dentist.University</p>
-                        <p>Level| @Model.profileData.dentist.Level</p>
+                        @if (Model.profileData.dentist.Graduated == false)
+                        {
+                            <p>Level| @Model.profileData.dentist.Level</p>
+                        }
                     </div>
                     <br>
             </section>
