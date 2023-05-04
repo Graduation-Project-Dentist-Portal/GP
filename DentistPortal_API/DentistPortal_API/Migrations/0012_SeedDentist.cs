@@ -58,6 +58,7 @@ namespace DentistPortal_API.Migrations
                 PasswordHash = hasher.HashPassword(new dentist(), "123"),
                 IsActive = true,
                 Graduated = false,
+                ProfilePicture = "https://res.cloudinary.com/djrj0pmt0/image/upload/v1683095750/275175585_4873357982742135_5145599846285141268_n_qeclhb.jpg",
                 University = "Helwan",
                 IdentityCardPicture = "test",
                 UniversityCardPicture = "test",
