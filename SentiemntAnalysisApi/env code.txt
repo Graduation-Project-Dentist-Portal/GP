@@ -3,3 +3,8 @@ anaconda env
 conda create --name GP python=3.7
 conda activate GP
 
+________________________
+
+set FLASK_APP=Code.py
+set FLASK_ENV=developoment
+flask run
