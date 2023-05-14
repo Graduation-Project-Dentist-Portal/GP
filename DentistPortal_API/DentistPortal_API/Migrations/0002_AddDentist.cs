@@ -17,6 +17,7 @@ namespace DentistPortal_API.Migrations
                 .WithColumn("Username").AsString().NotNullable().Unique()
                 .WithColumn("FirstName").AsString().NotNullable()
                 .WithColumn("LastName").AsString().NotNullable()
+                .WithColumn("Email").AsString().NotNullable().Unique()
                 .WithColumn("PasswordHash").AsString().NotNullable()
                 .WithColumn("ProfilePicture").AsString().Nullable()
                 .WithColumn("RefreshTokenId").AsGuid().Nullable().ForeignKey("RefreshToken", "Id")

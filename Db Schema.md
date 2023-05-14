@@ -8,6 +8,7 @@ Tables:
 	| String | Username |  |
 	| String | FirstName |  |
 	| String | LastName |  |
+	| String | Email |  |
 	| String | PasswordHash | |
 	| Guid | RefreshTokenId | Foreign Key => (RefreshToken.Id) |
 	| String | ProfilePicture | |

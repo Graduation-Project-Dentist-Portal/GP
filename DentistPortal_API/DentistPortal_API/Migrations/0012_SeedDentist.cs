@@ -12,6 +12,7 @@ namespace DentistPortal_API.Migrations
             public string Username { get; set; } = string.Empty;
             public string FirstName { get; set; } = string.Empty;
             public string LastName { get; set; } = string.Empty;
+            public string Email { get; set; } = string.Empty;
             public string PasswordHash { get; set; } = string.Empty;
             public Guid RefreshTokenId { get; set; }
             public string ProfilePicture { get; set; } = string.Empty;
@@ -38,6 +39,7 @@ namespace DentistPortal_API.Migrations
                 Username = "YounesAbady",
                 FirstName = "Younes",
                 LastName = "Abady",
+                Email = "younesabadyy@gmail.com",
                 PasswordHash = hasher.HashPassword(new dentist(), "123"),
                 IsActive = true,
                 Graduated = false,
@@ -55,6 +57,7 @@ namespace DentistPortal_API.Migrations
                 Username = "MohamedKhaled",
                 FirstName = "Mohamed",
                 LastName = "Khaled",
+                Email = "test@gmail.com",
                 PasswordHash = hasher.HashPassword(new dentist(), "123"),
                 IsActive = true,
                 Graduated = false,
