@@ -3,16 +3,19 @@ using DentistPortal_API.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using DentistPortal_API.Controllers;
 
 namespace DentistPortal_API.Controllers
 {
     public class AdminController : Controller
     {
         private readonly WebsiteDbContext _context;
+        private readonly IConfiguration _configuration;
 
-        public AdminController(WebsiteDbContext context)
+        public AdminController(WebsiteDbContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -43,6 +46,8 @@ namespace DentistPortal_API.Controllers
                 dentist.IsVerified = "true";
                 _context.Dentist.Update(dentist);
                 await _context.SaveChangesAsync();
+                EmailController emailController = new EmailController();
+                await emailController.SendEmail("Registered Successfully", dentist.Email, _configuration);
                 return Ok();
             }
             catch (Exception e)
@@ -64,6 +69,8 @@ namespace DentistPortal_API.Controllers
                 dentist.VerfiyMessage = msg;
                 _context.Dentist.Update(dentist);
                 await _context.SaveChangesAsync();
+                EmailController emailController = new EmailController();
+                await emailController.SendEmail(msg, dentist.Email, _configuration);
                 return Ok();
             }
             catch (Exception e)
