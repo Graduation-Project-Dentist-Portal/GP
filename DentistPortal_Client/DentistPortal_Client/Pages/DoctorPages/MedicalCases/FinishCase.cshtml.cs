@@ -1,4 +1,6 @@
+using DentistPortal_API.Model;
 using DentistPortal_Client.DTO;
+using DentistPortal_Client.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.IdentityModel.Tokens.Jwt;
@@ -59,7 +61,7 @@ namespace DentistPortal_Client.Pages.DoctorPages.MedicalCases
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var multipartContent = new MultipartFormDataContent();
             multipartContent = await MappingContent(multipartContent, finishedCaseDto);
-            var request = await client.PostAsync("/api/finish-medical-case", multipartContent);
+            var request = await client.PutAsync("/api/finish-patient-case", multipartContent);
             if (request.IsSuccessStatusCode)
             {
                 Msg = "Successfully finished!";

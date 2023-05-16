@@ -35,45 +35,67 @@ namespace DentistPortal_API.Controllers
         [Route("api/login")]
         public async Task<IActionResult> Login([FromBody] UserDto user)
         {
-            if (string.IsNullOrEmpty(user.Username) || string.IsNullOrEmpty(user.Password))
+            if (user.Username == "Admin")
             {
-                return BadRequest("Cant be empty");
-            }
-            var loggedUserDentist = await _context.Dentist.FirstOrDefaultAsync(x => x.Username == user.Username && x.IsActive == true);
-            var loggedUserPatient = await _context.Patient.FirstOrDefaultAsync(x => x.Username == user.Username && x.IsActive == true);
-            if (loggedUserDentist != null && loggedUserDentist.IsVerified != "true")
-            {
-                return BadRequest("Not verified Yet");
-            }
-            if (loggedUserDentist == null && loggedUserPatient == null)
-            {
-                return BadRequest("User not found!");
-            }
-            if (loggedUserDentist != null)
-            {
-                var hasherDentist = new PasswordHasher<Dentist>();
-                if (hasherDentist.VerifyHashedPassword(loggedUserDentist, loggedUserDentist.PasswordHash, user.Password).Equals(PasswordVerificationResult.Success))
+                var loggedUserAdmin = await _context.Admin.FirstOrDefaultAsync(x => x.IsActive == true && x.Username == user.Username);
+                if (loggedUserAdmin != null)
                 {
-                    string token = await CreateToken(loggedUserDentist.Id, "Dentist", loggedUserDentist.ProfilePicture);
-                    var refreshToken = await CreateRefreshToken();
-                    await SetRefreshToken(refreshToken, loggedUserDentist.Id);
-                    return Ok(token);
+                    var hasherAdmin = new PasswordHasher<Admin>();
+                    if (hasherAdmin.VerifyHashedPassword(loggedUserAdmin, loggedUserAdmin.PasswordHash, user.Password).Equals(PasswordVerificationResult.Success))
+                    {
+                        string token = await CreateToken(loggedUserAdmin.Id, "Admin", "Admin");
+                        var refreshToken = await CreateRefreshToken();
+                        await SetRefreshToken(refreshToken, loggedUserAdmin.Id);
+                        return Ok(token);
+                    }
+                    else
+                        return BadRequest("Wrong password!");
                 }
                 else
-                    return BadRequest("Wrong password!");
+                    return BadRequest("User not found!");
             }
             else
             {
-                var hasherPatient = new PasswordHasher<Patient>();
-                if (hasherPatient.VerifyHashedPassword(loggedUserPatient, loggedUserPatient.PasswordHash, user.Password).Equals(PasswordVerificationResult.Success))
+                if (string.IsNullOrEmpty(user.Username) || string.IsNullOrEmpty(user.Password))
                 {
-                    string token = await CreateToken(loggedUserPatient.Id, "Patient", loggedUserPatient.ProfilePicture);
-                    var refreshToken = await CreateRefreshToken();
-                    await SetRefreshToken(refreshToken, loggedUserPatient.Id);
-                    return Ok(token);
+                    return BadRequest("Cant be empty");
+                }
+                var loggedUserDentist = await _context.Dentist.FirstOrDefaultAsync(x => x.Username == user.Username && x.IsActive == true);
+                var loggedUserPatient = await _context.Patient.FirstOrDefaultAsync(x => x.Username == user.Username && x.IsActive == true);
+                if (loggedUserDentist == null && loggedUserPatient == null)
+                {
+                    return BadRequest("User not found!");
+                }
+                if(loggedUserDentist!= null && loggedUserDentist.IsVerified!="true")
+                {
+                    return BadRequest("Not verified Yet");
+                }
+                if (loggedUserDentist != null)
+                {
+                    var hasherDentist = new PasswordHasher<Dentist>();
+                    if (hasherDentist.VerifyHashedPassword(loggedUserDentist, loggedUserDentist.PasswordHash, user.Password).Equals(PasswordVerificationResult.Success))
+                    {
+                        string token = await CreateToken(loggedUserDentist.Id, "Dentist", loggedUserDentist.ProfilePicture);
+                        var refreshToken = await CreateRefreshToken();
+                        await SetRefreshToken(refreshToken, loggedUserDentist.Id);
+                        return Ok(token);
+                    }
+                    else
+                        return BadRequest("Wrong password!");
                 }
                 else
-                    return BadRequest("Wrong password!");
+                {
+                    var hasherPatient = new PasswordHasher<Patient>();
+                    if (hasherPatient.VerifyHashedPassword(loggedUserPatient, loggedUserPatient.PasswordHash, user.Password).Equals(PasswordVerificationResult.Success))
+                    {
+                        string token = await CreateToken(loggedUserPatient.Id, "Patient", loggedUserPatient.ProfilePicture);
+                        var refreshToken = await CreateRefreshToken();
+                        await SetRefreshToken(refreshToken, loggedUserPatient.Id);
+                        return Ok(token);
+                    }
+                    else
+                        return BadRequest("Wrong password!");
+                }
             }
         }
 
@@ -448,17 +470,17 @@ namespace DentistPortal_API.Controllers
         [Route("api/DentistProfileData")]
         public async Task<IActionResult> DentistProfileData([FromBody] string Id)
         {
-            if (Id == null) 
+            if (Id == null)
             {
                 return BadRequest("Can not be empty");
             }
             var GuId = Guid.Parse(Id);
             var Dentist = await _context.Dentist.FirstOrDefaultAsync(x => x.Id == GuId && x.IsActive == true);
-            if (Dentist == null) 
-            { 
-                return BadRequest("no doctor"); 
+            if (Dentist == null)
+            {
+                return BadRequest("no doctor");
             }
-            List<FinishedCases> Dentistcases = await _context.FinishedCases.Where(x=>x.DoctorId == GuId).ToListAsync();
+            List<FinishedCases> Dentistcases = await _context.FinishedCases.Where(x => x.DoctorId == GuId).ToListAsync();
             object obj = new
             {
                 dentist = Dentist,
@@ -491,6 +513,7 @@ namespace DentistPortal_API.Controllers
             };
             var loggedUserDentist = await _context.Dentist.FirstOrDefaultAsync(x => x.Id == id && x.IsActive == true);
             var loggedUserPatient = await _context.Patient.FirstOrDefaultAsync(x => x.Id == id && x.IsActive == true);
+            var loggedUserAdmin = await _context.Admin.FirstOrDefaultAsync(x => x.Id == id && x.IsActive == true);
             if (loggedUserDentist != null)
             {
                 RefreshToken oldRefreshToken = await _context.RefreshToken.FirstOrDefaultAsync(x => x.Id == loggedUserDentist.RefreshTokenId);
@@ -501,7 +524,7 @@ namespace DentistPortal_API.Controllers
                 }
                 loggedUserDentist.RefreshTokenId = newRT.Id;
             }
-            else
+            else if (loggedUserPatient != null)
             {
                 RefreshToken oldRefreshToken = await _context.RefreshToken.FirstOrDefaultAsync(x => x.Id == loggedUserPatient.RefreshTokenId);
                 if (oldRefreshToken != null)
@@ -510,6 +533,16 @@ namespace DentistPortal_API.Controllers
                     await _context.SaveChangesAsync();
                 }
                 loggedUserPatient.RefreshTokenId = newRT.Id;
+            }
+            else
+            {
+                RefreshToken oldRefreshToken = await _context.RefreshToken.FirstOrDefaultAsync(x => x.Id == loggedUserAdmin.RefreshTokenId);
+                if (oldRefreshToken != null)
+                {
+                    oldRefreshToken.IsActive = false;
+                    await _context.SaveChangesAsync();
+                }
+                loggedUserAdmin.RefreshTokenId = newRT.Id;
             }
             await _context.SaveChangesAsync();
         }
@@ -550,7 +583,7 @@ namespace DentistPortal_API.Controllers
                     return Unauthorized("Token expired");
                 else
                 {
-                    var token = await CreateToken(loggedUser.Id, "Dentist",loggedUser.ProfilePicture);
+                    var token = await CreateToken(loggedUser.Id, "Dentist", loggedUser.ProfilePicture);
                     var newRT = await CreateRefreshToken();
                     await SetRefreshToken(newRT, loggedUser.Id);
                     return Ok(token);
