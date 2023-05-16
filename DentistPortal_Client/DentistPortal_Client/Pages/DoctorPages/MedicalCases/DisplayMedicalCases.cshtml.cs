@@ -9,6 +9,8 @@ using System.Security.Claims;
 using System.Net.Mime;
 using System.Net.Http.Headers;
 using System.Net;
+using DentistPortal_Client.Model;
+using DentistPortal_API.DTO;
 
 namespace DentistPortal_Client.Pages.DoctorPages
 {
@@ -24,14 +26,68 @@ namespace DentistPortal_Client.Pages.DoctorPages
         public string Msg { get; set; } = String.Empty;
         [TempData]
         public string Status { get; set; } = String.Empty;
-        public List<MedicalCase> MedicalCases = new();
         public string[] Pictures { get; set; }
         public MedicalCaseDto MedicalCaseDto { get; set; }
+        public List<MedicalCase> MedicalCases = new();
+        public List<PatientCase> PatientCases = new();
 
         public DisplayMedicalCasesModel(IHttpClientFactory httpClientFactory)
         {
             _httpClient = httpClientFactory;
         }
+
+        //public async Task OnGet()
+        //{
+        //    if (HttpContext.Session.GetString("Token") == null)
+        //    {
+        //        Response.Redirect($"https://localhost:7156/Login?url={"DoctorPages/MedicalCases/DisplayMedicalCases"}");
+        //        await Task.CompletedTask;
+        //    }
+        //    else
+        //    {
+        //        var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
+        //        DoctorId = Guid.Parse(jwt.Claims.First().Value);
+        //        var client = _httpClient.CreateClient();
+        //        client.BaseAddress = new Uri(config["BaseAddress"]);
+        //        client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+        //        try
+        //        {
+        //            var request = await client.GetStringAsync("/api/display-medical-cases");
+        //            if (request is not null)
+        //            {
+        //                if (request.Length > 0)
+        //                {
+        //                    var options = new JsonSerializerOptions
+        //                    {
+        //                        WriteIndented = true,
+        //                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        //                        DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
+        //                    };
+        //                    MedicalCases = JsonSerializer.Deserialize<List<MedicalCase>>(request, options);
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Msg = request.ToString();
+        //                Status = "error";
+        //            }
+        //        }
+        //        catch (HttpRequestException ex)
+        //        {
+        //            if (ex.StatusCode == HttpStatusCode.Unauthorized)
+        //            {
+        //                LoginModel loginModel = new LoginModel(_httpClient);
+        //                await loginModel.GetNewToken(HttpContext);
+        //                await OnGet();
+        //            }
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            Msg = e.Message;
+        //            Status = "error";
+        //        }
+        //    }
+        //}
 
         public async Task OnGet()
         {
@@ -49,7 +105,7 @@ namespace DentistPortal_Client.Pages.DoctorPages
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
                 try
                 {
-                    var request = await client.GetStringAsync("/api/display-medical-cases");
+                    var request = await client.GetStringAsync("/api/All-cases-doctor");
                     if (request is not null)
                     {
                         if (request.Length > 0)
@@ -60,7 +116,9 @@ namespace DentistPortal_Client.Pages.DoctorPages
                                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                                 DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
                             };
-                            MedicalCases = JsonSerializer.Deserialize<List<MedicalCase>>(request, options);
+                            var combinedList = JsonSerializer.Deserialize<CombinedCasesDto>(request, options);
+                            PatientCases = combinedList.PatientCases;
+                            MedicalCases = combinedList.MedicalCases;
                         }
                     }
                     else
@@ -117,6 +175,28 @@ namespace DentistPortal_Client.Pages.DoctorPages
             }
         }
 
+        //public async Task<IActionResult> OnPostTakeCase(Guid caseId)
+        //{
+        //    var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
+        //    var doctorId = Guid.Parse(jwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+        //    var client = _httpClient.CreateClient();
+        //    client.BaseAddress = new Uri(config["BaseAddress"]);
+        //    client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+        //    var request = await client.PutAsJsonAsync($"/api/take-medical-case/{caseId}", doctorId);
+        //    if (request.IsSuccessStatusCode)
+        //    {
+        //        Msg = "Added successfully";
+        //        Status = "success";
+        //        return RedirectToPage("MyMedicalCases");
+        //    }
+        //    else
+        //    {
+        //        Msg = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+        //        Status = "error";
+        //        return RedirectToPage("");
+        //    }
+        //}
+
         public async Task<IActionResult> OnPostTakeCase(Guid caseId)
         {
             var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
@@ -124,7 +204,7 @@ namespace DentistPortal_Client.Pages.DoctorPages
             var client = _httpClient.CreateClient();
             client.BaseAddress = new Uri(config["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
-            var request = await client.PutAsJsonAsync($"/api/take-medical-case/{caseId}", doctorId);
+            var request = await client.PutAsJsonAsync($"/api/take-case-all/{caseId}", doctorId);
             if (request.IsSuccessStatusCode)
             {
                 Msg = "Added successfully";
