@@ -66,6 +66,10 @@ namespace DentistPortal_API.Controllers
                 {
                     return BadRequest("User not found!");
                 }
+                if(loggedUserDentist!= null && loggedUserDentist.IsVerified!="true")
+                {
+                    return BadRequest("Not verified Yet");
+                }
                 if (loggedUserDentist != null)
                 {
                     var hasherDentist = new PasswordHasher<Dentist>();

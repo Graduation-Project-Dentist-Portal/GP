@@ -28,40 +28,53 @@
     @await RenderSectionAsync("styles",false)
 </head>
 <body>
-    <nav>
+    <nav style="display:flex; align-items:center;">
         <div class="logo">DentalHub</div>
-        <input type="checkbox" id="click">
+        @*<input type="checkbox" id="click">
         <label for="click" class="menu-btn">
-            <i class="fas fa-bars"></i>
-        </label>
-        <ul>
-            <li><a class="active" href="/Home">Home</a></li>
-            <li><a href="/DoctorPages/Clinics/DisplayClinics">Clinics</a></li>
-            <li><a href="/DoctorPages/MedicalCases/DisplayMedicalCases">Medical Cases</a></li>
-            <li><a href="/DoctorPages/Tools/DisplayTools">Tools</a></li>
-            <li><a href="#">Post My Case</a></li>
+        <i class="fas fa-bars"></i>
+        </label>*@
+        <ul style="display:flex; justify-content:flex-end; margin-bottom:0;">
             @if (HttpContextAccessor.HttpContext.Session.GetString("Token") == null)
             {
+                <li><a class="active" href="/Home">Home</a></li>
+                <li><a href="/DoctorPages/Clinics/DisplayClinics">Clinics</a></li>
+                <li><a href="/DoctorPages/MedicalCases/DisplayMedicalCases">Medical Cases</a></li>
+                <li><a href="/DoctorPages/Tools/DisplayTools">Tools</a></li>
+                <li><a href="#">Post My Case</a></li>
                 <li><a href="/Login">Login</a></li>
             }
-            else
+            else if (HttpContextAccessor.HttpContext.Session.GetString("role") == "Dentist")
             {
+                <li><a class="active" href="/Home">Home</a></li>
+                <li><a href="/DoctorPages/Clinics/DisplayClinics">Clinics</a></li>
+                <li><a href="/DoctorPages/MedicalCases/DisplayMedicalCases">Medical Cases</a></li>
+                <li><a href="/DoctorPages/Tools/DisplayTools">Tools</a></li>
+                <li><a href="#">Post My Case</a></li>
                 <div class="dropdown">
                     <a class="nav-profile-picture dropdown-toggle btn-danger" role="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><img class="nav-profile-picture" src="@HttpContextAccessor.HttpContext.Session.GetString("profilePicture")" /></a>
 
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        @if (HttpContextAccessor.HttpContext.Session.GetString("role") == "Patient")
-                        {
-                            <li><a class="dropdown-item" href="/PatientProfile"><i class="bi bi-person-circle" style="font-style:normal"> Profile</i></a></li>
-                        }
-                        else
-                        {
-                            <li><a class="dropdown-item" href="/ViewProfile"><i class="bi bi-person-circle" style="font-style:normal"> Profile</i></a></li>
-                        }
+                        <li><a class="dropdown-item" href="/ViewProfile"><i class="bi bi-person-circle" style="font-style:normal"> Profile</i></a></li>
                         <li><a class="dropdown-item" href="/Home?clear=yes"><i class="bi bi-box-arrow-in-right" style="font-style:normal"> Log Out</i></a></li>
                     </ul>
                 </div>
             }
+            else
+            {
+                <li><a class="active" href="/Home">Home</a></li>
+                <li><a href="/DoctorPages/Clinics/DisplayClinics">Clinics</a></li>
+                <!--<li><a href="/DoctorPages/MedicalCases/MyMedicalCases">My Medical Cases</a></li>-->
+                <div class="dropdown">
+                    <a class="nav-profile-picture dropdown-toggle btn-danger" role="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style="display:flex; align-items:center;"><img class="nav-profile-picture" src="@HttpContextAccessor.HttpContext.Session.GetString("profilePicture")" /></a>
+
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" href="/ViewPatientProfile"><i class="bi bi-person-circle" style="font-style:normal"> Profile</i></a></li>
+                        <li><a class="dropdown-item" href="/Home?clear=yes"><i class="bi bi-box-arrow-in-right" style="font-style:normal"> Log Out</i></a></li>
+                    </ul>
+                </div>
+            }
+
         </ul>
     </nav>
 

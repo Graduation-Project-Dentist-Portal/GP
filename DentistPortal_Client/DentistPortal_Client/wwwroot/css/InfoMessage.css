@@ -1,0 +1,92 @@
+﻿:root {
+    font-size: 20px;
+    box-sizing: inherit;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+p {
+    margin: 0;
+    font-size: 22px;
+    margin-left: 30px;
+}
+
+    p:not(:last-child) {
+        margin-bottom: 1.5em;
+    }
+
+span {
+    margin-left: 85px;
+}
+
+body {
+    font: 1em/1.618 Inter, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    color: #224;
+    background-image: linear-gradient(#2B4F71,#657A97,#C9CFDF,#E9EDF8);
+    /* url(https://source.unsplash.com/E8Ufcyxz514/2400x1823) */
+    center / cover no-repeat fixed;
+}
+
+.card {
+    max-width: 300px;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 500px;
+    height: 300px;
+    padding: 35px;
+    border: 1px solid rgba(255, 255, 255, .25);
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.45);
+    box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(15px);
+}
+
+.infoicon {
+    background: url('https://api.iconify.design/material-symbols/info.svg') no-repeat center center / contain;
+    content: url('https://api.iconify.design/material-symbols/info.svg?color=rgb(43, 79, 113)&width=20&height=20');
+    height: 100px;
+    width: 100px;
+    margin-left: 200px;
+}
+
+button{
+    color: #ffffff;
+    background-color: #2B4F71;
+    height: 40px;
+    width: 40%;
+    margin-top: 15px;
+    cursor: pointer;
+    border: none;
+    border-radius: 2%;
+    outline: none;
+    text-align: center;
+    font-size: 16px;
+    text-decoration: none;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+    margin-left: 140px;
+}
+
+    button:hover {
+        background-color: #657A97;
+    }
+
+.card-footer {
+    font-size: 0.65em;
+    color: #446;
+}
+
+a{
+    color: white;
+    text-decoration: none;
+}

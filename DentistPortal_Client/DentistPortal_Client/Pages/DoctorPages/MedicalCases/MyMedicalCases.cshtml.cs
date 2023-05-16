@@ -90,14 +90,11 @@ namespace DentistPortal_Client.Pages.DoctorPages.MedicalCases
         //        Status = "error";
         //    }
         //}
-
-
-
-
-
-
+        
         public async Task OnGet()
         {
+            if (HttpContext.Session.GetString("role") == "Dentist")
+            {
             var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
             var id = Guid.Parse(jwt.Claims.First().Value);
             var client = _httpClient.CreateClient();
@@ -138,11 +135,14 @@ namespace DentistPortal_Client.Pages.DoctorPages.MedicalCases
                 Msg = e.Message;
                 Status = "error";
             }
+                        }
+            else
+            {
+                Response.Redirect($"https://localhost:7156/Login?url={"DoctorPages/MedicalCases/MyMedicalCases"}");
+                Response.WriteAsync("redirecting......");
+            }
         }
-
-
-
-
+        
         public async Task<IActionResult> OnPostCancel(Guid id)
         {
             var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));

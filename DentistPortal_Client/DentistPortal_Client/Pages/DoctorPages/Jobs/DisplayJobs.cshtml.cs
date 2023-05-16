@@ -40,41 +40,49 @@ namespace DentistPortal_Client.Pages.DoctorPages.Jobs
 
         public async Task OnGet()
         {
-            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
-            DoctorId = Guid.Parse(jwt.Claims.First().Value);
-            var client = _httpClient.CreateClient();
-            client.BaseAddress = new Uri(config["BaseAddress"]);
-            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
-
-
-
-            try
+            if (HttpContext.Session.GetString("role") == "Dentist")
             {
-                var request = await client.GetStringAsync("/api/Display-All-Jobs");
-                if (request is not null)
+                var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
+                DoctorId = Guid.Parse(jwt.Claims.First().Value);
+                var client = _httpClient.CreateClient();
+                client.BaseAddress = new Uri(config["BaseAddress"]);
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+
+
+
+                try
                 {
-                    if (request.Length > 0)
+                    var request = await client.GetStringAsync("/api/Display-All-Jobs");
+                    if (request is not null)
                     {
-                        var options = new JsonSerializerOptions
+                        if (request.Length > 0)
                         {
-                            WriteIndented = true,
-                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                            DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
-                        };
-                        Jobs = JsonSerializer.Deserialize<List<Job>>(request, options);
+                            var options = new JsonSerializerOptions
+                            {
+                                WriteIndented = true,
+                                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                                DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
+                            };
+                            Jobs = JsonSerializer.Deserialize<List<Job>>(request, options);
+                        }
+                    }
+                    else
+                    {
+                        Msg = request.ToString();
+                        Status = "error";
                     }
                 }
-                else
+                catch (Exception e)
                 {
-                    Msg = request.ToString();
+                    Msg = e.Message;
                     Status = "error";
                 }
             }
-            catch (Exception e)
+            else
             {
-                Msg = e.Message;
-                Status = "error";
+                Response.Redirect($"https://localhost:7156/Login?url={"DoctorPages/Jobs/DisplayJobs"}");
             }
+
         }
 
 

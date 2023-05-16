@@ -31,15 +31,23 @@ namespace DentistPortal_Client.Pages.DoctorPages.MedicalCases
 
         public void OnGet(Guid id, FinishedCaseDto? finishedCaseDto)
         {
-            if (!string.IsNullOrEmpty(finishedCaseDto.DoctorWork))
+            if (HttpContext.Session.GetString("role") == "Dentist")
             {
-                FinishedCase = finishedCaseDto;
-                FinishedCase.CaseId = finishedCaseDto.CaseId;
+                if (!string.IsNullOrEmpty(finishedCaseDto.DoctorWork))
+                {
+                    FinishedCase = finishedCaseDto;
+                    FinishedCase.CaseId = finishedCaseDto.CaseId;
+                }
+                else
+                {
+                    FinishedCase = new();
+                    FinishedCase.CaseId = id;
+                }
             }
             else
             {
-                FinishedCase = new();
-                FinishedCase.CaseId = id;
+                Response.Redirect($"https://localhost:7156/Login?url={"DoctorPages/MedicalCases/FinishCase"}");
+                Response.WriteAsync("redercting...");
             }
         }
 
