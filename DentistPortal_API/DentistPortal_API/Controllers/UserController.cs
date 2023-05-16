@@ -41,6 +41,10 @@ namespace DentistPortal_API.Controllers
             }
             var loggedUserDentist = await _context.Dentist.FirstOrDefaultAsync(x => x.Username == user.Username && x.IsActive == true);
             var loggedUserPatient = await _context.Patient.FirstOrDefaultAsync(x => x.Username == user.Username && x.IsActive == true);
+            if (loggedUserDentist != null && loggedUserDentist.IsVerified != "true")
+            {
+                return BadRequest("Not verified Yet");
+            }
             if (loggedUserDentist == null && loggedUserPatient == null)
             {
                 return BadRequest("User not found!");
