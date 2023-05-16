@@ -21,9 +21,9 @@ namespace DentistPortal_Client.Pages.PatientPages
               .AddEnvironmentVariables()
               .Build();
         [TempData]
-        public string Msg { get; set; } = String.Empty;
+        public string Msg { get; set; } = string.Empty;
         [TempData]
-        public string Status { get; set; } = String.Empty;
+        public string Status { get; set; } = string.Empty;
         public List<PatientCase> PatientCases = new();
         public string[] PatientCasePictures { get; set; }
         public Guid PatientId;
@@ -79,7 +79,7 @@ namespace DentistPortal_Client.Pages.PatientPages
             {
                 Msg = "Wrong input for Patient Age!";
                 Status = "error";
-                return RedirectToPage("DisplayPatientCases");
+                return RedirectToPage("MyCases_Patient");
             }
             var token = HttpContext.Session.GetString("Token");
             var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);

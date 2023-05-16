@@ -22,5 +22,6 @@ namespace DentistPortal_API.Data
         public DbSet<Job> Job { get; set; }
         public DbSet<PatientCase> PatientCase { get; set; }
         public DbSet<PatientCaseImage> PatientCaseImage { get; set; }
+        public DbSet<Admin> Admin { get; set; }
     }
 }

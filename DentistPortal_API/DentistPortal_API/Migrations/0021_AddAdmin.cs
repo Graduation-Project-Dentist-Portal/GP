@@ -16,6 +16,7 @@ namespace DentistPortal_API.Migrations
                 .WithColumn("Id").AsGuid().PrimaryKey()
                 .WithColumn("Username").AsString().Unique().NotNullable()
                 .WithColumn("PasswordHash").AsString().NotNullable()
+                .WithColumn("RefreshTokenId").AsGuid().Nullable().ForeignKey("RefreshToken", "Id")
                 .WithColumn("IsActive").AsBoolean().NotNullable();
         }
     }

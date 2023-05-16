@@ -2,7 +2,7 @@
 
 namespace DentistPortal_API.Migrations
 {
-    [Migration(14)]
+    //[Migration(14)]
     public class _0014_AddFinishedCases : Migration
     {
         public override void Down()
@@ -18,7 +18,7 @@ namespace DentistPortal_API.Migrations
                 .WithColumn("DoctorId").AsGuid().NotNullable()
                 .WithColumn("BeforePicture").AsString().NotNullable()
                 .WithColumn("AfterPicture").AsString().NotNullable()
-                .WithColumn("CaseId").AsGuid().NotNullable().ForeignKey("MedicalCase", "Id")
+                .WithColumn("CaseId").AsGuid().NotNullable().ForeignKey("MedicalCase", "Id").OnDelete(System.Data.Rule.Cascade)
                 .WithColumn("IsActive").AsBoolean().NotNullable();
         }
     }

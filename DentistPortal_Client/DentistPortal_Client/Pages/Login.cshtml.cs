@@ -63,6 +63,8 @@ namespace DentistPortal_Client.Pages
                 {
                     return RedirectToPage(url);
                 }
+                if (role == "Admin")
+                    return RedirectToPage("/AdminPages/VerifyPage");
                 return RedirectToPage("/Home");
             }
             else
