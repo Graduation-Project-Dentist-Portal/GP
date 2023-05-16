@@ -323,7 +323,137 @@
                                                 </div>
                                                 counter++;
                                             }
+                                            @foreach (var patientCase in Model.PatientCases)
+                                            {
+
+                                                imageUrls = new();
+                                                req = string.Empty;
+                                                req = await client.GetStringAsync($"api/get-patient-case-pics/{patientCase.Id}");
+                                                if (req is not null)
+                                                {
+                                                    var options = new JsonSerializerOptions
+                        {
+                            WriteIndented = true,
+                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                            DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
+                        };
+                                                    imageUrls = JsonSerializer.Deserialize<List<string>>(req, options);
+                                                }
+
+                                                <ul id="myList" class="" style="display:block;">
+                                                    <li class="w-100">
+                                                        <div class="myaccordion ">
+
+                                                            <div class="accordion-item">
+
+                                                                <h2 class="accordion-header" id=@("heading"+counter)>
+                                                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target=@("#collapse" + @counter) aria-controls=@("collapse"+@counter) aria-expanded="true">
+                                                                        Added By Patient
+                                                                    </button>
+                                                                </h2>
+
+                                                                <div id=@("collapse"+@counter) class="accordion-collapse collapse" aria-labelledby=@("heading"+@counter) data-bs-parent="#accordionExample">
+                                                                    <div class="accordion-body">
+
+
+
+
+
+                                                                        <div class="card mycard">
+                                                                            <div class="row no-gutters">
+
+
+
+                                                                                <div class="col-sm-5">
+                                                                                    <div class="imgdiv" style="width:100%;">
+                                                                                        <div id=@("carouselExampleControls"+@counter) class="carousel slide" data-bs-ride="carousel">
+                                                                                            <div class="carousel-inner text-center">
+                                                                                                @foreach (var item in imageUrls)
+                                                                                                {
+                                                                                                    if (item == imageUrls[0])
+                                                                                                    {
+                                                                                                        <div class="carousel-item active">
+                                                                                                            <img src=@item alt="..." class="card-img-top h-100" style="width:80%;" />
+                                                                                                        </div>
+                                                                                                    }
+                                                                                                    else
+                                                                                                    {
+                                                                                                        <div class="carousel-item">
+                                                                                                            <img src=@item alt="..." class="card-img-top h-100" style="width:80%;" />
+                                                                                                        </div>
+                                                                                                    }
+                                                                                                }
+                                                                                            </div>
+                                                                                            <button class="carousel-control-prev" type="button" data-bs-target=@("#carouselExampleControls" + @counter) data-bs-slide="prev">
+                                                                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                                                                <span class="visually-hidden">Previous</span>
+                                                                                            </button>
+                                                                                            <button class="carousel-control-next" type="button" data-bs-target=@("#carouselExampleControls" + @counter) data-bs-slide="next">
+                                                                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                                                                <span class="visually-hidden">Next</span>
+                                                                                            </button>
+                                                                                        </div>
+
+                                                                                    </div>
+                                                                                </div>
+
+
+
+
+                                                                                <div class="col-sm-7">
+                                                                                    <div class="card-body mycardbody">
+
+                                                                                        <div class="details">
+                                                                                            <div class="PatientName">@patientCase.Patient.Username</div>
+                                                                                            <div class="CaseDescription">
+                                                                                                <br><b>Case description: </b>@patientCase.Description
+                                                                                            </div>
+
+                                                                                            <div class="line">
+
+                                                                                                <div class="PatientPhone">
+                                                                                                    <i class="fa-sharp fa-solid fa-phone"></i>
+                                                                                                    <span> @patientCase.PatientPhone</span>
+                                                                                                </div>
+                                                                                                <div class="PatientAge">
+                                                                                                <span>Age:</span>
+                                                                                                    <span>@patientCase.PatientAge</span>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <form asp-page-handler="TakeCase" asp-route-caseId="@patientCase.Id" method="post">
+                                                                                            <button type="submit" class="btn mybtn">
+                                                                                                <i class="bi bi-person-heart"> Take Case</i>
+                                                                                            </button>
+                                                                                        </form>
+
+
+                                            </div>
                                         </div>
+
+
+
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                </li>
+
+                </ul>
+
+
+
+                                                counter++;
+
+
+                                            }
+                                            </div>
                                     </div>
                                 </div>
                             </div>

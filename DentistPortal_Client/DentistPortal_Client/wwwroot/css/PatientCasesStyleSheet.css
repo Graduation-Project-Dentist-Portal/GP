@@ -1,0 +1,78 @@
+﻿* {
+    margin: 0px;
+    padding: 0px;
+}
+.mybtn {
+    margin: 15px 0;
+    text-align: center;
+    display: block;
+    margin: auto;
+    padding: 10px 30px;
+    transition: 0.4s;
+    color: #E9EDF8;
+    background-color: #657A97;
+    border-color: #E9EDF8;
+    border-radius: 32px;
+}
+
+    .mybtn:hover {
+        color: #657A97;
+        background-color: #E9EDF8;
+        border-color: #657A97;
+    }
+
+.Dmybtn {
+    margin: 15px 0;
+    text-align: center;
+    display: block;
+    margin: auto;
+    padding: 10px 30px;
+    transition: 0.4s;
+    color: #E9EDF8;
+    background-color: #db1f1f;
+    border-color: #cb0c0c;
+    border-radius: 32px;
+}
+
+    .Dmybtn:hover {
+        color: #E9EDF8;
+        background-color: #cb0c0c;
+        border-color: #657A97;
+    }
+
+.setting {
+    transform: translate(94%, 1%);
+}
+.sett {
+    background: none;
+    border: none;
+}
+.dropdown-toggle::after {
+    display: none;
+}
+.PatientCases {
+    height: 500px;
+    overflow: auto;
+}
+.labla .paragraph {
+    padding: 35px 0px;
+}
+
+    .labla .paragraph h4 {
+        font-size: 36px;
+        color: #000000a6;
+        position: relative;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        margin-top: 63px;
+        font-weight: bold;
+    }
+
+    .labla .paragraph p:first-of-type {
+        padding: 10px 10px;
+        font-size: 15px;
+    }
+
+.details {
+    margin: 6px 7px 10px 14px;
+}

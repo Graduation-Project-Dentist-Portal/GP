@@ -20,5 +20,7 @@ namespace DentistPortal_API.Data
         public DbSet<ClinicImage> ClinicImage { get; set; }
         public DbSet<MedicalCaseImage> MedicalCaseImage { get; set; }
         public DbSet<Job> Job { get; set; }
+        public DbSet<PatientCase> PatientCase { get; set; }
+        public DbSet<PatientCaseImage> PatientCaseImage { get; set; }
     }
 }
