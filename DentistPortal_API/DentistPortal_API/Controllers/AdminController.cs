@@ -47,7 +47,7 @@ namespace DentistPortal_API.Controllers
                 _context.Dentist.Update(dentist);
                 await _context.SaveChangesAsync();
                 EmailController emailController = new EmailController();
-                await emailController.SendEmail("Registered Successfully", dentist.Email, _configuration);
+                await emailController.SendEmail("Verified Successfully", dentist.Email, _configuration);
                 return Ok();
             }
             catch (Exception e)
