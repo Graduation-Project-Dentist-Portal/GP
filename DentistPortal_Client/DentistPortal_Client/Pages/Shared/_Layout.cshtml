@@ -41,7 +41,7 @@
                 <li><a href="/DoctorPages/Clinics/DisplayClinics">Clinics</a></li>
                 <li><a href="/DoctorPages/MedicalCases/DisplayMedicalCases">Medical Cases</a></li>
                 <li><a href="/DoctorPages/Tools/DisplayTools">Tools</a></li>
-                <li><a href="#">Post My Case</a></li>
+                <li><a href="/DoctorPages/Jobs/DisplayJobs">Jobs</a></li>
                 <li><a href="/Login">Login</a></li>
             }
             else if (HttpContextAccessor.HttpContext.Session.GetString("role") == "Dentist")
@@ -50,7 +50,7 @@
                 <li><a href="/DoctorPages/Clinics/DisplayClinics">Clinics</a></li>
                 <li><a href="/DoctorPages/MedicalCases/DisplayMedicalCases">Medical Cases</a></li>
                 <li><a href="/DoctorPages/Tools/DisplayTools">Tools</a></li>
-                <li><a href="#">Post My Case</a></li>
+                <li><a href="/DoctorPages/Jobs/DisplayJobs">Jobs</a></li>
                 <div class="dropdown">
                     <a class="nav-profile-picture dropdown-toggle btn-danger" role="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><img class="nav-profile-picture" src="@HttpContextAccessor.HttpContext.Session.GetString("profilePicture")" /></a>
 
@@ -64,6 +64,7 @@
             {
                 <li><a class="active" href="/Home">Home</a></li>
                 <li><a href="/DoctorPages/Clinics/DisplayClinics">Clinics</a></li>
+                <li><a href="/PatientPages/MyCases_Patient">Find me a doctor</a></li>
                 <!--<li><a href="/DoctorPages/MedicalCases/MyMedicalCases">My Medical Cases</a></li>-->
                 <div class="dropdown">
                     <a class="nav-profile-picture dropdown-toggle btn-danger" role="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style="display:flex; align-items:center;"><img class="nav-profile-picture" src="@HttpContextAccessor.HttpContext.Session.GetString("profilePicture")" /></a>

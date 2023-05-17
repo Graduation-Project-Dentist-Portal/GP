@@ -34,42 +34,50 @@ namespace DentistPortal_Client.Pages.DoctorPages.Tools
 
         public async Task OnGet()
         {
-            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
-            var client = _httpClient.CreateClient();
-            client.BaseAddress = new Uri(config["BaseAddress"]);
-            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
-            try
+            if (HttpContext.Session.GetString("role") == "Dentist")
             {
-                var request = await client.GetStringAsync($"/api/display-my-tools/{jwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value}");
-                if (request is not null)
+                var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
+                var client = _httpClient.CreateClient();
+                client.BaseAddress = new Uri(config["BaseAddress"]);
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+                try
                 {
-                    var options = new JsonSerializerOptions
+                    var request = await client.GetStringAsync($"/api/display-my-tools/{jwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value}");
+                    if (request is not null)
                     {
-                        WriteIndented = true,
-                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                        DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
-                    };
-                    Tools = JsonSerializer.Deserialize<List<Tool>>(request, options);
+                        var options = new JsonSerializerOptions
+                        {
+                            WriteIndented = true,
+                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                            DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
+                        };
+                        Tools = JsonSerializer.Deserialize<List<Tool>>(request, options);
+                    }
+                    else
+                    {
+                        Msg = request.ToString();
+                        Status = "error";
+                    }
                 }
-                else
+                catch (HttpRequestException ex)
                 {
-                    Msg = request.ToString();
+                    if (ex.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        LoginModel loginModel = new LoginModel(_httpClient);
+                        await loginModel.GetNewToken(HttpContext);
+                        await OnGet();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Msg = e.Message;
                     Status = "error";
                 }
             }
-            catch (HttpRequestException ex)
+            else
             {
-                if (ex.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    LoginModel loginModel = new LoginModel(_httpClient);
-                    await loginModel.GetNewToken(HttpContext);
-                    await OnGet();
-                }
-            }
-            catch (Exception e)
-            {
-                Msg = e.Message;
-                Status = "error";
+                Msg = "Only dentists can access this page";
+                Response.Redirect("https://localhost:7156");
             }
         }
         public async Task<IActionResult> OnPostDelete(Guid id)

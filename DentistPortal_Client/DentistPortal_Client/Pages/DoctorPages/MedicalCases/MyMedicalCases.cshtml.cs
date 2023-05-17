@@ -90,59 +90,60 @@ namespace DentistPortal_Client.Pages.DoctorPages.MedicalCases
         //        Status = "error";
         //    }
         //}
-        
+
         public async Task OnGet()
         {
             if (HttpContext.Session.GetString("role") == "Dentist")
             {
-            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
-            var id = Guid.Parse(jwt.Claims.First().Value);
-            var client = _httpClient.CreateClient();
-            client.BaseAddress = new Uri(config["BaseAddress"]);
-            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
-            try
-            {
-                var request1 = await client.GetStringAsync($"/api/my-cases-doctor/{id}");
-                if (request1 is not null)
+                var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
+                var id = Guid.Parse(jwt.Claims.First().Value);
+                var client = _httpClient.CreateClient();
+                client.BaseAddress = new Uri(config["BaseAddress"]);
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+                try
                 {
-                    var options1 = new JsonSerializerOptions
+                    var request1 = await client.GetStringAsync($"/api/my-cases-doctor/{id}");
+                    if (request1 is not null)
                     {
-                        WriteIndented = true,
-                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                        DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
-                    };
-                    var combinedList = JsonSerializer.Deserialize<CombinedCasesDto>(request1, options1);
-                    PatientCases = combinedList.PatientCases;
-                    MedicalCases = combinedList.MedicalCases;
+                        var options1 = new JsonSerializerOptions
+                        {
+                            WriteIndented = true,
+                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                            DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
+                        };
+                        var combinedList = JsonSerializer.Deserialize<CombinedCasesDto>(request1, options1);
+                        PatientCases = combinedList.PatientCases;
+                        MedicalCases = combinedList.MedicalCases;
+                    }
+                    else
+                    {
+                        Msg = request1.ToString();
+                        Status = "error";
+                    }
                 }
-                else
+                catch (HttpRequestException ex)
                 {
-                    Msg = request1.ToString();
+                    if (ex.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        LoginModel loginModel = new LoginModel(_httpClient);
+                        await loginModel.GetNewToken(HttpContext);
+                        await OnGet();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Msg = e.Message;
                     Status = "error";
                 }
             }
-            catch (HttpRequestException ex)
-            {
-                if (ex.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    LoginModel loginModel = new LoginModel(_httpClient);
-                    await loginModel.GetNewToken(HttpContext);
-                    await OnGet();
-                }
-            }
-            catch (Exception e)
-            {
-                Msg = e.Message;
-                Status = "error";
-            }
-                        }
             else
             {
-                Response.Redirect($"https://localhost:7156/Login?url={"DoctorPages/MedicalCases/MyMedicalCases"}");
+                Msg = "Only dentists can access this page";
+                Response.Redirect($"https://localhost:7156/");
                 Response.WriteAsync("redirecting......");
             }
         }
-        
+
         public async Task<IActionResult> OnPostCancel(Guid id)
         {
             var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
@@ -169,70 +170,70 @@ namespace DentistPortal_Client.Pages.DoctorPages.MedicalCases
 
 
 
-            }
-
-
-  //public async Task<IActionResult> OnPostCancelByPatient(Guid id)
-            //{
-            //    var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
-            //    var client = _httpClient.CreateClient();
-            //    client.BaseAddress = new Uri(config["BaseAddress"]);
-            //    client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
-            //    var request = await client.PutAsJsonAsync($"/api/leave-patient-case", id);
-            //    if (request.IsSuccessStatusCode)
-            //    {
-            //        Msg = "Canceled successfully";
-            //        Status = "success";
-            //        return RedirectToPage("");
-            //    }
-            //    else
-            //    {
-            //        Msg = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-            //        Status = "error";
-            //        return RedirectToPage("");
-            //    }
-
-
-
-
-
-
-
-            //}
-
-
-            //private async Task<IActionResult> CancelCase(string endpoint, Guid id)
-            //{
-            //    var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
-            //    var client = _httpClient.CreateClient();
-            //    client.BaseAddress = new Uri(config["BaseAddress"]);
-            //    client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
-            //    var request = await client.PutAsJsonAsync(endpoint, id);
-            //    if (request.IsSuccessStatusCode)
-            //    {
-            //        Msg = "Canceled successfully";
-            //        Status = "success";
-            //        return RedirectToPage("");
-            //    }
-            //    else
-            //    {
-            //        Msg = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-            //        Status = "error";
-            //        return RedirectToPage("");
-            //    }
-            //}
-
-            //public async Task<IActionResult> OnPostCancel(Guid id)
-            //{
-            //    return await CancelCase("/api/leave-medical-case", id);
-            //}
-
-            //public async Task<IActionResult> OnPostCancelByPatient(Guid id)
-            //{
-            //    return await CancelCase("/api/leave-patient-case", id);
-            //}
-
-
-
         }
+
+
+        //public async Task<IActionResult> OnPostCancelByPatient(Guid id)
+        //{
+        //    var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
+        //    var client = _httpClient.CreateClient();
+        //    client.BaseAddress = new Uri(config["BaseAddress"]);
+        //    client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+        //    var request = await client.PutAsJsonAsync($"/api/leave-patient-case", id);
+        //    if (request.IsSuccessStatusCode)
+        //    {
+        //        Msg = "Canceled successfully";
+        //        Status = "success";
+        //        return RedirectToPage("");
+        //    }
+        //    else
+        //    {
+        //        Msg = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+        //        Status = "error";
+        //        return RedirectToPage("");
+        //    }
+
+
+
+
+
+
+
+        //}
+
+
+        //private async Task<IActionResult> CancelCase(string endpoint, Guid id)
+        //{
+        //    var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
+        //    var client = _httpClient.CreateClient();
+        //    client.BaseAddress = new Uri(config["BaseAddress"]);
+        //    client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+        //    var request = await client.PutAsJsonAsync(endpoint, id);
+        //    if (request.IsSuccessStatusCode)
+        //    {
+        //        Msg = "Canceled successfully";
+        //        Status = "success";
+        //        return RedirectToPage("");
+        //    }
+        //    else
+        //    {
+        //        Msg = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+        //        Status = "error";
+        //        return RedirectToPage("");
+        //    }
+        //}
+
+        //public async Task<IActionResult> OnPostCancel(Guid id)
+        //{
+        //    return await CancelCase("/api/leave-medical-case", id);
+        //}
+
+        //public async Task<IActionResult> OnPostCancelByPatient(Guid id)
+        //{
+        //    return await CancelCase("/api/leave-patient-case", id);
+        //}
+
+
+
+    }
 }

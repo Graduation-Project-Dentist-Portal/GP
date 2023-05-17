@@ -40,49 +40,54 @@ namespace DentistPortal_Client.Pages.DoctorPages.Jobs
 
         public async Task OnGet()
         {
-            if (HttpContext.Session.GetString("role") == "Dentist")
+            if (HttpContext.Session.GetString("Token") == null)
             {
-                var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
-                DoctorId = Guid.Parse(jwt.Claims.First().Value);
-                var client = _httpClient.CreateClient();
-                client.BaseAddress = new Uri(config["BaseAddress"]);
-                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
-
-
-
-                try
-                {
-                    var request = await client.GetStringAsync("/api/Display-All-Jobs");
-                    if (request is not null)
-                    {
-                        if (request.Length > 0)
-                        {
-                            var options = new JsonSerializerOptions
-                            {
-                                WriteIndented = true,
-                                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                                DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
-                            };
-                            Jobs = JsonSerializer.Deserialize<List<Job>>(request, options);
-                        }
-                    }
-                    else
-                    {
-                        Msg = request.ToString();
-                        Status = "error";
-                    }
-                }
-                catch (Exception e)
-                {
-                    Msg = e.Message;
-                    Status = "error";
-                }
+                Response.Redirect($"https://localhost:7156/Login?url={"DoctorPages/Jobs/DisplayJobs"}");
+                await Task.CompletedTask;
             }
             else
             {
-                Response.Redirect($"https://localhost:7156/Login?url={"DoctorPages/Jobs/DisplayJobs"}");
+                if (HttpContext.Session.GetString("role") == "Dentist")
+                {
+                    var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
+                    DoctorId = Guid.Parse(jwt.Claims.First().Value);
+                    var client = _httpClient.CreateClient();
+                    client.BaseAddress = new Uri(config["BaseAddress"]);
+                    client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+                    try
+                    {
+                        var request = await client.GetStringAsync("/api/Display-All-Jobs");
+                        if (request is not null)
+                        {
+                            if (request.Length > 0)
+                            {
+                                var options = new JsonSerializerOptions
+                                {
+                                    WriteIndented = true,
+                                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                                    DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
+                                };
+                                Jobs = JsonSerializer.Deserialize<List<Job>>(request, options);
+                            }
+                        }
+                        else
+                        {
+                            Msg = request.ToString();
+                            Status = "error";
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Msg = e.Message;
+                        Status = "error";
+                    }
+                }
+                else
+                {
+                    Msg = "Only dentists can access this page";
+                    Response.Redirect($"https://localhost:7156/");
+                }
             }
-
         }
 
 

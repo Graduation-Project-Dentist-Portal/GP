@@ -52,7 +52,8 @@ namespace DentistPortal_Client.Pages.DoctorPages.Jobs
             }
             else
             {
-                Response.Redirect($"https://localhost:7156/Login?url={"DoctorPages/Jobs/MyJobs"}");
+                Msg = "Only dentists can access this page";
+                Response.Redirect($"https://localhost:7156/");
             }
 
         }

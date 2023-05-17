@@ -98,48 +98,56 @@ namespace DentistPortal_Client.Pages.DoctorPages
             }
             else
             {
-                var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
-                DoctorId = Guid.Parse(jwt.Claims.First().Value);
-                var client = _httpClient.CreateClient();
-                client.BaseAddress = new Uri(config["BaseAddress"]);
-                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
-                try
+                if (HttpContext.Session.GetString("role") == "Dentist")
                 {
-                    var request = await client.GetStringAsync("/api/All-cases-doctor");
-                    if (request is not null)
+                    var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
+                    DoctorId = Guid.Parse(jwt.Claims.First().Value);
+                    var client = _httpClient.CreateClient();
+                    client.BaseAddress = new Uri(config["BaseAddress"]);
+                    client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+                    try
                     {
-                        if (request.Length > 0)
+                        var request = await client.GetStringAsync("/api/All-cases-doctor");
+                        if (request is not null)
                         {
-                            var options = new JsonSerializerOptions
+                            if (request.Length > 0)
                             {
-                                WriteIndented = true,
-                                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                                DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
-                            };
-                            var combinedList = JsonSerializer.Deserialize<CombinedCasesDto>(request, options);
-                            PatientCases = combinedList.PatientCases;
-                            MedicalCases = combinedList.MedicalCases;
+                                var options = new JsonSerializerOptions
+                                {
+                                    WriteIndented = true,
+                                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                                    DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
+                                };
+                                var combinedList = JsonSerializer.Deserialize<CombinedCasesDto>(request, options);
+                                PatientCases = combinedList.PatientCases;
+                                MedicalCases = combinedList.MedicalCases;
+                            }
+                        }
+                        else
+                        {
+                            Msg = request.ToString();
+                            Status = "error";
                         }
                     }
-                    else
+                    catch (HttpRequestException ex)
                     {
-                        Msg = request.ToString();
+                        if (ex.StatusCode == HttpStatusCode.Unauthorized)
+                        {
+                            LoginModel loginModel = new LoginModel(_httpClient);
+                            await loginModel.GetNewToken(HttpContext);
+                            await OnGet();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Msg = e.Message;
                         Status = "error";
                     }
                 }
-                catch (HttpRequestException ex)
+                else
                 {
-                    if (ex.StatusCode == HttpStatusCode.Unauthorized)
-                    {
-                        LoginModel loginModel = new LoginModel(_httpClient);
-                        await loginModel.GetNewToken(HttpContext);
-                        await OnGet();
-                    }
-                }
-                catch (Exception e)
-                {
-                    Msg = e.Message;
-                    Status = "error";
+                    Msg = "Only dentists can access this page";
+                    Response.Redirect("https://localhost:7156");
                 }
             }
         }

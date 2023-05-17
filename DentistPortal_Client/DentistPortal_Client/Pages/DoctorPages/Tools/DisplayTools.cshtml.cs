@@ -33,16 +33,16 @@ namespace DentistPortal_Client.Pages.DoctorPages.Tools
 
         public async Task OnGet()
         {
-            if (HttpContext.Session.GetString("role") == "Dentist")
+            var client = _httpClient.CreateClient();
+            client.BaseAddress = new Uri(config["BaseAddress"]);
+            if (HttpContext.Session.GetString("Token") == null)
             {
-                var client = _httpClient.CreateClient();
-                client.BaseAddress = new Uri(config["BaseAddress"]);
-                if (HttpContext.Session.GetString("Token") == null)
-                {
-                    Response.Redirect($"https://localhost:7156/Login?url={"DoctorPages/Tools/DisplayTools"}");
-                    await Task.CompletedTask;
-                }
-                else
+                Response.Redirect($"https://localhost:7156/Login?url={"DoctorPages/Tools/DisplayTools"}");
+                await Task.CompletedTask;
+            }
+            else
+            {
+                if (HttpContext.Session.GetString("role") == "Dentist")
                 {
                     client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
                     try
@@ -82,10 +82,11 @@ namespace DentistPortal_Client.Pages.DoctorPages.Tools
                         Status = "error";
                     }
                 }
-            }
-            else
-            {
-                Response.Redirect("https://localhost:7156");
+                else
+                {
+                    Msg = "Only dentists can access this page";
+                    Response.Redirect("https://localhost:7156");
+                }
             }
         }
 

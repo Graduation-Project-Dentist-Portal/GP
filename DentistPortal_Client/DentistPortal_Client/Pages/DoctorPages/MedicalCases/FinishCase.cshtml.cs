@@ -46,7 +46,8 @@ namespace DentistPortal_Client.Pages.DoctorPages.MedicalCases
             }
             else
             {
-                Response.Redirect($"https://localhost:7156/Login?url={"DoctorPages/MedicalCases/FinishCase"}");
+                Msg = "Only dentists can access this page";
+                Response.Redirect($"https://localhost:7156/");
                 Response.WriteAsync("redercting...");
             }
         }
