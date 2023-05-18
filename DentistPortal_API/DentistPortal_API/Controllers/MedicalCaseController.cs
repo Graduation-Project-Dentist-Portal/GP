@@ -80,7 +80,6 @@ namespace DentistPortal_API.Controllers
                         medicalCaseImage = new();
                     }
                 }
-
                 return Ok();
             }
             catch (Exception e)

@@ -23,7 +23,6 @@ namespace DentistPortal_API.Controllers
             _cloudinary = new Cloudinary(account);
         }
 
-
         [HttpPost]
         [Route("api/create-patient-case")]
         [Authorize]
@@ -31,62 +30,50 @@ namespace DentistPortal_API.Controllers
         {
             try
             {
-
-            var NewPatientCase = new PatientCase();
+                var NewPatientCase = new PatientCase();
                 var patientcaseimage = new PatientCaseImage();
                 var uploadResult = new ImageUploadResult();
-            
-            NewPatientCase.Patient = null;
-            NewPatientCase.IsActive = true;
-            NewPatientCase.Id = Guid.NewGuid();
-            NewPatientCase.CaseStatus = "Open";
-            NewPatientCase.PatientPhone = patientcaseDto.PatientPhone;
-            NewPatientCase.PatientAge = patientcaseDto.PatientAge;
-            NewPatientCase.Description = patientcaseDto.Description;
-            NewPatientCase.PatientId = patientcaseDto.PatientId;
-            //NewPatientCase.AssignedDoctorId = patientcaseDto.AssignedDoctorId;
-            NewPatientCase.TimeCreated = DateTime.Now;
-            await _context.PatientCase.AddAsync(NewPatientCase);
-            await _context.SaveChangesAsync();
-            foreach (var image in patientcaseDto.PatientCasePictures)
-            {
-                using (var stream = image.OpenReadStream())
+                NewPatientCase.Patient = null;
+                NewPatientCase.IsActive = true;
+                NewPatientCase.Id = Guid.NewGuid();
+                NewPatientCase.CaseStatus = "Open";
+                NewPatientCase.PatientPhone = patientcaseDto.PatientPhone;
+                NewPatientCase.PatientAge = patientcaseDto.PatientAge;
+                NewPatientCase.Description = patientcaseDto.Description;
+                NewPatientCase.PatientId = patientcaseDto.PatientId;
+                //NewPatientCase.AssignedDoctorId = patientcaseDto.AssignedDoctorId;
+                NewPatientCase.TimeCreated = DateTime.Now;
+                await _context.PatientCase.AddAsync(NewPatientCase);
+                await _context.SaveChangesAsync();
+                foreach (var image in patientcaseDto.PatientCasePictures)
                 {
-                    var uploadParams = new ImageUploadParams()
+                    using (var stream = image.OpenReadStream())
                     {
-                        File = new FileDescription(image.Name, stream)
-                    };
-                    uploadResult = _cloudinary.Upload(uploadParams);
-                    patientcaseimage.Id = Guid.NewGuid();
-                    patientcaseimage.PatientCaseId = NewPatientCase.Id;
-                    patientcaseimage.IsActive = true;
-                    patientcaseimage.Url = uploadResult.Uri.ToString();
-                    await _context.PatientCaseImage.AddAsync(patientcaseimage);
-                    await _context.SaveChangesAsync();
-                    uploadResult = new();
-                    patientcaseimage = new();
+                        var uploadParams = new ImageUploadParams()
+                        {
+                            File = new FileDescription(image.Name, stream)
+                        };
+                        uploadResult = _cloudinary.Upload(uploadParams);
+                        patientcaseimage.Id = Guid.NewGuid();
+                        patientcaseimage.PatientCaseId = NewPatientCase.Id;
+                        patientcaseimage.IsActive = true;
+                        patientcaseimage.Url = uploadResult.Uri.ToString();
+                        await _context.PatientCaseImage.AddAsync(patientcaseimage);
+                        await _context.SaveChangesAsync();
+                        uploadResult = new();
+                        patientcaseimage = new();
+                    }
                 }
+                return Ok();
             }
-
-
-
-
-            return Ok();
-
-        }
-         catch (Exception e)
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
-    }
-
-
-}
-
-
-
+            }
+        }
 
         [HttpPut]
-        [Route("api/take-case-all/{caseId}") ]
+        [Route("api/take-case-all/{caseId}")]
         [Authorize]
         public async Task<IActionResult> TakeCaseAll(Guid caseId, [FromBody] Guid userId)
         {
@@ -104,22 +91,19 @@ namespace DentistPortal_API.Controllers
                     await _context.SaveChangesAsync();
                     return Ok();
                 }
-                
-                    var patientCase = await _context.PatientCase.FirstOrDefaultAsync(x => x.Id == caseId);
-                    if (patientCase != null)
-                    {
-                        // Take the patient case
-                        if (await _context.PatientCase.CountAsync(x => x.AssignedDoctorId == userId && x.CaseStatus == "Pending") >= 2)
-                            return BadRequest("Cant take more than 2 cases at a time!");
-                        patientCase.AssignedDoctorId = userId;
-                        patientCase.CaseStatus = "Pending";
-                        _context.PatientCase.Update(patientCase);
-                        await _context.SaveChangesAsync();
-                        return Ok();
-                    }
-                
-               
 
+                var patientCase = await _context.PatientCase.FirstOrDefaultAsync(x => x.Id == caseId);
+                if (patientCase != null)
+                {
+                    // Take the patient case
+                    if (await _context.PatientCase.CountAsync(x => x.AssignedDoctorId == userId && x.CaseStatus == "Pending") >= 2)
+                        return BadRequest("Cant take more than 2 cases at a time!");
+                    patientCase.AssignedDoctorId = userId;
+                    patientCase.CaseStatus = "Pending";
+                    _context.PatientCase.Update(patientCase);
+                    await _context.SaveChangesAsync();
+                    return Ok();
+                }
                 return BadRequest("Cant find the case");
             }
             catch (Exception ex)
@@ -131,7 +115,6 @@ namespace DentistPortal_API.Controllers
         [HttpPut]
         [Route("api/leave-case-all")]
         [Authorize]
-
         public async Task<IActionResult> LeaveCaseAll([FromBody] Guid caseId)
         {
             try
@@ -155,7 +138,6 @@ namespace DentistPortal_API.Controllers
                     await _context.SaveChangesAsync();
                     return Ok();
                 }
-
                 return BadRequest("Cant find the case");
             }
             catch (Exception ex)
@@ -172,7 +154,6 @@ namespace DentistPortal_API.Controllers
 
             if (finishedCaseDto.CaseId == Guid.Empty || finishedCaseDto.DoctorId == Guid.Empty || finishedCaseDto.BeforePicture is null || finishedCaseDto.AfterPicture is null || string.IsNullOrEmpty(finishedCaseDto.DoctorWork))
                 return BadRequest("Cant be empty");
-
             try
             {
                 var patientCase = await _context.PatientCase.FirstOrDefaultAsync(x => x.Id == finishedCaseDto.CaseId);
@@ -188,9 +169,7 @@ namespace DentistPortal_API.Controllers
                     //finishedCase.PatientCase = null;
                     //finishedCase.MedicalCase = null;
                     finishedCase.IsActive = true;
-
                     finishedCase.PatientCaseId = patientCase.Id;
-
                     var uploadResult = new ImageUploadResult();
                     using (var beforeStream = finishedCaseDto.BeforePicture.OpenReadStream())
                     {
@@ -212,10 +191,8 @@ namespace DentistPortal_API.Controllers
                         uploadResult = _cloudinary.Upload(afterUploadParams);
                         finishedCase.AfterPicture = uploadResult.Uri.ToString();
                     }
-
                     await _context.FinishedCases.AddAsync(finishedCase);
                     _context.PatientCase.Update(patientCase);
-
                 }
                 else
                 {
@@ -230,12 +207,9 @@ namespace DentistPortal_API.Controllers
                         finishedCase.DoctorWork = finishedCaseDto.DoctorWork;
                         finishedCase.MedicalCaseId = medCase.Id;
                         finishedCase.IsActive = true;
-
                         finishedCase.PatientCaseId = null;
                         //finishedCase.PatientCase = null;
                         //finishedCase.MedicalCase = null;
-
-
                         var uploadResult = new ImageUploadResult();
                         using (var beforeStream = finishedCaseDto.BeforePicture.OpenReadStream())
                         {
@@ -257,17 +231,14 @@ namespace DentistPortal_API.Controllers
                             uploadResult = _cloudinary.Upload(afterUploadParams);
                             finishedCase.AfterPicture = uploadResult.Uri.ToString();
                         }
-                        
                         await _context.FinishedCases.AddAsync(finishedCase);
                         _context.MedicalCase.Update(medCase);
-
                     }
                     else
                     {
                         return BadRequest("There is no case");
                     }
                 }
-
                 await _context.SaveChangesAsync();
                 return Ok();
             }
@@ -278,7 +249,6 @@ namespace DentistPortal_API.Controllers
         }
 
         //Get Patient Case by Id For Edit Function
-
         [HttpGet]
         [Route("api/get-patient-case/{id}")]
         [Authorize]
@@ -407,11 +377,9 @@ namespace DentistPortal_API.Controllers
             }
         }
 
-
         [HttpGet]
         [Route("api/get-patient-case-pics/{patientCaseId}")]
         [Authorize]
-
         public async Task<IActionResult> GetPictures(Guid patientCaseId)
         {
             if (patientCaseId == Guid.Empty)
@@ -429,8 +397,6 @@ namespace DentistPortal_API.Controllers
             }
         }
 
-
-
         //My Medical Cases Pages 
         [HttpGet]
         [Route("api/my-cases-doctor/{id}")]
@@ -444,12 +410,9 @@ namespace DentistPortal_API.Controllers
                 MedicalCases = medCases,
                 PatientCases = patientCases
             };
-
             return Ok(combinedList);
-
         }
-       
-        
+
         // Display Medical Pages 
         [HttpGet]
         [Route("api/All-cases-doctor")]
@@ -463,9 +426,7 @@ namespace DentistPortal_API.Controllers
                 MedicalCases = medCases,
                 PatientCases = patientCases
             };
-
             return Ok(combinedList);
-
         }
 
         // Display My Cases Patient Page
@@ -489,37 +450,9 @@ namespace DentistPortal_API.Controllers
             }
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //[HttpGet]
-        //[Route("api/my-patients-cases/{id}")]
-        ////[Authorize]
-        //public async Task<IActionResult> GetMyMedicalCases(Guid id)
-        //{
-        //    try
-        //    {
-        //        return Ok(await _context.PatientCase.Where(x => x.IsActive == true && x.AssignedDoctorId == id).ToListAsync());
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
-
         [HttpGet]
         [Route("api/display-patient-cases")]
-        //[Authorize]
+        [Authorize]
         public async Task<ActionResult<List<PatientCase>>> DisplayPatientCases()
         {
 
@@ -536,45 +469,8 @@ namespace DentistPortal_API.Controllers
             {
                 return BadRequest(ex.Message);
             }
-
-
         }
-
-        //[HttpPut]
-        //[Route("api/take-patient-case/{CaseId}")]
-        //[Authorize]
-        //public async Task<IActionResult> TakePatientCase(Guid CaseId ,[FromBody]Guid UserId)
-        //{
-        //    try
-        //    {
-        //        if (await _context.PatientCase.CountAsync(x => x.AssignedDoctorId == UserId && x.CaseStatus == "Pending") >= 2)
-        //            return BadRequest("Cant take more than 2 cases at a time!");
-        //        var patientcase = await _context.PatientCase.FirstOrDefaultAsync(x => x.Id == CaseId);
-        //        if (patientcase == null)
-        //        { return BadRequest("Cant find the case"); }
-        //        else
-        //        {
-        //            patientcase.AssignedDoctorId = UserId;
-        //            patientcase.CaseStatus = "Pending";
-        //            _context.PatientCase.Update(patientcase);
-        //            await _context.SaveChangesAsync();
-        //            return Ok();
-        //        }
-        //    }
-
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
-
-
-
-
     }
-
-
-
 }
 
 

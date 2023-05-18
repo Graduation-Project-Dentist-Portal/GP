@@ -24,7 +24,6 @@ namespace DentistPortal_API.Controllers
             _cloudinary = new Cloudinary(account);
         }
 
-
         [HttpGet]
         [Route("api/Display-All-Jobs")]
         public async Task<ActionResult<List<Job>>> DisplayAllJobs()
@@ -38,9 +37,6 @@ namespace DentistPortal_API.Controllers
                 return BadRequest("No available jobs or trainings, come back soon!");
             }
         }
-
-
-
 
         [HttpGet("api/Display-Job/{id}"), Authorize]
         public async Task<ActionResult> DisplayJob(Guid id)
@@ -70,8 +66,6 @@ namespace DentistPortal_API.Controllers
             }
         }
 
-
-
         [HttpPost]
         [Route("api/Add-Job")]
         public async Task<ActionResult> AddJob([FromBody] JobDto Jobdto)
@@ -87,17 +81,10 @@ namespace DentistPortal_API.Controllers
             job.Location = Jobdto.Location;
             job.Duration = Jobdto.Duration;
             job.IsActive = true;
-
-
             await _context.Job.AddAsync(job);
             await _context.SaveChangesAsync();
-
-
             return Ok();
         }
-
-
-
 
         [HttpPut]
         [Route("api/Edit-Job/{id}")]
@@ -121,23 +108,16 @@ namespace DentistPortal_API.Controllers
                     OldJob.ContactNumber = jobdto.ContactNumber;
                     OldJob.Duration = jobdto.Duration;
                     OldJob.Location = jobdto.Location;
-
-
                     _context.Job.Update(OldJob);
                     await _context.SaveChangesAsync();
                     return Ok();
                 }
-
                 else
                 {
                     return BadRequest("Can't find old job");
                 }
-
             }
-
         }
-
-
 
         [HttpDelete]
         [Route("api/Delete-Job/{id}")]
@@ -177,6 +157,5 @@ namespace DentistPortal_API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
     }
 }

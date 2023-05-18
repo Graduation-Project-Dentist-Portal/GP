@@ -66,7 +66,7 @@ namespace DentistPortal_API.Controllers
                 {
                     return BadRequest("User not found!");
                 }
-                if(loggedUserDentist!= null && loggedUserDentist.IsVerified!="true")
+                if (loggedUserDentist != null && loggedUserDentist.IsVerified != "true")
                 {
                     return BadRequest("Not verified Yet");
                 }
@@ -98,35 +98,6 @@ namespace DentistPortal_API.Controllers
                 }
             }
         }
-
-        //[HttpPost]
-        //[Route("api/create-user")]
-        //public async Task<ActionResult> Register([FromBody] UserDto newUser)
-        //{
-        //    User user = await _context.User.FirstOrDefaultAsync(x => x.Username == newUser.Username);
-        //    if (string.IsNullOrEmpty(newUser.Username) || string.IsNullOrEmpty(newUser.Password) || string.IsNullOrEmpty(newUser.FirstName) || string.IsNullOrEmpty(newUser.LastName) || string.IsNullOrEmpty(newUser.Role) || (newUser.Role != "Doctor" && newUser.Role != "Student" && newUser.Role != "Patient"))
-        //        return BadRequest("Cant be empty");
-        //    else if (user is not null)
-        //    {
-        //        return BadRequest("Username already taken!");
-        //    }
-        //    else
-        //    {
-        //        user = new();
-        //        user.Id = Guid.NewGuid();
-        //        user.IsActive = true;
-        //        var hasher = new PasswordHasher<User>();
-        //        user.PasswordHash = hasher.HashPassword(user, newUser.Password);
-        //        user.FirstName = newUser.FirstName;
-        //        user.LastName = newUser.LastName;
-        //        user.Role = newUser.Role;
-        //        user.Username = newUser.Username;
-        //        user.ProfilePicture = newUser.ProfilePicture;
-        //        await _context.User.AddAsync(user);
-        //        await _context.SaveChangesAsync();
-        //        return Ok();
-        //    }
-        //}
 
         [HttpPost]
         [Route("api/RegisterAsDoctor")]
@@ -371,35 +342,6 @@ namespace DentistPortal_API.Controllers
             }
         }
 
-        //[HttpPost]
-        //[Route("api/create-user")]
-        //public async Task<ActionResult> Register([FromBody] UserDto newUser)
-        //{
-        //    User user = await _context.User.FirstOrDefaultAsync(x => x.Username == newUser.Username);
-        //    if (string.IsNullOrEmpty(newUser.Username) || string.IsNullOrEmpty(newUser.Password) || string.IsNullOrEmpty(newUser.FirstName) || string.IsNullOrEmpty(newUser.LastName) || string.IsNullOrEmpty(newUser.Role) || (newUser.Role != "Doctor" && newUser.Role != "Student" && newUser.Role != "Patient"))
-        //        return BadRequest("Cant be empty");
-        //    else if (user is not null)
-        //    {
-        //        return BadRequest("Username already taken!");
-        //    }
-        //    else
-        //    {
-        //        user = new();
-        //        user.Id = Guid.NewGuid();
-        //        user.IsActive = true;
-        //        var hasher = new PasswordHasher<User>();
-        //        user.PasswordHash = hasher.HashPassword(user, newUser.Password);
-        //        user.FirstName = newUser.FirstName;
-        //        user.LastName = newUser.LastName;
-        //        user.Role = newUser.Role;
-        //        user.Username = newUser.Username;
-        //        user.ProfilePicture = newUser.ProfilePicture;
-        //        await _context.User.AddAsync(user);
-        //        await _context.SaveChangesAsync();
-        //        return Ok();
-        //    }
-        //}
-
         [HttpPost]
         [Route("api/ChangeImage")]
         public async Task<IActionResult> ChangeImage([FromForm] ChangeImageDto Obj)
@@ -464,7 +406,6 @@ namespace DentistPortal_API.Controllers
             await _context.SaveChangesAsync();
             return Ok();
         }
-
 
         [HttpPost]
         [Route("api/DentistProfileData")]

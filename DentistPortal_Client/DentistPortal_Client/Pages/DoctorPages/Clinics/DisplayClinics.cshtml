@@ -27,6 +27,15 @@
         client.BaseAddress = new Uri(config["BaseAddress"]);
         string req;
         List<string> imageUrls = new();
+
+        <!-- Create Clinic Modal Trigger-->
+        @if (role == "Dentist")
+        {
+            <div class="text-center m-4">
+                <button style="background-color:#252f3e;color:white;" class="btn" data-bs-toggle="modal" data-bs-target="#AddClinic"><i class="bi bi-plus-circle" style="font-style:normal"> Add Clinic</i></button>
+            </div>
+        }
+
         <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-2 g0">
             @foreach (var clinic in @Model.Clinics)
             {
@@ -216,14 +225,6 @@
             }
         </div>
         <br />
-
-        <!-- Create Clinic Modal Trigger-->
-        @if (role == "Dentist")
-        {
-            <div class="text-center m-4">
-                <button style="background-color:#252f3e;color:white;" class="btn" data-bs-toggle="modal" data-bs-target="#AddClinic"><i class="bi bi-plus-circle" style="font-style:normal"> Add Clinic</i></button>
-            </div>
-        }
 
         <!-- Create Clinic Modal -->
         <div class="modal fade" id="AddClinic" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">

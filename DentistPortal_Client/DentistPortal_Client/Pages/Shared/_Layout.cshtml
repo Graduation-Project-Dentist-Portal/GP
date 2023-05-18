@@ -29,16 +29,11 @@
 </head>
 <body>
     <nav style="display:flex; align-items:center;">
-        <div class="logo">DentalHub</div>
-        @*<input type="checkbox" id="click">
-        <label for="click" class="menu-btn">
-        <i class="fas fa-bars"></i>
-        </label>*@
+        <div class="logo"><a href="/Home"><img src="~/Images/logo-white.png" width="200" height="90px" /></a></div>
         <ul style="display:flex; justify-content:flex-end; margin-bottom:0;">
             @if (HttpContextAccessor.HttpContext.Session.GetString("Token") == null)
             {
-                <li><a class="active" href="/Home">Home</a></li>
-                <li><a href="/DoctorPages/Clinics/DisplayClinics">Clinics</a></li>
+                <li><a class="active" href="/DoctorPages/Clinics/DisplayClinics">Clinics</a></li>
                 <li><a href="/DoctorPages/MedicalCases/DisplayMedicalCases">Medical Cases</a></li>
                 <li><a href="/DoctorPages/Tools/DisplayTools">Tools</a></li>
                 <li><a href="/DoctorPages/Jobs/DisplayJobs">Jobs</a></li>
@@ -46,8 +41,7 @@
             }
             else if (HttpContextAccessor.HttpContext.Session.GetString("role") == "Dentist")
             {
-                <li><a class="active" href="/Home">Home</a></li>
-                <li><a href="/DoctorPages/Clinics/DisplayClinics">Clinics</a></li>
+                <li><a class="active" href="/DoctorPages/Clinics/DisplayClinics">Clinics</a></li>
                 <li><a href="/DoctorPages/MedicalCases/DisplayMedicalCases">Medical Cases</a></li>
                 <li><a href="/DoctorPages/Tools/DisplayTools">Tools</a></li>
                 <li><a href="/DoctorPages/Jobs/DisplayJobs">Jobs</a></li>
@@ -60,12 +54,14 @@
                     </ul>
                 </div>
             }
+            else if (HttpContextAccessor.HttpContext.Session.GetString("role") == "Admin")
+            {
+                <li><a class="active" href="/Home?clear=yes">Log Out</a></li>
+            }
             else
             {
-                <li><a class="active" href="/Home">Home</a></li>
-                <li><a href="/DoctorPages/Clinics/DisplayClinics">Clinics</a></li>
+                <li><a class="active" href="/DoctorPages/Clinics/DisplayClinics">Clinics</a></li>
                 <li><a href="/PatientPages/MyCases_Patient">Find me a doctor</a></li>
-                <!--<li><a href="/DoctorPages/MedicalCases/MyMedicalCases">My Medical Cases</a></li>-->
                 <div class="dropdown">
                     <a class="nav-profile-picture dropdown-toggle btn-danger" role="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style="display:flex; align-items:center;"><img class="nav-profile-picture" src="@HttpContextAccessor.HttpContext.Session.GetString("profilePicture")" /></a>
 
@@ -75,12 +71,8 @@
                     </ul>
                 </div>
             }
-
         </ul>
     </nav>
-
-
-
 
     <div style="overflow-x:hidden;height:100%">
         <main role="main" class="pb-3">
@@ -111,24 +103,23 @@
             <div>
                 <i class="fa fa-map-marker"></i>
                 <p>
-                    <span>helwan</span>
-                    university
+                    <span>Helwan</span> University
                 </p>
             </div>
 
             <div>
                 <i class="fa fa-phone"></i>
-                <p>+91 74**9**258</p>
+                <p>+20 1006465085</p>
             </div>
             <div>
                 <i class="fa fa-envelope"></i>
-                <p><a href="http://www.helwan.edu.eg/">helwan@gmail.com</a></p>
+                <p>dentalhubgp@gmail.com</p>
             </div>
         </div>
         <div class="footer-right">
             <p class="footer-company-about">
                 <span>About our website </span>
-                <strong>DentalHub</strong> is a website that provides a platform for dental dentists, doctors, and patients.
+                <strong>DentalHub</strong> is a website that provides a platform for dental students, dentists, and patients.
             </p>
             <div class="footer-icons">
                 <a href="#"><i class="bi bi-facebook"></i></a>
