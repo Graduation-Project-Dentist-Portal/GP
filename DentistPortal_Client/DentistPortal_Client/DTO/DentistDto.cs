@@ -15,5 +15,6 @@
         public IFormFile? IdentityCardPicture { get; set; }
         public IFormFile? UniversityCardPicture { get; set; }
         public int Level { get; set; }
+        public string Email { get; set; } = string.Empty;
     }
 }

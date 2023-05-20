@@ -15,5 +15,9 @@
         public string IdentityCardPicture { get; set; } = String.Empty;
         public string UniversityCardPicture { get; set; } = String.Empty;
         public int Level { get; set; }
+        public string VerfiyMessage { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+
+        public string IsVerified { get; set; } = string.Empty;
     }
 }

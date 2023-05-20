@@ -40,54 +40,49 @@ namespace DentistPortal_Client.Pages.DoctorPages.Jobs
 
         public async Task OnGet()
         {
-            if (HttpContext.Session.GetString("Token") == null)
+            if (HttpContext.Session.GetString("role") == "Dentist")
             {
-                Response.Redirect($"https://localhost:7156/Login?url={"DoctorPages/Jobs/DisplayJobs"}");
-                await Task.CompletedTask;
-            }
-            else
-            {
-                if (HttpContext.Session.GetString("role") == "Dentist")
+                var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
+                DoctorId = Guid.Parse(jwt.Claims.First().Value);
+                var client = _httpClient.CreateClient();
+                client.BaseAddress = new Uri(config["BaseAddress"]);
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+
+
+
+                try
                 {
-                    var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
-                    DoctorId = Guid.Parse(jwt.Claims.First().Value);
-                    var client = _httpClient.CreateClient();
-                    client.BaseAddress = new Uri(config["BaseAddress"]);
-                    client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
-                    try
+                    var request = await client.GetStringAsync("/api/Display-All-Jobs");
+                    if (request is not null)
                     {
-                        var request = await client.GetStringAsync("/api/Display-All-Jobs");
-                        if (request is not null)
+                        if (request.Length > 0)
                         {
-                            if (request.Length > 0)
+                            var options = new JsonSerializerOptions
                             {
-                                var options = new JsonSerializerOptions
-                                {
-                                    WriteIndented = true,
-                                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                                    DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
-                                };
-                                Jobs = JsonSerializer.Deserialize<List<Job>>(request, options);
-                            }
-                        }
-                        else
-                        {
-                            Msg = request.ToString();
-                            Status = "error";
+                                WriteIndented = true,
+                                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                                DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
+                            };
+                            Jobs = JsonSerializer.Deserialize<List<Job>>(request, options);
                         }
                     }
-                    catch (Exception e)
+                    else
                     {
-                        Msg = e.Message;
+                        Msg = request.ToString();
                         Status = "error";
                     }
                 }
-                else
+                catch (Exception e)
                 {
-                    Msg = "Only dentists can access this page";
-                    Response.Redirect($"https://localhost:7156/");
+                    Msg = e.Message;
+                    Status = "error";
                 }
             }
+            else
+            {
+                Response.Redirect($"https://localhost:7156/Login?url={"DoctorPages/Jobs/DisplayJobs"}");
+            }
+
         }
 
 

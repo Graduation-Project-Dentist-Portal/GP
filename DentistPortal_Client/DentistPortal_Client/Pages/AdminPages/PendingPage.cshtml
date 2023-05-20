@@ -1,0 +1,136 @@
+﻿@page
+@model DentistPortal_Client.Pages.AdminPages.PendingPageModel
+@{
+    @Html.AntiForgeryToken()
+    Layout = "";
+
+    <head>
+        <meta charset="utf-8">
+        <title>Multi Step Form | CodingNepal</title>
+        <link rel="stylesheet" href="~/css/Pending.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="form-outer">
+                <form method="post" enctype="multipart/form-data">
+                    <div class="page slide-page">
+                        <div class="">
+
+                            <img src="@Model.LoggedDentist.ProfilePicture" alt="header-image" class="imgContainer">
+                            <br>
+                            <button type="button" onclick="document.getElementById('getFile2').click()" style="background-color:#2B4F71; color:white; width:80px; border-radius:50px; cursor:pointer;">upload</button>
+                            <input type='file' asp-for="obj.ProfilePicture" id="getFile2" style="display:none">
+                        </div>
+                        <div class="field">
+                            <div class="label">
+                                UserName
+                            </div>
+                            <input class="ForEdit" type="text" id="username" value="@Model.LoggedDentist.Username" disabled>
+                            <!--<div style="display:inline; cursor:pointer; text-decoration:underline; padding:10px; position:absolute; right:1px" class="edit">Edit</div>-->
+                        </div>
+                        <div class="field">
+                            <div class="label">
+                                First Name
+                            </div>
+                            <input class="ForEdit" type="text" id="firstname" value="@Model.LoggedDentist.FirstName" disabled>
+                            <div style="display:inline; cursor:pointer; text-decoration:underline; padding:10px; position:absolute; right:1px" class="edit">Edit</div>
+                        </div>
+                        <div class="field">
+                            <div class="label">
+                                Last Name
+                            </div>
+                            <input class="ForEdit" type="text" id="lastname" value="@Model.LoggedDentist.LastName" disabled>
+                            <div style="display:inline; cursor:pointer; text-decoration:underline; padding:10px; position:absolute; right:1px" class="edit">Edit</div>
+                        </div>
+                        <div class="field">
+                            <div class="label">
+                                Email Address
+                            </div>
+                            <input class="ForEdit" type="email" id="email" value="@Model.LoggedDentist.Email" disabled>
+                            <div style="display:inline; cursor:pointer; text-decoration:underline; padding:10px; position:absolute; right:1px" class="edit">Edit</div>
+                        </div>
+                        <div class="field">
+                            <div class="label">
+                                University
+                            </div>
+                            <input class="ForEdit" type="text" id="university" value="@Model.LoggedDentist.University" disabled>
+                            <div style="display:inline; cursor:pointer; text-decoration:underline; padding:10px; position:absolute; right:1px" class="edit">Edit</div>
+                        </div>
+                        <div class="field">
+                            <div class="label">
+                                Level
+                            </div>
+                            <input class="ForEdit" type="text" id="level" value="@Model.LoggedDentist.Level" disabled>
+                            <div style="display:inline; cursor:pointer; text-decoration:underline; padding:10px; position:absolute; right:1px" class="edit">Edit</div>
+                        </div>
+                        <div class="field">
+                            <div class="label">
+                                Password
+                            </div>
+                            <input class="ForEdit" type="password" id="password" value="password" disabled>
+                            <div style="display:inline; cursor:pointer; text-decoration:underline; padding:10px; position:absolute; right:1px" class="edit">Edit</div>
+                        </div>
+
+                        <div class="label">
+                            Message
+                        </div>
+                        <textarea id="freeform" name="freeform" rows="2" readonly>@Model.LoggedDentist.VerfiyMessage</textarea>
+
+                        <div class="field">
+                            <button class="firstNext next">Next</button>
+                        </div>
+                    </div>
+                    <div class="page">
+                        <div class="field">
+                            <div class="label">
+                                University Card Photo
+                            </div>
+                            <div>
+                                <img src="@Model.LoggedDentist.UniversityCardPicture">
+                                <br>
+                                <div class="upload">
+                                    <button type="button" onclick="document.getElementById('getFile1').click()">upload</button>
+                                    <input type='file' asp-for="obj.UniversityCardPicture" id="getFile1" style="display:none">
+                                </div>
+                            </div>
+                        </div>
+                        <br><br><br><br><br><br><br><br>
+
+                        <div class="field">
+                            <div class="label">
+                                Identity Card Photo
+                            </div>
+                            <div>
+                                <img src="@Model.LoggedDentist.IdentityCardPicture">
+                                <br>
+                                <div class="upload">
+                                    <button type="button" onclick="document.getElementById('getFile3').click()">upload</button>
+                                    <input type='file' asp-for="obj.IdentityCardPicture" id="getFile3" style="display:none">
+                                </div>
+                            </div>
+                        </div>
+                        <br><br><br><br>  <br><br><br><br>
+
+                        <div class="label">
+                            Message
+                        </div>
+                        <textarea id="freeform" name="freeform" rows="2" readonly>@Model.LoggedDentist.VerfiyMessage</textarea>
+
+                        <div class="field btns">
+                            <button class="prev-1 prev">Previous</button>
+                            <button class="submit">Submit</button>
+                        </div>
+                        <div class="field btns">
+                            <button class="prev-1 prev"><a href="/Home?clear=yes" style="text-decoration:none; color:white">Go Home</a></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/js/Pending.js"></script>
+    </body>
+
+}
