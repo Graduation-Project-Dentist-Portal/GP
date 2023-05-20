@@ -1,19 +1,19 @@
-using DentistPortal_Client.DTO;
 using DentistPortal_API.Model;
+using DentistPortal_Client.DTO;
+using Hangfire.Logging;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Security.Claims;
 using System.Text;
-using System.Net.Mime;
-using System.Net.Http.Headers;
-using System.Diagnostics;
 
-namespace DentistPortal_Client.Pages
+namespace DentistPortal_Client.Pages.AdminPages
 {
-    public class DentistProfileModel : PageModel
+    public class PendingPageModel : PageModel
     {
         [TempData]
         public string Msg { get; set; } = String.Empty;
@@ -31,13 +31,10 @@ namespace DentistPortal_Client.Pages
                .AddJsonFile("appsettings.json")
                .AddEnvironmentVariables()
                .Build();
-
-
         public async Task OnGet()
         {
             try
             {
-                //var username = HttpContext.Session.GetString("username");
                 var token = HttpContext.Session.GetString("token");
                 var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
                 var Id = jwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
@@ -56,11 +53,12 @@ namespace DentistPortal_Client.Pages
                     LoggedDentist = JsonConvert.DeserializeObject<Dentist>(stringdata);
                 }
             }
-            catch(Exception ex) 
+            catch(Exception ex)
             {
                 var st = new StackTrace(ex, true);
                 var frame = st.GetFrame(0);
                 var line = frame.GetFileLineNumber();
+
                 Response.WriteAsync("something went wrong please try again");
             }
         }
@@ -69,6 +67,7 @@ namespace DentistPortal_Client.Pages
         {
             try
             {
+                obj.verifyDentist = "false";
                 var username = HttpContext.Session.GetString("username");
                 var role = HttpContext.Session.GetString("role");
                 if (!string.IsNullOrEmpty(role))
@@ -76,7 +75,6 @@ namespace DentistPortal_Client.Pages
                     obj.username = username;
 
                     var content = new MultipartFormDataContent();
-                    obj.verifyDentist = "true";
                     content = await MappingContent(content, obj);
 
                     var httpClient = HttpContext.RequestServices.GetService<IHttpClientFactory>();
@@ -87,11 +85,11 @@ namespace DentistPortal_Client.Pages
                     var request = await client.PostAsync("/api/ChangeImage", content);
                     if (request.IsSuccessStatusCode)
                     {
-                        return RedirectToPage("/DentistProfile");
+                        return RedirectToPage("Home?clear=yes");
                     }
-                    return RedirectToPage("/DentistProfile");
+                    return RedirectToPage("/Home?clear=yes");
                 }
-                return RedirectToPage("/DentistProfile");
+                return RedirectToPage("/Home?clear=yes");
             }
             catch(Exception ex)
             {
@@ -109,13 +107,15 @@ namespace DentistPortal_Client.Pages
             {
                 var JsonObject = HttpContext.Session.GetString("LoggedUser");
                 LoggedDentist = JsonConvert.DeserializeObject<Dentist>(JsonObject);
+                LoggedDentist.IsVerified = "false";
 
                 if (obj.University != LoggedDentist.University) { LoggedDentist.University = obj.University; }
                 if (obj.FirstName != LoggedDentist.FirstName) { LoggedDentist.FirstName = obj.FirstName; }
                 if (obj.LastName != LoggedDentist.LastName) { LoggedDentist.LastName = obj.LastName; }
+                if (obj.Email != LoggedDentist.Email) { LoggedDentist.Email = obj.Email; }
                 if (obj.Level != LoggedDentist.Level) { LoggedDentist.Level = obj.Level; }
 
-                LoggedDentist.IsVerified = "true";
+
 
                 if (obj.PasswordHash != "password")
                 {
@@ -125,7 +125,7 @@ namespace DentistPortal_Client.Pages
                     client.BaseAddress = new Uri(config["BaseAddress"]);
                     var jsoncategory = JsonConvert.SerializeObject(LoggedDentist);
                     var content = new StringContent(jsoncategory, Encoding.UTF8, "application/json");
-                    var request = await client.PostAsync("/api/EditPatientProfile", content);
+                    var request = await client.PostAsync("/api/EditDentistProfile", content);
 
                     if (request.IsSuccessStatusCode)
                     {
@@ -176,8 +176,7 @@ namespace DentistPortal_Client.Pages
         private async Task<MultipartFormDataContent> MappingContent(MultipartFormDataContent multipartFormDataContent, ChangeImageDto? Obj)
         {
             multipartFormDataContent.Add(new StringContent(Obj.username, Encoding.UTF8, MediaTypeNames.Text.Plain), "username");
-            multipartFormDataContent.Add(new StringContent(Obj.verifyDentist, Encoding.UTF8, MediaTypeNames.Text.Plain), "VerifyDentist");
-
+            multipartFormDataContent.Add(new StringContent(Obj.verifyDentist, Encoding.UTF8, MediaTypeNames.Text.Plain), "verifyDentist");
 
             if (Obj.ProfilePicture != null)
             {

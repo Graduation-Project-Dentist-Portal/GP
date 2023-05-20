@@ -8,6 +8,8 @@ using System.Text;
 using System.Text.Json;
 using Hangfire;
 using Hangfire.Common;
+using DentistPortal_API.Model;
+using Newtonsoft.Json;
 
 namespace DentistPortal_Client.Pages
 {
@@ -24,6 +26,7 @@ namespace DentistPortal_Client.Pages
                .AddJsonFile("appsettings.json")
                .AddEnvironmentVariables()
                .Build();
+        public Dentist LoggedDentist { get; set; } = new Dentist();
         [TempData]
         public string Msg { get; set; } = string.Empty;
         [TempData]
@@ -49,12 +52,19 @@ namespace DentistPortal_Client.Pages
                 var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
                 var role = jwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value;
                 var profilePicture = jwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Uri).Value;
-
+                var isVerifeid = jwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Surname).Value;
+               
                 HttpContext.Session.SetString("Token", token);
                 HttpContext.Session.SetString("username", user.Username);
                 HttpContext.Session.SetString("token", token);
                 HttpContext.Session.SetString("role", role);
                 HttpContext.Session.SetString("profilePicture", profilePicture);
+
+                if(isVerifeid == "pending")
+                {
+                    return RedirectToPage("/AdminPages/PendingPage");
+                }
+
                 //var timer = new System.Threading.Timer(async (e) =>
                 //{
                 //    await GetNewToken(_h);
@@ -70,8 +80,15 @@ namespace DentistPortal_Client.Pages
             else
             {
                 Msg = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-                Status = "error";
-                return RedirectToPage("/Login");
+                if (Msg == "Not verified Yet")
+                {
+                    return RedirectToPage("/InfoMessage");
+                }
+                else 
+                {
+                    Status = "error";
+                    return RedirectToPage("/Login");
+                }
             }
         }
 

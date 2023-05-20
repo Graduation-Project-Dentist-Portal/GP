@@ -6,5 +6,7 @@
         public IFormFile? ProfilePicture { get; set; }
         public IFormFile? IdentityCardPicture { get; set; }
         public IFormFile? UniversityCardPicture { get; set; }
+        public string verifyDentist { get; set; } = string.Empty;
+
     }
 }
