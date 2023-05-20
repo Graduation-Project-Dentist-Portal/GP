@@ -43,7 +43,7 @@ namespace DentistPortal_API.Controllers
                     var hasherAdmin = new PasswordHasher<Admin>();
                     if (hasherAdmin.VerifyHashedPassword(loggedUserAdmin, loggedUserAdmin.PasswordHash, user.Password).Equals(PasswordVerificationResult.Success))
                     {
-                        string token = await CreateToken(loggedUserAdmin.Id, "Admin", "Admin");
+                        string token = await CreateToken(loggedUserAdmin.Id, "Admin", "Admin" , "admin");
                         var refreshToken = await CreateRefreshToken();
                         await SetRefreshToken(refreshToken, loggedUserAdmin.Id);
                         return Ok(token);
@@ -66,7 +66,7 @@ namespace DentistPortal_API.Controllers
                 {
                     return BadRequest("User not found!");
                 }
-                if (loggedUserDentist != null && loggedUserDentist.IsVerified != "true")
+                if(loggedUserDentist!= null && loggedUserDentist.IsVerified == "false")
                 {
                     return BadRequest("Not verified Yet");
                 }
@@ -75,7 +75,7 @@ namespace DentistPortal_API.Controllers
                     var hasherDentist = new PasswordHasher<Dentist>();
                     if (hasherDentist.VerifyHashedPassword(loggedUserDentist, loggedUserDentist.PasswordHash, user.Password).Equals(PasswordVerificationResult.Success))
                     {
-                        string token = await CreateToken(loggedUserDentist.Id, "Dentist", loggedUserDentist.ProfilePicture);
+                        string token = await CreateToken(loggedUserDentist.Id, "Dentist", loggedUserDentist.ProfilePicture , loggedUserDentist.IsVerified);
                         var refreshToken = await CreateRefreshToken();
                         await SetRefreshToken(refreshToken, loggedUserDentist.Id);
                         return Ok(token);
@@ -88,7 +88,7 @@ namespace DentistPortal_API.Controllers
                     var hasherPatient = new PasswordHasher<Patient>();
                     if (hasherPatient.VerifyHashedPassword(loggedUserPatient, loggedUserPatient.PasswordHash, user.Password).Equals(PasswordVerificationResult.Success))
                     {
-                        string token = await CreateToken(loggedUserPatient.Id, "Patient", loggedUserPatient.ProfilePicture);
+                        string token = await CreateToken(loggedUserPatient.Id, "Patient", loggedUserPatient.ProfilePicture , "patient");
                         var refreshToken = await CreateRefreshToken();
                         await SetRefreshToken(refreshToken, loggedUserPatient.Id);
                         return Ok(token);
@@ -98,6 +98,35 @@ namespace DentistPortal_API.Controllers
                 }
             }
         }
+
+        //[HttpPost]
+        //[Route("api/create-user")]
+        //public async Task<ActionResult> Register([FromBody] UserDto newUser)
+        //{
+        //    User user = await _context.User.FirstOrDefaultAsync(x => x.Username == newUser.Username);
+        //    if (string.IsNullOrEmpty(newUser.Username) || string.IsNullOrEmpty(newUser.Password) || string.IsNullOrEmpty(newUser.FirstName) || string.IsNullOrEmpty(newUser.LastName) || string.IsNullOrEmpty(newUser.Role) || (newUser.Role != "Doctor" && newUser.Role != "Student" && newUser.Role != "Patient"))
+        //        return BadRequest("Cant be empty");
+        //    else if (user is not null)
+        //    {
+        //        return BadRequest("Username already taken!");
+        //    }
+        //    else
+        //    {
+        //        user = new();
+        //        user.Id = Guid.NewGuid();
+        //        user.IsActive = true;
+        //        var hasher = new PasswordHasher<User>();
+        //        user.PasswordHash = hasher.HashPassword(user, newUser.Password);
+        //        user.FirstName = newUser.FirstName;
+        //        user.LastName = newUser.LastName;
+        //        user.Role = newUser.Role;
+        //        user.Username = newUser.Username;
+        //        user.ProfilePicture = newUser.ProfilePicture;
+        //        await _context.User.AddAsync(user);
+        //        await _context.SaveChangesAsync();
+        //        return Ok();
+        //    }
+        //}
 
         [HttpPost]
         [Route("api/RegisterAsDoctor")]
@@ -303,6 +332,11 @@ namespace DentistPortal_API.Controllers
                 }
                 loggedUserDentist.Username = updatedDentist.Username;
             }
+            if (updatedDentist.IsVerified == loggedUserDentist.IsVerified) { }
+            else
+            {
+                loggedUserDentist.IsVerified = updatedDentist.IsVerified;
+            }
             if (updatedDentist.FirstName == loggedUserDentist.FirstName) { }
             else
             {
@@ -342,6 +376,35 @@ namespace DentistPortal_API.Controllers
             }
         }
 
+        //[HttpPost]
+        //[Route("api/create-user")]
+        //public async Task<ActionResult> Register([FromBody] UserDto newUser)
+        //{
+        //    User user = await _context.User.FirstOrDefaultAsync(x => x.Username == newUser.Username);
+        //    if (string.IsNullOrEmpty(newUser.Username) || string.IsNullOrEmpty(newUser.Password) || string.IsNullOrEmpty(newUser.FirstName) || string.IsNullOrEmpty(newUser.LastName) || string.IsNullOrEmpty(newUser.Role) || (newUser.Role != "Doctor" && newUser.Role != "Student" && newUser.Role != "Patient"))
+        //        return BadRequest("Cant be empty");
+        //    else if (user is not null)
+        //    {
+        //        return BadRequest("Username already taken!");
+        //    }
+        //    else
+        //    {
+        //        user = new();
+        //        user.Id = Guid.NewGuid();
+        //        user.IsActive = true;
+        //        var hasher = new PasswordHasher<User>();
+        //        user.PasswordHash = hasher.HashPassword(user, newUser.Password);
+        //        user.FirstName = newUser.FirstName;
+        //        user.LastName = newUser.LastName;
+        //        user.Role = newUser.Role;
+        //        user.Username = newUser.Username;
+        //        user.ProfilePicture = newUser.ProfilePicture;
+        //        await _context.User.AddAsync(user);
+        //        await _context.SaveChangesAsync();
+        //        return Ok();
+        //    }
+        //}
+
         [HttpPost]
         [Route("api/ChangeImage")]
         public async Task<IActionResult> ChangeImage([FromForm] ChangeImageDto Obj)
@@ -369,6 +432,7 @@ namespace DentistPortal_API.Controllers
             }
             if (Obj.UniversityCardPicture != null)
             {
+                loggedDentist.IsVerified = Obj.verifyDentist;
                 using (var stream = Obj.UniversityCardPicture.OpenReadStream())
                 {
                     var uploadParams = new ImageUploadParams()
@@ -381,18 +445,20 @@ namespace DentistPortal_API.Controllers
             }
             if (Obj.IdentityCardPicture != null)
             {
+                loggedDentist.IsVerified = Obj.verifyDentist;
                 using (var stream = Obj.IdentityCardPicture.OpenReadStream())
                 {
                     var uploadParams = new ImageUploadParams()
                     {
-                        File = new FileDescription(Obj.UniversityCardPicture.Name, stream)
+                        File = new FileDescription(Obj.IdentityCardPicture.Name, stream)
                     };
                     uploadResult = _cloudinary.Upload(uploadParams);
-                    loggedDentist.UniversityCardPicture = uploadResult.Uri.ToString();
+                    loggedDentist.IdentityCardPicture = uploadResult.Uri.ToString();
                 }
             }
             if (Obj.ProfilePicture != null)
             {
+                loggedDentist.IsVerified = Obj.verifyDentist;
                 using (var stream = Obj.ProfilePicture.OpenReadStream())
                 {
                     var uploadParams = new ImageUploadParams()
@@ -406,6 +472,7 @@ namespace DentistPortal_API.Controllers
             await _context.SaveChangesAsync();
             return Ok();
         }
+
 
         [HttpPost]
         [Route("api/DentistProfileData")]
@@ -488,13 +555,14 @@ namespace DentistPortal_API.Controllers
             await _context.SaveChangesAsync();
         }
 
-        private async Task<string> CreateToken(Guid id, string role, string profilePicture)
+        private async Task<string> CreateToken(Guid id, string role, string profilePicture , string verifyDentist)
         {
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier,id.ToString()),
                 new Claim(ClaimTypes.Role,role.ToString()),
-                new Claim(ClaimTypes.Uri,profilePicture.ToString())
+                new Claim(ClaimTypes.Uri,profilePicture.ToString()),
+                new Claim(ClaimTypes.Surname,verifyDentist.ToString())
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Token").Value));
             var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
@@ -524,7 +592,7 @@ namespace DentistPortal_API.Controllers
                     return Unauthorized("Token expired");
                 else
                 {
-                    var token = await CreateToken(loggedUser.Id, "Dentist", loggedUser.ProfilePicture);
+                    var token = await CreateToken(loggedUser.Id, "Dentist", loggedUser.ProfilePicture , loggedUser.IsVerified);
                     var newRT = await CreateRefreshToken();
                     await SetRefreshToken(newRT, loggedUser.Id);
                     return Ok(token);
