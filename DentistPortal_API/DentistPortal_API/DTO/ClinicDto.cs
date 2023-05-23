@@ -5,6 +5,7 @@ namespace DentistPortal_API.DTO
     public class ClinicDto
     {
         public string Address { get; set; } = string.Empty;
+        public double Score { get; set; }
         public string Name { get; set; } = string.Empty;
         public string ClinicDescription { get; set; } = string.Empty;
         public Guid DoctorId { get; set; }

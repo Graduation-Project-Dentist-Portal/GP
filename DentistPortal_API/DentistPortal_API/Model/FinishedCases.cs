@@ -14,10 +14,10 @@ namespace DentistPortal_API.Model
         public Guid? PatientCaseId { get; set; }
         public bool IsActive { get; set; }
         [ForeignKey("MedicalCaseId")]
-        public virtual MedicalCase MedicalCase { get; set; }
+        public virtual MedicalCase? MedicalCase { get; set; }
 
         [ForeignKey("PatientCaseId")]
-        public virtual PatientCase PatientCase { get; set; }
+        public virtual PatientCase? PatientCase { get; set; }
 
 
 

@@ -3,6 +3,7 @@
     public class Clinic
     {
         public Guid Id { get; set; }
+        public double Score { get; set; }
         public string Address { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public string ClinicDescription { get; set; } = string.Empty;

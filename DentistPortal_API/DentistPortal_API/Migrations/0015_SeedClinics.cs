@@ -22,6 +22,7 @@ namespace DentistPortal_API.Migrations
                 CloseTime = DateTime.Parse("2023-05-02 22:00:00.000"),
                 ClinicDescription = "Oasis Clinics is a medical group practice specializing in outpatient and inpatient daycare health services." +
                 " It is a one-of-a-kind polyclinic wholly devoted to outpatient services.",
+                Score = 0,
                 IsActive = true
             }).Row(new
             {
@@ -34,6 +35,7 @@ namespace DentistPortal_API.Migrations
                 CloseTime = DateTime.Parse("2023-05-02 23:00:00.000"),
                 ClinicDescription = "Health care is a constant form of collaboration and innovation." +
                 " There are always new fields to explore and new services to offer.",
+                Score = 0,
                 IsActive = true
             });
         }

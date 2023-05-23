@@ -56,6 +56,18 @@
                     <div class="card h-100 text-center m-3" style="background-color:transparent;border:solid;border-color:#14213d;">
                         <div class="card-body">
                             <h5 class="card-title" style="color:#000000"><i class="bi bi-geo-alt-fill" style="font-style:normal"> @clinic.Address</i></h5>
+                            @if (clinic.Score != 0 && clinic.Score > 0)
+                            {
+                                <h5 class="card-title" style="color:#000000"><i class="bi bi-stars" style="font-style:normal"> @String.Format("{0:0.00}",clinic.Score)% Postive</i></h5>
+                            }
+                            else if (clinic.Score != 0 && clinic.Score < 0)
+                            {
+                                <h5 class="card-title" style="color:#000000"><i class="bi bi-stars" style="font-style:normal"> @String.Format("{0:0.00}",Math.Abs(clinic.Score))% Negative</i></h5>
+                            }
+                            else
+                            {
+                                <h5 class="card-title" style="color:#000000"><i class="bi bi-stars" style="font-style:normal"> 0% Rating</i></h5>
+                            }
                             <br>
                             <div class="card-text" style="color:#66FCF1;text-align:left">
                                 <div id=@("carouselExampleControls"+@counter) class="carousel slide" data-bs-ride="carousel">

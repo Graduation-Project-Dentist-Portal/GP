@@ -9,137 +9,108 @@
 @using Microsoft.AspNetCore.Http;
 @using System.IdentityModel.Tokens.Jwt
 
-<header class>
-    <div class="website-search"  style=" transform: translate(32%, -42%);">
-        <form id="live-search" action="">
-            <div>
-                <input type="text" placeholder="Search" class="text" id="diagnosisInput">
+<br />
+<div class="website-search">
+    <form id="live-search" action="">
+        <div>
+            <input type="text" placeholder="Search" class="text" id="diagnosisInput">
 
-            </div>
-        </form>
-@*        <div class="menu-main-menu-container">
-            <ul id="menu-main-menu" class="menu">
-                <li id="menu-item-680"
-                    class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-680">
-                    <a href="#">
-                        My
-                        Cases
-                    </a>
-                </li>
-                <li id="menu-item-693"
-                    class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-693">
-                    <a href="../MedicalCases/DisplayMedicalCases">Medical Cases</a>
-                </li>
-                <li id="menu-item-31652"
-                    class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-31652">
-                    <a href="../Clinics/DisplayClinics">
-                        Clinics
-                    </a>
-                </li>
-                <li id="menu-item-2763"
-                    class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-2763">
-                    <a data-section=".formsection">Available Jobs</a>
-                </li>
-                <li id="menu-item-2763"
-                    class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-2763">
-                    <a href="../Jobs/MyJobs ">My Jobs</a>
-                </li>
-
-            </ul>
         </div>
-*@    </div>
-    <div class="text-center col-sm add">
-        <!-- Button trigger CreateModal -->
+    </form>
+</div>
+<div class="text-center col-sm add">
+    <!-- Button trigger CreateModal -->
 
-        <button type="button" class="btn mybtn" data-bs-toggle="modal" data-bs-target="#AddJob" style="transform:translate(10px,-16px);">
-            <i class="bi bi-plus-circle-dotted" style="font-style:normal;"> Add Job</i>
-        </button>
+    <button type="button" class="btn mybtn" data-bs-toggle="modal" data-bs-target="#AddJob" style="transform:translate(10px,-16px);">
+        <i class="bi bi-plus-circle-dotted" style="font-style:normal;"> Add Job</i>
+    </button>
 
 
-        <!--Add job modal-->
-        <div class="modal fade" id="AddJob" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <div class="modal-title" id="staticBackdropLabel"><h5 style="color:black"> Enter Job Data</h5></div>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body modal-md">
-                        <form method="post" id="AddJob" enctype="multipart/form-data" class="align-content-center col-6 w-100 needs-validation" style="margin:auto;color:#1A2238;" novalidate>
-                            <input name="doctorId" value="Model.JobDto.OwnerIdDoctor" hidden>
-                            <input name="id" value="Model.JobDto.Id" hidden>
+    <!--Add job modal-->
+    <div class="modal fade" id="AddJob" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title" id="staticBackdropLabel"><h5 style="color:black"> Enter Job Data</h5></div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body modal-md">
+                    <form method="post" id="AddJob" enctype="multipart/form-data" class="align-content-center col-6 w-100 needs-validation" style="margin:auto;color:#1A2238;" novalidate>
+                        <input name="doctorId" value="Model.JobDto.OwnerIdDoctor" hidden>
+                        <input name="id" value="Model.JobDto.Id" hidden>
 
-                            <div class="form-floating form-outline mb-1">
-                                <input name="job.JobTitle" class="form-control" id="floatingJobTitle" placeholder="JobTitle" required />
-                                <label class="form-label" for="floatingJobTitle" style="font-size:19px;">Job Title</label>
-                                <div class="invalid-feedback">
-                                    please fill in job title.
-                                </div>
+                        <div class="form-floating form-outline mb-1">
+                            <input name="job.JobTitle" class="form-control" id="floatingJobTitle" placeholder="JobTitle" required />
+                            <label class="form-label" for="floatingJobTitle" style="font-size:19px;">Job Title</label>
+                            <div class="invalid-feedback">
+                                please fill in job title.
                             </div>
+                        </div>
 
-                            <div class="form-floating form-outline mb-1">
-                                <input name="job.Description" class="form-control" id="floatingDescription"  placeholder="Description" required>
-                                <label class="form-label" for="floatingDescription" style="font-size: 19px;">Job Description</label>
-                                <div class="invalid-feedback">
-                                    Please fill in the job description.
-                                </div>
+                        <div class="form-floating form-outline mb-1">
+                            <input name="job.Description" class="form-control" id="floatingDescription" placeholder="Description" required>
+                            <label class="form-label" for="floatingDescription" style="font-size: 19px;">Job Description</label>
+                            <div class="invalid-feedback">
+                                Please fill in the job description.
                             </div>
+                        </div>
 
-                            <div class="form-floating form-outline mb-1">
-                                <input name="job.Location" class="form-control" id="floatingLocation" " placeholder="Location" required>
-                                <label class="form-label" for="floatingLocation" style="font-size: 19px;">Location</label>
-                                <div class="invalid-feedback">
-                                    Please fill in the job location.
-                                </div>
+                        <div class="form-floating form-outline mb-1">
+                            <input name="job.Location" class="form-control" id="floatingLocation" " placeholder="Location" required>
+                            <label class="form-label" for="floatingLocation" style="font-size: 19px;">Location</label>
+                            <div class="invalid-feedback">
+                                Please fill in the job location.
                             </div>
+                        </div>
 
 
-                            <div class="form-floating form-outline mb-1">
-                                <input name="job.ContactNumber" class="form-control" id="floatingContactNumber"  placeholder="ContactNumber" >
-                                <label class="form-label" for="floatingContactNumber"style="font-size: 19px;" >Contact Number</label>
+                        <div class="form-floating form-outline mb-1">
+                            <input name="job.ContactNumber" class="form-control" id="floatingContactNumber" placeholder="ContactNumber">
+                            <label class="form-label" for="floatingContactNumber" style="font-size: 19px;">Contact Number</label>
 
+                        </div>
+
+                        <div class="form-floating form-outline mb-1">
+                            <input name="job.ContactEmail" class="form-control" id="floatingContactEmail" " placeholder="ContactEmail" required>
+                            <label class="form-label" for="floatingContactEmail" style="font-size: 19px;">ContactEmail</label>
+                            <div class="invalid-feedback">
+                                Please fill in the contact e-mail.
                             </div>
+                        </div>
 
-                            <div class="form-floating form-outline mb-1">
-                                <input name="job.ContactEmail" class="form-control" id="floatingContactEmail" " placeholder="ContactEmail" required>
-                                <label class="form-label" for="floatingContactEmail"style="font-size: 19px;">ContactEmail</label>
-                                <div class="invalid-feedback">
-                                    Please fill in the contact e-mail.
-                                </div>
+                        <div class="form-floating form-outline mb-1">
+                            <input name="job.Duration" class="form-control" id="floatingDuration" placeholder="Duration" required>
+                            <label class="form-label" for="floatingDuration" style="font-size: 19px;">Duration</label>
+                            <div class="invalid-feedback">
+                                Please fill in the job duration.
                             </div>
+                        </div>
 
-                            <div class="form-floating form-outline mb-1">
-                                <input name="job.Duration" class="form-control" id="floatingDuration" placeholder="Duration" required>
-                                <label class="form-label" for="floatingDuration"style="font-size: 19px;">Duration</label>
-                                <div class="invalid-feedback">
-                                    Please fill in the job duration.
-                                </div>
+                        <div class="form-floating form-outline mb-1">
+                            <input name="job.Salary" class="form-control" id="floatingSalary" placeholder="Salary" required>
+                            <label class="form-label" for="floatingSalary" style="font-size: 19px;">Salary</label>
+                            <div class="invalid-feedback">
+                                Please fill in the job salary.
                             </div>
+                        </div>
 
-                            <div class="form-floating form-outline mb-1">
-                                <input name="job.Salary" class="form-control" id="floatingSalary"  placeholder="Salary" required>
-                                <label class="form-label" for="floatingSalary" style="font-size: 19px;">Salary</label>
-                                <div class="invalid-feedback">
-                                    Please fill in the job salary.
-                                </div>
-                            </div>
-
-                            <div style="text-align:center">
-                                <button type="submit" class="mybtn" class="btn btn-outline-light" style="background-color:#2B4F71; font-style:normal;color:white; width: 180px;
+                        <div style="text-align:center">
+                            <button type="submit" class="mybtn" class="btn btn-outline-light" style="background-color:#2B4F71; font-style:normal;color:white; width: 180px;
     height: auto;
-    font-size: 21px; "><i class="bi bi-patch-plus text-center" style="font-style:normal;"> Add </i></button>
+    font-size: 21px; ">
+                                <i class="bi bi-patch-plus text-center" style="font-style:normal;"> Add </i>
+                            </button>
 
-                            </div>
+                        </div>
 
-                        </form>
+                    </form>
 
-                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-</header>
 @{
     int counter = 0;
     Guid id = new();
@@ -152,188 +123,190 @@
         <!--Display Jobs cards-->
         <section class="section">
             <div class="container">
-                          <div class="row gy-4 d-flex justify-content-between" id="myList">
+                <div class="row gy-4 d-flex justify-content-between" id="myList">
 
                     @foreach (var job in Model.Jobs)
                     {
-                                    <div class="card col-lg-4  col-md-6 card-hover li" style="width: 18rem;">
+                        <div class="card col-lg-4  col-md-6 card-hover li" style="width: 18rem;">
 
-                                            
-                                                    <div class="card-body d-flex flex-column" style="text-align:center;">
-                                                        <h5 class="card-title" id=@("collapse"+@counter) aria-labelledby=@("heading"+@counter)>@job.JobTitle </h5>
-                                                        <p class="card-text" id=@("collapse"+@counter) aria-labelledby=@("heading"+@counter)>
-                                            @job.Location
-                                                        </p>
-                                                         <div class="mt-auto text-center">
-                                                    <button type="button" class="btn mybtn" style="margin-bottom:10px;" data-bs-toggle="modal" data-bs-target=@("#JobDetail"+@counter)>
-                                                                <i class="bi bi-info-circle" style="font-style:normal;"> Read More</i>
-                                                            </button>
-                                            @if (job.OwnerIdDoctor == Model.DoctorId)
-                                            {
 
-                                                            <div class="dropdown">
-                                                                <button class="dropdown-toggle mybtn" type="button" id="dropdownMenu2"  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Options
-                                                                </button>
-                                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                            <div class="card-body d-flex flex-column" style="text-align:center;">
+                                <h5 class="card-title" id=@("collapse"+@counter) aria-labelledby=@("heading"+@counter)>@job.JobTitle </h5>
+                                <p class="card-text" id=@("collapse"+@counter) aria-labelledby=@("heading"+@counter)>
+                                    @job.Location
+                                </p>
+                                <div class="mt-auto text-center">
+                                    <button type="button" class="btn mybtn" style="margin-bottom:10px;" data-bs-toggle="modal" data-bs-target=@("#JobDetail"+@counter)>
+                                        <i class="bi bi-info-circle" style="font-style:normal;"> Read More</i>
+                                    </button>
+                                    @if (job.OwnerIdDoctor == Model.DoctorId)
+                                    {
 
-                                                                    <!-- Button trigger delete modal -->
-                                                                    <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target=@("#EditJobModal" + @counter)>Edit</button></li>
+                                        <div class="dropdown">
+                                            <button class="dropdown-toggle mybtn" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Options
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
 
-                                                                    <!-- Button trigger edit modal -->
-                                                                    <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target=@("#DeleteJobModal" + @counter)>Delete</button></li>
-                                                                </ul>
-                                                            </div>
-                                            }
-                                                        </div>
-                                                    </div>
-                                                
+                                                <!-- Button trigger delete modal -->
+                                                <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target=@("#EditJobModal" + @counter)>Edit</button></li>
 
-                                    </div>
+                                                <!-- Button trigger edit modal -->
+                                                <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target=@("#DeleteJobModal" + @counter)>Delete</button></li>
+                                            </ul>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+
+                        </div>
 
                         //////////////////////////Job Details Modal /////////////////////////////////////////
-                                    <div class="modal fade" id=@("JobDetail"+@counter) tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLongTitle" style="color:black">@job.JobTitle</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="details">
-                                                        <div class="JobDescription" style="font-style:normal;">
+                        <div class="modal fade" id=@("JobDetail"+@counter) tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle" style="color:black">@job.JobTitle</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="details">
+                                            <div class="JobDescription" style="font-style:normal;">
                                                 @job.Description
-                                                        </div>
+                                            </div>
 
-                                            <div class="Location" >
+                                            <div class="Location">
                                                 <i class="bi bi-geo-alt-fill" style="font-style:normal;">
-                                                 @job.Location </i>
+                                                    @job.Location
+                                                </i>
                                             </div>
                                             <div class="ContactEmail" style="font-style:normal;">
                                                 <i class="bi bi-envelope-open-heart" style="font-style:normal;">
-                                                     @job.ContactEmail 
+                                                    @job.ContactEmail
                                                 </i>
                                             </div>
 
 
-                                                        <div class="line">
-                                                            <div class="ContactNumber">
-                                                                <i class="bi bi-telephone-inbound"></i>
-                                                                <span style="font-style:normal;"> @job.ContactNumber </span>
-                                                            </div>
+                                            <div class="line">
+                                                <div class="ContactNumber">
+                                                    <i class="bi bi-telephone-inbound"></i>
+                                                    <span style="font-style:normal;"> @job.ContactNumber </span>
+                                                </div>
                                                 <div class="Duration" style="font-style:normal;">
                                                     <i class="bi bi-clock-fill" style="font-style:normal;">
-                                                         @job.Duration 
+                                                        @job.Duration
                                                     </i>
                                                 </div>
 
                                                 <div class="Salary">
                                                     <i class="bi bi-cash-stack" style="font-style:normal">  @job.Salary</i>
                                                 </div>
-                                                        </div>
+                                            </div>
 
 
 
-                                                    </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Edit Job Modal -->
+                        <div class="modal fade" id=@("EditJobModal"+@counter) data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                <div class="modal-content" style="top: 79px;">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="staticBackdropLabel" style="color:black">Edit Job</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body modal-lg">
+                                        <form method="post" enctype="multipart/form-data" class="align-content-center col-6 w-100 needs-validation" style="margin:auto;text-align:center;color:#1A2238;" novalidate>
+                                            <input name="jobDto.OwnerIdDoctor" value="@job.OwnerIdDoctor" hidden>
+                                            <input name="id" value="@job.Id" hidden>
+                                            <div class="form-floating form-outline mb-2">
+                                                <input name="jobDto.JobTitle" class="form-control" id="floatingJobTitle" placeholder="JobTitle" value="@job.JobTitle" required>
+                                                <label class="form-label" for="floatingJobTitle">Job Title</label>
+                                                <div class="invalid-feedback">
+                                                    Please fill in the job title.
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-
-                                <!-- Edit Job Modal -->
-                                <div class="modal fade" id=@("EditJobModal"+@counter) data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered modal-lg">
-                                        <div class="modal-content" style="top: 79px;">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="staticBackdropLabel" style="color:black">Edit Job</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <div class="form-floating form-outline mb-1">
+                                                <input name="jobDto.Description" class="form-control" id="floatingDescription" placeholder="Description" value="@job.Description " required>
+                                                <label class="form-label" for="floatingDescription">Job Description</label>
+                                                <div class="invalid-feedback">
+                                                    Please fill in job description.
+                                                </div>
                                             </div>
-                                            <div class="modal-body modal-lg">
-                                                <form method="post" enctype="multipart/form-data" class="align-content-center col-6 w-100 needs-validation" style="margin:auto;text-align:center;color:#1A2238;" novalidate>
-                                                    <input name="jobDto.OwnerIdDoctor" value="@job.OwnerIdDoctor" hidden>
-                                                    <input name="id" value="@job.Id" hidden>
-                                                    <div class="form-floating form-outline mb-2">
-                                                        <input name="jobDto.JobTitle" class="form-control" id="floatingJobTitle" placeholder="JobTitle" value="@job.JobTitle" required>
-                                                        <label class="form-label" for="floatingJobTitle">Job Title</label>
-                                                        <div class="invalid-feedback">
-                                                            Please fill in the job title.
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-floating form-outline mb-1">
-                                                        <input name="jobDto.Description" class="form-control" id="floatingDescription" placeholder="Description" value="@job.Description " required>
-                                                        <label class="form-label" for="floatingDescription">Job Description</label>
-                                                        <div class="invalid-feedback">
-                                                            Please fill in job description.
-                                                        </div>
-                                                    </div>
 
-                                                    <div class="form-floating form-outline mb-1">
-                                                        <input name="jobDto.Location" class="form-control" id="floatingLocation" placeholder="Location" value="@job.Location " required>
-                                                        <label class="form-label" for="floatingLocation">Location</label>
-                                                        <div class="invalid-feedback">
-                                                            Please fill in job location.
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-floating form-outline mb-1">
-                                                        <input name="jobDto.ContactNumber" class="form-control" id="floatingContactNumber" placeholder="ContactEmail" value="@job.ContactNumber ">
-                                                        <label class="form-label" for="floatingContactNumberl">Contact Number</label>
-
-                                                    </div>
-
-                                                    <div class="form-floating form-outline mb-1">
-                                                        <input name="jobDto.ContactEmail" class="form-control" id="floatingContactEmail" placeholder="ContactEmail" value="@job.ContactEmail " required>
-                                                        <label class="form-label" for="floatingContactEmail">Contact Email</label>
-                                                        <div class="invalid-feedback">
-                                                            Please fill in contact Email.
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-floating form-outline mb-1">
-                                                        <input name="jobDto.Duration" class="form-control" id="floatingDuration" placeholder="Duration" value="@job.Duration " required>
-                                                        <label class="form-label" for="floatingDurationl">Duration</label>
-                                                        <div class="invalid-feedback">
-                                                            Please fill in job duration.
-                                                        </div>
-                                                    </div>
-
-
-                                                    <div class="form-floating form-outline mb-1">
-                                                        <input name="jobDto.Salary" class="form-control" id="floatingSalary" placeholder="PatientAge" value="@job.Salary " required>
-                                                        <label class="form-label" for="floatingSalary">Salary</label>
-                                                        <div class="invalid-feedback">
-                                                            Please fill in job salary.
-                                                        </div>
-                                                    </div>
-
-
-                                                    <button asp-page-handler="Edit" type="submit" class="btn btn-success btn-block mb-3 mybtn"><i class="bi bi-pencil-square" style="font-style:normal"> Edit</i></button>
-                                                </form>
+                                            <div class="form-floating form-outline mb-1">
+                                                <input name="jobDto.Location" class="form-control" id="floatingLocation" placeholder="Location" value="@job.Location " required>
+                                                <label class="form-label" for="floatingLocation">Location</label>
+                                                <div class="invalid-feedback">
+                                                    Please fill in job location.
+                                                </div>
                                             </div>
-                                        </div>
+
+                                            <div class="form-floating form-outline mb-1">
+                                                <input name="jobDto.ContactNumber" class="form-control" id="floatingContactNumber" placeholder="ContactEmail" value="@job.ContactNumber ">
+                                                <label class="form-label" for="floatingContactNumberl">Contact Number</label>
+
+                                            </div>
+
+                                            <div class="form-floating form-outline mb-1">
+                                                <input name="jobDto.ContactEmail" class="form-control" id="floatingContactEmail" placeholder="ContactEmail" value="@job.ContactEmail " required>
+                                                <label class="form-label" for="floatingContactEmail">Contact Email</label>
+                                                <div class="invalid-feedback">
+                                                    Please fill in contact Email.
+                                                </div>
+                                            </div>
+
+                                            <div class="form-floating form-outline mb-1">
+                                                <input name="jobDto.Duration" class="form-control" id="floatingDuration" placeholder="Duration" value="@job.Duration " required>
+                                                <label class="form-label" for="floatingDurationl">Duration</label>
+                                                <div class="invalid-feedback">
+                                                    Please fill in job duration.
+                                                </div>
+                                            </div>
+
+
+                                            <div class="form-floating form-outline mb-1">
+                                                <input name="jobDto.Salary" class="form-control" id="floatingSalary" placeholder="PatientAge" value="@job.Salary " required>
+                                                <label class="form-label" for="floatingSalary">Salary</label>
+                                                <div class="invalid-feedback">
+                                                    Please fill in job salary.
+                                                </div>
+                                            </div>
+
+
+                                            <button asp-page-handler="Edit" type="submit" class="btn btn-success btn-block mb-3 mybtn"><i class="bi bi-pencil-square" style="font-style:normal"> Edit</i></button>
+                                        </form>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
 
-                                <!--Delete Job-->
-                                <div class="modal fade" id=@("DeleteJobModal"+@counter) tabindex="-1" aria-labelledby="deleteJobLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body" style="text-align:center">
-                                                Are you sure?
-                                                <br />
-                                                You won't be able to revert this!
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary mybtn" data-bs-dismiss="modal" style="margin:unset;position:relative;transform:translate(-177px,1px); ">Close</button>
-                                                <form asp-page-handler="Delete" asp-route-id="@job.Id" method="post">
+                        <!--Delete Job-->
+                        <div class="modal fade" id=@("DeleteJobModal"+@counter) tabindex="-1" aria-labelledby="deleteJobLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body" style="text-align:center">
+                                        Are you sure?
+                                        <br />
+                                        You won't be able to revert this!
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary mybtn" data-bs-dismiss="modal" style="margin:unset;position:relative;transform:translate(-177px,1px); ">Close</button>
+                                        <form asp-page-handler="Delete" asp-route-id="@job.Id" method="post">
                                             <button type="submit" class="btn btn-danger Dmybtn" data-bs-dismiss="modal" style="border-radius: 32px; padding: 10px 30px;">Yes, delete it!</button>
-                                                </form>
-                                            </div>
-                                        </div>
+                                        </form>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
                         counter++;
 
                     }
@@ -351,10 +324,10 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $("#diagnosisInput").on("keyup", function () {
+    $(document).ready(function() {
+        $("#diagnosisInput").on("keyup", function() {
             var value = $(this).val().toLowerCase();
-            $("#myList .li").filter(function () {
+            $("#myList .li").filter(function() {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
         });
@@ -365,32 +338,32 @@
 
 @if (@Model.Msg != null)
 {
-        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     if (@Model.Status == "success")
     {
-                <script type="text/javascript">
-                    Swal.fire({
-                        icon: 'success',
-                        title: '@Model.Msg',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                </script>
+        <script type="text/javascript">
+            Swal.fire({
+                icon: 'success',
+                title: '@Model.Msg',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        </script>
     }
     else if (@Model.Status == "error")
     {
-                <script type="text/javascript">
-                    Swal.fire({
-                        icon: 'error',
-                        title: '@Model.Msg',
-                        showConfirmButton: true
-                    })
-                </script>
+        <script type="text/javascript">
+            Swal.fire({
+                icon: 'error',
+                title: '@Model.Msg',
+                showConfirmButton: true
+            })
+        </script>
     }
 }
 @section styles{
-        <link rel="stylesheet" href="~/css/JobStyleSheet.css" />
-        <link rel="stylesheet" href="~/css/SearchbarStyleSheet.css" />
+    <link rel="stylesheet" href="~/css/JobStyleSheet.css" />
+    <link rel="stylesheet" href="~/css/SearchbarStyleSheet.css" />
 
 
     }

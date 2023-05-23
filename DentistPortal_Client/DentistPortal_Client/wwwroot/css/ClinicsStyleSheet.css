@@ -100,7 +100,7 @@
 @media only screen and (max-width: 768px) {
     .about h1 {
         font-size: 36px;
-        margin-top: 50px;
+        margin-top: 100px;
         position: absolute;
         top: 0;
         left: 0;
@@ -111,7 +111,7 @@
     .about .about_main {
         flex-direction: column;
         top: 50%;
-        margin-top: 25px;
+        margin-top: 150px;
     }
 
         .about .about_main .about_image .about_small_image {
@@ -131,6 +131,6 @@
         }
 
     .comments {
-        margin-top: 15px;
+        margin-top: 175px;
     }
 }

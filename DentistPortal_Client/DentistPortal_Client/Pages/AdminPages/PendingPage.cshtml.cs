@@ -53,7 +53,7 @@ namespace DentistPortal_Client.Pages.AdminPages
                     LoggedDentist = JsonConvert.DeserializeObject<Dentist>(stringdata);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 var st = new StackTrace(ex, true);
                 var frame = st.GetFrame(0);
@@ -85,13 +85,19 @@ namespace DentistPortal_Client.Pages.AdminPages
                     var request = await client.PostAsync("/api/ChangeImage", content);
                     if (request.IsSuccessStatusCode)
                     {
-                        return RedirectToPage("Home?clear=yes");
+                        Msg = "Edited Successfully";
+                        return Redirect($"https://localhost:7156/Home?clear={"yes"}");
                     }
-                    return RedirectToPage("/Home?clear=yes");
+                    else
+                    {
+                        Msg = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                        Status = "error";
+                        return RedirectToPage();
+                    }
                 }
-                return RedirectToPage("/Home?clear=yes");
+                return Redirect($"https://localhost:7156/Home?clear={"yes"}");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 var st = new StackTrace(ex, true);
                 var frame = st.GetFrame(0);
@@ -163,7 +169,7 @@ namespace DentistPortal_Client.Pages.AdminPages
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 var st = new StackTrace(ex, true);
                 var frame = st.GetFrame(0);
