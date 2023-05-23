@@ -112,6 +112,7 @@ Tables:
     | Guid | Id | Primary Key |
 	| String | Adress |  |
 	| String | Name |  |
+	| Double | Score |  |
 	| Guid | DoctorId | Foreign Key => (Dentist.Id) |
 	| String | ClinicPhone |  |
 	| DateTime | OpenTime |  |
