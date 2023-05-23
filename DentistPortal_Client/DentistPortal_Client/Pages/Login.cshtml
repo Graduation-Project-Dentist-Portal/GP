@@ -6,44 +6,45 @@
     Layout = "";
 
     <head>
-            <meta charset="UTF-8">
-            <meta http-equiv="X-UA-Compatible" content="IE=edge">
-            <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
-            <title>Login</title>
-            <link rel="stylesheet" href="~/css/Login.css">
+        <title>Login - DentalHub</title>
+        <link rel="icon" type="image/x-icon" href="~/Images/favicon.png" />
+        <link rel="stylesheet" href="~/css/Login.css">
     </head>
 
 
     <body>
-            <div class="card">
-                <div class="form">
-                    <h3>Login</h3>
-                    <form method="post">
-                        <input name="url" value="@Model.Url" hidden>
-                        <div class="input-field">
-                            <i class="fa fa-envelope"></i>
-                            <input asp-for="User.Username" type="text" placeholder="Enter your username" required>
-                        </div>
-                        <div class="input-field">
-                            <i class="fa fa-lock"></i>
-                            <input asp-for="User.Password" type="password" placeholder="Enter your password" required>
-                        </div>
-                        <br>
-                        <button>Login</button>
-                    </form>
-                    <pre>Don't have an account? 
-                    <div><a asp-page="/RegisterAsDoctor">Signup as a doctor</a> or <a asp-page="/RegisterAsPatient">Signup as a patient</a></div>
-                                            </pre>
-                    <button type="button" onclick="location.href = 'https://localhost:7156/';"  style="width:100px;align-content:center;align-items:center;margin:auto"> Home</button>
-                </div>
-                <div class="image">
-                    <div class="overlay">
+        <div class="card">
+            <div class="form">
+                <h3>Login</h3>
+                <form method="post">
+                    <input name="url" value="@Model.Url" hidden>
+                    <div class="input-field">
+                        <i class="fa fa-envelope"></i>
+                        <input asp-for="User.Username" type="text" placeholder="Enter your username" required>
                     </div>
+                    <div class="input-field">
+                        <i class="fa fa-lock"></i>
+                        <input asp-for="User.Password" type="password" placeholder="Enter your password" required>
+                    </div>
+                    <br>
+                    <button>Login</button>
+                </form>
+                <pre>Don't have an account? 
+                <div><a asp-page="/RegisterAsDoctor">Signup as a doctor</a> or <a asp-page="/RegisterAsPatient">Signup as a patient</a></div>
+                                                    </pre>
+                <button type="button" onclick="location.href = 'https://localhost:7156/';" style="width:100px;align-content:center;align-items:center;margin:auto"> Home</button>
+            </div>
+            <div class="image">
+                <div class="overlay">
                 </div>
             </div>
+        </div>
     </body>
 }
 @if (@Model.Msg != null)
