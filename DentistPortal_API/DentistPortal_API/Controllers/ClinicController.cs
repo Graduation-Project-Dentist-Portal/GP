@@ -66,6 +66,7 @@ namespace DentistPortal_API.Controllers
                 clinic.OpenTime = clinicDto.OpenTime;
                 clinic.CloseTime = clinicDto.CloseTime;
                 clinic.Address = clinicDto.Address;
+                clinic.Score = 0;
                 await _context.Clinic.AddAsync(clinic);
                 await _context.SaveChangesAsync();
                 foreach (var image in clinicDto.CasePictures)

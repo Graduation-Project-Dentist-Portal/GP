@@ -51,6 +51,12 @@ namespace DentistPortal_API.Controllers
                 feedback.AiScore = feedbackDto.AiScore;
                 await _context.Feedback.AddAsync(feedback);
                 await _context.SaveChangesAsync();
+                Clinic clinic = await _context.Clinic.FindAsync(feedbackDto.ClinicId);
+                if (clinic == null)
+                    return BadRequest("Cant find the clinic");
+                clinic.Score = await GetScore(clinic);
+                _context.Clinic.Update(clinic);
+                await _context.SaveChangesAsync();
                 return Ok();
             }
             catch (Exception e)
@@ -74,6 +80,12 @@ namespace DentistPortal_API.Controllers
                     {
                         feedback.IsActive = false;
                         _context.Feedback.Update(feedback);
+                        await _context.SaveChangesAsync();
+                        Clinic clinic = await _context.Clinic.FindAsync(feedback.ClinicId);
+                        if (clinic == null)
+                            return BadRequest("Cant find the clinic");
+                        clinic.Score = await GetScore(clinic);
+                        _context.Clinic.Update(clinic);
                         await _context.SaveChangesAsync();
                         return Ok();
                     }
@@ -107,6 +119,12 @@ namespace DentistPortal_API.Controllers
                         oldFeedback.Comment = feedbackDto.Comment;
                         oldFeedback.AiScore = feedbackDto.AiScore;
                         _context.Feedback.Update(oldFeedback);
+                        await _context.SaveChangesAsync();
+                        Clinic clinic = await _context.Clinic.FindAsync(feedbackDto.ClinicId);
+                        if (clinic == null)
+                            return BadRequest("Cant find the clinic");
+                        clinic.Score = await GetScore(clinic);
+                        _context.Clinic.Update(clinic);
                         await _context.SaveChangesAsync();
                         return Ok();
                     }
@@ -224,6 +242,16 @@ namespace DentistPortal_API.Controllers
                 feedbackDto.AiScore != "-1"))
                 return false;
             return true;
+        }
+
+        private async Task<double> GetScore(Clinic clinic)
+        {
+            double score = (
+                (await _context.Feedback.Where(x => x.IsActive == true && x.ClinicId == clinic.Id && x.AiScore == "1").CountAsync() * 0.5) -
+                (await _context.Feedback.Where(x => x.IsActive == true && x.ClinicId == clinic.Id && x.AiScore == "-1").CountAsync() * 0.3) +
+                (await _context.Feedback.Where(x => x.IsActive == true && x.ClinicId == clinic.Id && x.AiScore == "0").CountAsync() * 0.2)
+             ) / await _context.Feedback.Where(x => x.IsActive == true && x.ClinicId == clinic.Id).CountAsync();
+            return score * 100 * 2;
         }
     }
 }
