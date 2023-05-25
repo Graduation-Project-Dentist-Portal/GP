@@ -32,8 +32,12 @@
 </head>
 <body>
     <nav style="display:flex; align-items:center;">
-        <div class="logo"><a href="/Home"><img src="~/Images/logo-white.png" width="100%" height="90px" /></a></div>
-        <ul style="display:flex; justify-content:flex-end; margin-bottom:0;">
+        <div class="logo"><a class="logo" href="/Home"><img src="~/Images/logo-white.png" width="100%" height="90px" /></a></div>
+        <input type="checkbox" id="check" />
+        <label for="check" class="check-btn">
+            <i class="bi bi-list"></i>
+        </label>
+        <ul @*style="display:flex; justify-content:flex-end; margin-bottom:0;"*@>
             @if (HttpContextAccessor.HttpContext.Session.GetString("Token") == null)
             {
                 <li><a class="active" href="/DoctorPages/Clinics/DisplayClinics">Clinics</a></li>

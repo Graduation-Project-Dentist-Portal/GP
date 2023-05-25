@@ -1,11 +1,11 @@
 ﻿/* The footer is fixed to the bottom of the page */
 
 footer {
-    position: fixed;
+    position: static;
     bottom: 0;
 }
 
-@media (max-height:800px) {
+/*@media (max-height:800px) {
     footer {
         position: static;
     }
@@ -13,7 +13,7 @@ footer {
     header {
         padding-top: 40px;
     }
-}
+}*/
 
 .footer-distributed {
     background-color: #2B4F71;
