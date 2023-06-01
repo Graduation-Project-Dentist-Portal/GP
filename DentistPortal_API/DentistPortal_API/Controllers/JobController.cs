@@ -68,18 +68,20 @@ namespace DentistPortal_API.Controllers
 
         [HttpPost]
         [Route("api/Add-Job")]
-        public async Task<ActionResult> AddJob([FromBody] JobDto Jobdto)
+        public async Task<ActionResult> AddJob([FromBody] JobDto JobDto)
         {
+            if (!await IsValid(JobDto))
+                return BadRequest("Cant be empty!");
             var job = new Job();
             job.Id = Guid.NewGuid();
-            job.Description = Jobdto.Description;
-            job.JobTitle = Jobdto.JobTitle;
-            job.Salary = Jobdto.Salary;
-            job.OwnerIdDoctor = Jobdto.OwnerIdDoctor;
-            job.ContactEmail = Jobdto.ContactEmail;
-            job.ContactNumber = Jobdto.ContactNumber;
-            job.Location = Jobdto.Location;
-            job.Duration = Jobdto.Duration;
+            job.Description = JobDto.Description;
+            job.JobTitle = JobDto.JobTitle;
+            job.Salary = JobDto.Salary;
+            job.OwnerIdDoctor = JobDto.OwnerIdDoctor;
+            job.ContactEmail = JobDto.ContactEmail;
+            job.ContactNumber = JobDto.ContactNumber;
+            job.Location = JobDto.Location;
+            job.Duration = JobDto.Duration;
             job.IsActive = true;
             await _context.Job.AddAsync(job);
             await _context.SaveChangesAsync();
@@ -88,11 +90,9 @@ namespace DentistPortal_API.Controllers
 
         [HttpPut]
         [Route("api/Edit-Job/{id}")]
-        public async Task<ActionResult> EditJob(Guid id, [FromBody] JobDto jobdto)
+        public async Task<ActionResult> EditJob(Guid id, [FromBody] JobDto jobDto)
         {
-            if (id == Guid.Empty || string.IsNullOrEmpty(jobdto.JobTitle) || string.IsNullOrEmpty(jobdto.Description) ||
-                string.IsNullOrEmpty(jobdto.ContactEmail) || string.IsNullOrEmpty(jobdto.Salary) || string.IsNullOrEmpty(jobdto.Location)
-                || string.IsNullOrEmpty(jobdto.Duration))
+            if (id == Guid.Empty || !await IsValid(jobDto))
             {
                 return BadRequest("Can't be empty");
             }
@@ -101,13 +101,13 @@ namespace DentistPortal_API.Controllers
                 var OldJob = await _context.Job.FirstOrDefaultAsync(x => x.Id == id && x.IsActive == true);
                 if (OldJob != null)
                 {
-                    OldJob.Description = jobdto.Description;
-                    OldJob.JobTitle = jobdto.JobTitle;
-                    OldJob.Salary = jobdto.Salary;
-                    OldJob.ContactEmail = jobdto.ContactEmail;
-                    OldJob.ContactNumber = jobdto.ContactNumber;
-                    OldJob.Duration = jobdto.Duration;
-                    OldJob.Location = jobdto.Location;
+                    OldJob.Description = jobDto.Description;
+                    OldJob.JobTitle = jobDto.JobTitle;
+                    OldJob.Salary = jobDto.Salary;
+                    OldJob.ContactEmail = jobDto.ContactEmail;
+                    OldJob.ContactNumber = jobDto.ContactNumber;
+                    OldJob.Duration = jobDto.Duration;
+                    OldJob.Location = jobDto.Location;
                     _context.Job.Update(OldJob);
                     await _context.SaveChangesAsync();
                     return Ok();
@@ -156,6 +156,22 @@ namespace DentistPortal_API.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        private async Task<bool> IsValid(JobDto jobDto)
+        {
+            if (string.IsNullOrEmpty(jobDto.JobTitle) ||
+                string.IsNullOrEmpty(jobDto.Description) ||
+                string.IsNullOrEmpty(jobDto.Salary) ||
+                jobDto.OwnerIdDoctor == null ||
+                jobDto.OwnerIdDoctor == Guid.Empty ||
+                string.IsNullOrEmpty(jobDto.ContactEmail) ||
+                string.IsNullOrEmpty(jobDto.Location) ||
+                string.IsNullOrEmpty(jobDto.Duration))
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

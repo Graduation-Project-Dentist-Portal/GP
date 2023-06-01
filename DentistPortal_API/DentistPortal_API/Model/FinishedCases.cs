@@ -18,12 +18,5 @@ namespace DentistPortal_API.Model
 
         [ForeignKey("PatientCaseId")]
         public virtual PatientCase? PatientCase { get; set; }
-
-
-
-        //public bool IsMedicalCase { get; set; }
-        //public Guid? FinishedFK { get; set; }
-        //[ForeignKey("Id")]
-        //public MedicalCase MedicalCase { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace DentistPortal_API.Migrations
 {
-    [Migration(6)]
+    //[Migration(6)]
     public class _0006_AddPost : Migration
     {
         public override void Down()
