@@ -3,6 +3,11 @@
 @inject IHttpContextAccessor HttpContextAccessor
 @model DentistPortal_Client.Pages.HomeModel
 @{
+    <head>
+    
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    </head>
     <!-- Cards -->
     <div class="box">
         <div class="inner row g-0">
@@ -28,17 +33,17 @@
     </div>
 
     <!-- Qoute -->
-    <div class="mozaa">
+    <div class="qoute-container">
         <p class="quote"><span>Why should you use DentalHub</span><span> ?</span></p>
     </div>
 
     <header>
         <!-- Paragraphs -->
-        <div class="container-home container">
+        <div class="container-first-paragraph container">
             <div class="image">
-                <img class="toto" src="~/Pictures/DentalStudent.jpg">
+                <img class="image-first-paragraph" src="~/Pictures/DentalStudent.jpg">
             </div>
-            <div class="text">
+            <div class="text-first-paragraph">
                 <h2>As a Dental Student</h2>
                 <p>
                     We shorten the space between you and your patient,
@@ -49,12 +54,12 @@
             </div>
         </div>
         <br>
-        <div class="contn">
+        <div class="container-second-paragraph">
             <div class="image">
-                <img class="soso" src="~/Pictures/Patient.jpg">
+                <img class="image-second-paragraph" src="~/Pictures/Patient.jpg">
             </div>
-            <div class="text2">
-                <h2>As a Patient</h2>
+            <div class="text-second-paragraph">
+                <h2 class="newline">As a Patient</h2>
                 <p>
                     You can get your teeth fixed by great doctors for free or for a small amount of money by posting a description of what is bothering you and taking a photo of your teeth,
                     and then a doctor will contact you to fix them.
@@ -64,12 +69,12 @@
             </div>
         </div>
         <br>
-        <div class="conta">
+        <div class="container-third-paragraph">
             <div class="image">
-                <img class="nono" src="https://allesleyparkdental.co.uk/wp-content/uploads/2022/09/AP-Dental-Team-Photo.jpg">
+                <img class="image-third-paragraph" src="https://allesleyparkdental.co.uk/wp-content/uploads/2022/09/AP-Dental-Team-Photo.jpg">
             </div>
-            <div class="text3">
-                <h2>As a Doctor</h2>
+            <div class="text-third-paragraph">
+                <h2 class="newline">As a Doctor</h2>
                 <p>
                     You can sell or buy dental tools,
                     and you can also post job offers and training for dental students,

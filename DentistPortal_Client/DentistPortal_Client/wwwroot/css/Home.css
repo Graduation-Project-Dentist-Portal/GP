@@ -65,57 +65,6 @@ body {
     display: grid;
 }
 
-.container-home {
-    display: flex;
-    align-items: center;
-    justify-content: center
-}
-
-.toto {
-    max-width: 400px;
-    max-height: 350px;
-    border-radius: 500px;
-}
-
-.text {
-    font-size: 20px;
-    padding-left: 100px;
-}
-
-    .text h2 {
-        font-size: 42px;
-        color: #657A97;
-    }
-
-    .text p {
-        font-size: 20px;
-        color: #657A97;
-    }
-
-.adv {
-    font-size: 46px;
-    font-style: oblique;
-    color: white;
-    text-align: center;
-}
-
-.container2 {
-    position: relative;
-    text-align: center;
-    color: white;
-}
-
-.top-left {
-    position: absolute;
-    top: 300px;
-    left: 63px;
-    color: white;
-    font-size: 28px;
-    border-radius: 30rem;
-    background-color: #262626;
-    padding: 8px;
-}
-
 .quote {
     color: #bfbfbf;
     font-size: 40px;
@@ -142,7 +91,7 @@ body {
         text-shadow: 0 0 10px #bfbfbf, 0 0 20px #bfbfbf, 0 0 40px #bfbfbf;
     }
 
-.mozaa {
+.qoute-container {
     background-color: #2B4F71;
     width: 100%;
     height: 120px;
@@ -150,42 +99,39 @@ body {
     text-align: center;
 }
 
-
-* {
-    box-sizing: border-box;
+.container-first-paragraph {
+    display: flex;
+    align-items: center;
+    justify-content: center
 }
 
-.img-comp-container {
-    position: relative;
-    height: 500px; /*should be the same height as the images*/
-    margin-left: 410px;
+.image-first-paragraph {
+    max-width: 400px;
+    max-height: 350px;
+    border-radius: 500px;
 }
 
-.img-comp-img {
-    position: absolute;
-    width: auto;
-    height: auto;
-    overflow: hidden;
+.text-first-paragraph {
+    font-size: 20px;
+    padding-left: 5%;
+    padding-top: 7%;
+    color: #657A97;
 }
 
-    .img-comp-img .fofo {
-        display: block;
-        vertical-align: middle;
+    .text-first-paragraph h2 {
+        font-size: 42px;
+        color: #657A97;
     }
 
-.img-comp-slider {
-    position: absolute;
-    z-index: 9;
-    cursor: ew-resize;
-    /*set the appearance of the slider:*/
-    width: 40px;
-    height: 40px;
-    background-color: #2196F3;
-    opacity: 0.7;
-    border-radius: 50%;
-}
+    .text-first-paragraph p {
+        font-size: 20px;
+        color: #657A97;
+    }
 
-.contn {
+
+
+
+.container-second-paragraph {
     <!-- display: flex; -->
     <!-- align-items: center; -->
     <!-- justify-content: center; -->
@@ -194,39 +140,40 @@ body {
     left: 20%;
 }
 
-.soso {
+.image-second-paragraph {
     max-width: 400px;
     max-height: 450px;
     float: right;
     border-radius: 500px;
 }
 
-.text2 {
+.text-second-paragraph {
     font-size: 20px;
     padding-left: 5%;
     padding-top: 7%;
     color: #657A97;
 }
 
-    .text2 h2 {
+    .text-second-paragraph h2 {
         color: #657A97;
         font-size: 42px;
     }
 
-    .text2 p {
+    .text-second-paragraph p {
         font-size: 20px;
+        color: #657A97;
     }
 
 
 /*  third paragraph */
-.conta {
+.container-third-paragraph {
     display: flex;
     align-items: center;
     justify-content: center;
-    position: absolute;
+    /* position:absolute; */
 }
 
-.nono {
+.image-third-paragraph {
     max-width: 400px;
     max-height: 400px;
     /*    padding-left: 10%;
@@ -234,18 +181,18 @@ body {
     border-radius: 500px;
 }
 
-.text3 {
+.text-third-paragraph {
     font-size: 20px;
     padding-top: 2%;
     color: #657A97;
 }
 
-    .text3 h2 {
+    .text-third-paragraph h2 {
         font-size: 42px;
         color: #657A97;
     }
 
-    .text3 p {
+    .text-third-paragraph p {
         font-size: 20px;
     }
 
@@ -284,4 +231,40 @@ header {
 
 .dropdown-toggle::after {
     color: #fff !important;
+}
+
+
+@media only screen and (min-width: 481px) and (max-width:768px) {
+    .inner {
+        width: 100%;
+        display: block;
+    }
+
+    .container-first-paragraph ,.container-second-paragraph ,.container-third-paragraph {
+        display: inline-block;
+        vertical-align: top;
+        text-align: center;
+        position:center
+    }
+    
+    
+    .image  {
+        position: center;
+    }
+    .newline {
+        margin-top:2%;
+        display: inline-block;
+    }
+    .image-second-paragraph {
+        margin: 6%;
+    }
+
+    .quote {
+        color: #bfbfbf;
+        font-size: 25px;
+        font-weight: bold;
+        font-family: serif;
+        letter-spacing: 7px;
+        cursor: default;
+    }
 }
