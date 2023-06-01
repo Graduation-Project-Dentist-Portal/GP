@@ -23,7 +23,7 @@
     var httpClient = HttpContext.RequestServices.GetService<IHttpClientFactory>();
     if (HttpContext.Session.GetString("Token") == null)
     {
-        Response.Redirect($"https://localhost:7156/Login?url={"PatientPages/DisplayPatientCases"}");
+        Response.Redirect($"https://localhost:7156/Login?url={"PatientPages/MyCases_Patient"}");
     }
     else
     {

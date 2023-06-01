@@ -234,27 +234,29 @@ header {
 }
 
 
-@media only screen and (min-width: 481px) and (max-width:768px) {
-    .inner {
+@media only screen and (max-width:768px) {
+/*    .inner {
         width: 100%;
         display: block;
-    }
+    }*/
 
-    .container-first-paragraph ,.container-second-paragraph ,.container-third-paragraph {
+    .container-first-paragraph, .container-second-paragraph, .container-third-paragraph {
         display: inline-block;
         vertical-align: top;
         text-align: center;
-        position:center
+        position: center
     }
-    
-    
-    .image  {
+
+
+    .image {
         position: center;
     }
+
     .newline {
-        margin-top:2%;
+        margin-top: 2%;
         display: inline-block;
     }
+
     .image-second-paragraph {
         margin: 6%;
     }

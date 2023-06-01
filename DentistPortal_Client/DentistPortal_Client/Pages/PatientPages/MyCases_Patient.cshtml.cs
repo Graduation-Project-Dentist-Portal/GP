@@ -33,45 +33,52 @@ namespace DentistPortal_Client.Pages.PatientPages
         }
         public async Task OnGet()
         {
-            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
-            var client = _httpClient.CreateClient();
-            client.BaseAddress = new Uri(config["BaseAddress"]);
-            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
-            try
+            if (HttpContext.Session.GetString("Token") == null)
             {
-                var request = await client.GetStringAsync($"/api/display-my-cases-pateint/{jwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value}");
-                if (request is not null)
+                Response.Redirect($"https://localhost:7156/Login?url={"DoctorPages/Clinics/MyCases_Patient"}");
+                await Task.CompletedTask;
+            }
+            else
+            {
+                var jwt = new JwtSecurityTokenHandler().ReadJwtToken(HttpContext.Session.GetString("Token"));
+                var client = _httpClient.CreateClient();
+                client.BaseAddress = new Uri(config["BaseAddress"]);
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+                try
                 {
-                    var options = new JsonSerializerOptions
+                    var request = await client.GetStringAsync($"/api/display-my-cases-pateint/{jwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value}");
+                    if (request is not null)
                     {
-                        WriteIndented = true,
-                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                        DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
-                    };
-                    PatientCases = JsonSerializer.Deserialize<List<PatientCase>>(request, options);
+                        var options = new JsonSerializerOptions
+                        {
+                            WriteIndented = true,
+                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                            DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
+                        };
+                        PatientCases = JsonSerializer.Deserialize<List<PatientCase>>(request, options);
+                    }
+                    else
+                    {
+                        Msg = request.ToString();
+                        Status = "error";
+                    }
                 }
-                else
+                catch (HttpRequestException ex)
                 {
-                    Msg = request.ToString();
+                    if (ex.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        LoginModel loginModel = new LoginModel(_httpClient);
+                        await loginModel.GetNewToken(HttpContext);
+                        await OnGet();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Msg = e.Message;
                     Status = "error";
                 }
             }
-            catch (HttpRequestException ex)
-            {
-                if (ex.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    LoginModel loginModel = new LoginModel(_httpClient);
-                    await loginModel.GetNewToken(HttpContext);
-                    await OnGet();
-                }
-            }
-            catch (Exception e)
-            {
-                Msg = e.Message;
-                Status = "error";
-            }
         }
-
 
         public async Task<IActionResult> OnPost(PatientCaseDto patientCaseDto)
         {
