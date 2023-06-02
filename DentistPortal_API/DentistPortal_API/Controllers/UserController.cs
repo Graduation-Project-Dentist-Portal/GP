@@ -105,6 +105,7 @@ namespace DentistPortal_API.Controllers
         {
             var loggedUserDentist = await _context.Dentist.FirstOrDefaultAsync(x => x.Username == newDentist.Username);
             var loggedUserPatient = await _context.Patient.FirstOrDefaultAsync(x => x.Username == newDentist.Username);
+            var loggedUserDoctorEmail = await _context.Dentist.FirstOrDefaultAsync(x => x.Email == newDentist.Email);
             if (string.IsNullOrEmpty(newDentist.Username) || string.IsNullOrEmpty(newDentist.PasswordHash) || string.IsNullOrEmpty(newDentist.LastName) || string.IsNullOrEmpty(newDentist.FirstName) || string.IsNullOrEmpty(newDentist.University))
             {
                 return BadRequest("Cant be empty");
@@ -112,6 +113,10 @@ namespace DentistPortal_API.Controllers
             else if (loggedUserDentist != null || loggedUserPatient != null)
             {
                 return BadRequest("Already used Username");
+            }
+            else if (loggedUserDoctorEmail != null)
+            {
+                return BadRequest("Email Already Used!");
             }
             Dentist dentist = new Dentist();
             dentist.Id = Guid.NewGuid();
@@ -160,6 +165,7 @@ namespace DentistPortal_API.Controllers
             dentist.Level = newDentist.Level;
             dentist.Graduated = newDentist.Graduated;
             dentist.University = newDentist.University;
+            dentist.Email = newDentist.Email;
             var hasher = new PasswordHasher<Dentist>();
             dentist.PasswordHash = hasher.HashPassword(dentist, newDentist.PasswordHash);
             await _context.Dentist.AddAsync(dentist);
@@ -437,7 +443,7 @@ namespace DentistPortal_API.Controllers
             };
             return Ok(obj);
         }
-    
+
         private async Task<RefreshToken> CreateRefreshToken()
         {
             var refreshToken = new RefreshToken

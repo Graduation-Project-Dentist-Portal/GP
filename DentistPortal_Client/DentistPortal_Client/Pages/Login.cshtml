@@ -50,11 +50,33 @@
 @if (@Model.Msg != null)
 {
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    if (@Model.Status == "error")
+    if (@Model.Status == "success")
+    {
+        <script type="text/javascript">
+            Swal.fire({
+                icon: 'success',
+                title: '@Model.Msg',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        </script>
+    }
+    else if (@Model.Status == "error")
     {
         <script type="text/javascript">
             Swal.fire({
                 icon: 'error',
+                title: '@Model.Msg',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        </script>
+    }
+    else
+    {
+        <script type="text/javascript">
+            Swal.fire({
+                icon: 'warning',
                 title: '@Model.Msg',
                 showConfirmButton: true
             })

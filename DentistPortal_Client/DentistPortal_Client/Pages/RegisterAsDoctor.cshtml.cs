@@ -50,9 +50,9 @@ namespace DentistPortal_Client.Pages
             var request = await client.PostAsync("/api/RegisterAsDoctor", content);
             if (request.IsSuccessStatusCode)
             {
-                Msg = "Successfully Created!";
+                Msg = "Successfully Created! \n Please wait until we verify your information.";
                 Status = "success";
-                return RedirectToPage("/Login");
+                return RedirectToPage("/Home");
             }
             else
             {
@@ -73,6 +73,7 @@ namespace DentistPortal_Client.Pages
             multipartFormDataContent.Add(new StringContent(dentist.University, Encoding.UTF8, MediaTypeNames.Text.Plain), "University");
             multipartFormDataContent.Add(new StringContent(graduated, Encoding.UTF8, MediaTypeNames.Text.Plain), "Graduated");
             multipartFormDataContent.Add(new StringContent(level, Encoding.UTF8, MediaTypeNames.Text.Plain), "Level");
+            multipartFormDataContent.Add(new StringContent(dentist.Email, Encoding.UTF8, MediaTypeNames.Text.Plain), "Email");
 
             if (dentist.ProfilePicture != null)
             {
