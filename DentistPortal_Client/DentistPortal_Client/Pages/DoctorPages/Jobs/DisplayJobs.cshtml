@@ -9,21 +9,32 @@
 @using Microsoft.AspNetCore.Http;
 @using System.IdentityModel.Tokens.Jwt
 
-<br />
-<div class="website-search">
-    <form id="live-search" action="">
-        <div>
-            <input type="text" placeholder="Search" class="text" id="diagnosisInput">
+<header style="padding-top:29px; background:none;">
+    <div class="website-search">
+        <form id="live-search" action="">
+            <div>
+                <input type="text" placeholder="Search" class="text" id="diagnosisInput" style="background-color:white;">
 
+            </div>
+        </form>
+        <div class="menu-main-menu">
+            <ul id="menu-main-menu" class="menu text-center">
+                <li id="menu-item-680"
+                    class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-680 ">
+                    <a href="../Jobs/MyJobs"> My Jobs</a>
+                </li>
+                <li id="menu-item-680"
+                    class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-680 ">
+                    <button type="button" style="background:none; border:none;" data-bs-toggle="modal" data-bs-target="#AddJob"> Add Job</button>
+                </li>
+            </ul>
         </div>
-    </form>
-</div>
-<div class="text-center col-sm add">
-    <!-- Button trigger CreateModal -->
 
-    <button type="button" class="btn mybtn" data-bs-toggle="modal" data-bs-target="#AddJob" style="transform:translate(10px,-16px);">
-        <i class="bi bi-plus-circle-dotted" style="font-style:normal;"> Add Job</i>
-    </button>
+    </div>
+</header>
+<br />
+
+
 
 
     <!--Add job modal-->
@@ -109,7 +120,6 @@
             </div>
         </div>
     </div>
-</div>
 
 @{
     int counter = 0;
@@ -123,7 +133,7 @@
         <!--Display Jobs cards-->
         <section class="section">
             <div class="container">
-                <div class="row gy-4 d-flex justify-content-between" id="myList">
+                <div class="row gy-4 d-flex justify-content-around" id="myList">
 
                     @foreach (var job in Model.Jobs)
                     {
