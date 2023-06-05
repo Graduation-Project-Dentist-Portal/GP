@@ -75,7 +75,7 @@
                 font-weight: bold;
             }
 
-.menu-main-menu-container ul,
+.menu-main-menu ul,
 li {
     display: inline-block;
     text-decoration: none;
@@ -106,7 +106,7 @@ li {
         display: none;
     }
 
-    .menu-main-menu-container {
+    .menu-main-menu {
         display: block;
     }
 }
@@ -130,7 +130,7 @@ header.small {
 }
 
 @media only screen and (min-width: 700px) {
-    header.small .menu-main-menu-container {
+    header.small .menu-main-menu {
         display: none;
         -webkit-transition: opacity 3s ease-in-out;
         -moz-transition: opacity 3s ease-in-out;
@@ -153,7 +153,7 @@ header .searchform label,
             padding: 5px;
         }
 
-    header .menu-main-menu-container {
+    header .menu-main-menu {
         padding-top: 7px;
     }
 }

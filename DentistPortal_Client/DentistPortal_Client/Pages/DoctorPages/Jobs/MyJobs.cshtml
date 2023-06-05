@@ -9,16 +9,16 @@
 @using Microsoft.AspNetCore.Http;
 @using System.IdentityModel.Tokens.Jwt
 
-<header class>
+<header style="padding-top:29px; background:none;">
     <div class="website-search"  >
         <form id="live-search" action="">
             <div>
-                <input type="text" placeholder="Search" class="text" id="diagnosisInput">
+                <input type="text" placeholder="Search" class="text" id="diagnosisInput" style="background-color:white;">
 
             </div>
         </form>
 </header>
-
+<br />
 @{
     int counter = 0;
     Guid id = new();
@@ -31,7 +31,7 @@
         <!--Display Jobs cards-->
         <section class="section">
             <div class="container">
-                          <div class="row gy-4 d-flex justify-content-between" id="myList">
+                <div class="row gy-4 d-flex justify-content-around" id="myList">
 
                     @foreach (var job in Model.Jobs)
                     {
