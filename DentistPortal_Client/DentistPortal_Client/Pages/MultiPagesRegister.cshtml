@@ -1,0 +1,138 @@
+﻿@page
+@model DentistPortal_Client.Pages.MultiPagesRegisterModel
+@{
+    Layout = "";
+    <head>
+        <link href="~/css/MultiFormRegister.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Register</title>
+    </head>
+    <body>
+        <div class="container" id="container">
+            <form method="post" enctype="multipart/form-data" id="register-form" class="needs-validation">
+                <div class="form-container sign-up-container">
+                    <div class="Sign-Up-form">
+                        <div class="row mb-3">
+                            <div class="input-field">
+                                <label>Profile Picture</label>
+                                <input asp-for="Dentist.ProfilePicture" type="file" required>
+                                <div class="invalid-feedback">
+                                    Please add your picture.
+                                </div>
+                            </div>
+                            <div class="input-field">
+                                <label>University/Work Card Picture</label>
+                                <input asp-for="Dentist.UniversityCardPicture" type="file" required>
+                                <div class="invalid-feedback">
+                                    Please add your proof card.
+                                </div>
+                            </div>
+                            <div class="input-field">
+                                <label>Identity Card Picture</label>
+                                <input asp-for="Dentist.IdentityCardPicture" type="file" required>
+                                <div class="invalid-feedback">
+                                    Please add your identity card.
+                                </div>
+                            </div>
+                            <div class="input-field">
+                                <input asp-for="Dentist.University" required placeholder="University">
+                                <div class="invalid-feedback">
+                                    Please fill the university name.
+                                </div>
+                            </div>
+                            <div class="input-field">
+                                <input asp-for="Dentist.Level" required placeholder="Level" min="0" max="5">
+                                <div class="invalid-feedback">
+                                    Please fill the university level and 0 if graduated.
+                                </div>
+                            </div>
+                            <div class="input-field">
+                                <label>IS Graduated ?</label>
+                                <input asp-for="Dentist.Graduated" placeholder="Is Graduated" type="checkbox">
+                            </div>
+                        </div>
+                        <button type="submit" class="signup-btn">Sign Up</button>
+                    </div>
+                </div>
+                <div class="form-container sign-in-container">
+                    <div class="Sign-Up-form">
+                        <h3>Register</h3>
+                        <div class="input-field">
+                            <input asp-for="Dentist.Username" required placeholder="Username" id="username">
+                            <div class="invalid-feedback">
+                                Please fill your username.
+                            </div>
+                        </div>
+                        <div class="input-field">
+                            <input asp-for="Dentist.FirstName" required placeholder="First Name" id="first-name">
+                            <div class="invalid-feedback">
+                                Please fill your first name.
+                            </div>
+                        </div>
+                        <div class="input-field">
+                            <input asp-for="Dentist.LastName" required placeholder="Last Name" id="last-name">
+                            <div class="invalid-feedback">
+                                Please fill your last name.
+                            </div>
+                        </div>
+                        <div class="input-field">
+                            <input asp-for="Dentist.PasswordHash" type="password" required placeholder="password" id="password">
+                            <div class="invalid-feedback">
+                                Please fill your password.
+                            </div>
+                        </div>
+                        <div class="input-field">
+                            <input asp-for="Dentist.Email" required type="email" placeholder="Email" id="email">
+                            <div class="invalid-feedback">
+                                Please fill your email.
+                            </div>
+                        </div>
+                        <p>Already have an account? <a style="color:#0098c1;text-decoration: none;font-size: 14px;" asp-page="/Login">Sign in</a></p>
+                        <button type="button" onclick="location.href = 'https://localhost:7156/';" style="width:100px;margin:auto"> Home</button>
+                    </div>
+                </div>
+                <div class="overlay-container">
+                    <div class="overlay">
+                        <div class="overlay-panel overlay-left">
+                            <h1>Glad you joined us, Dentist!</h1>
+                            <p>So we can verify you as a dentist, please fill out these details.</p>
+                            <button type="button" class="ghost" id="signIn">Back</button>
+                        </div>
+                        <div class="overlay-panel overlay-right">
+                            <h1>Glad you joined us, Dentist!</h1>
+                            <p>Enter your personal details to build your platform with us.</p>
+                            <button type="button" class="ghost" id="signUp">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </body>
+}
+
+<script src="~/js/MultiFormRegister.js"></script>
+<script src="~/js/MyJs.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<script>
+    $('#exampleModal').modal({
+        keyboard: false
+    })
+</script>
+@if (@Model.Msg != null)
+{
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    if (@Model.Status == "error")
+    {
+        <script type="text/javascript">
+            Swal.fire({
+                icon: 'error',
+                title: '@Model.Msg',
+                showConfirmButton: true
+            })
+        </script>
+    }
+}
