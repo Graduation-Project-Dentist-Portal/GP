@@ -21,8 +21,10 @@ namespace DentistPortal_Client.Pages
         [TempData]
         public string Status { get; set; } = string.Empty;
 
-        public void OnGet()
+        public void OnGet(DentistDto? dentist)
         {
+            if (dentist is not null)
+                Dentist = dentist;
         }
 
         public async Task<IActionResult> OnPost(DentistDto dentist)
@@ -31,7 +33,7 @@ namespace DentistPortal_Client.Pages
             {
                 Msg = "Cant be empty";
                 Status = "error";
-                return RedirectToPage("/RegisterAsDoctor", dentist);
+                return RedirectToPage("/MultiPagesRegister", dentist);
             }
             dentist.IsActive = true;
             if (dentist.Graduated)
@@ -54,7 +56,7 @@ namespace DentistPortal_Client.Pages
             {
                 Msg = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 Status = "error";
-                return RedirectToPage("/RegisterAsDoctor");
+                return RedirectToPage("/MultiPagesRegister", dentist);
             }
         }
 

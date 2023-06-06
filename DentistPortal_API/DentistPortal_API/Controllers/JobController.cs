@@ -30,11 +30,13 @@ namespace DentistPortal_API.Controllers
         {
             try
             {
+                if (await _context.Job.Where(x => x.IsActive == true).CountAsync() == 0)
+                    return BadRequest("No available jobs or trainings, come back soon!");
                 return Ok(await _context.Job.Where(x => x.IsActive == true).ToListAsync());
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest("No available jobs or trainings, come back soon!");
+                return BadRequest(ex.Message);
             }
         }
 

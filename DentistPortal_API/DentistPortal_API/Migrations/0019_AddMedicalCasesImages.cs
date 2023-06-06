@@ -15,7 +15,7 @@ namespace DentistPortal_API.Migrations
             Create.Table("MedicalCaseImage")
                 .WithColumn("Id").AsGuid().PrimaryKey()
                 .WithColumn("Url").AsString().Unique().NotNullable()
-                .WithColumn("MedicalCaseId").AsGuid().ForeignKey("MedicalCase", "Id")
+                .WithColumn("MedicalCaseId").AsGuid().ForeignKey("MedicalCase", "Id").OnDelete(System.Data.Rule.Cascade)
                 .WithColumn("IsActive").AsBoolean().NotNullable();
         }
     }

@@ -11,7 +11,7 @@
 @section styles{
     <link rel="stylesheet" href="~/css/MedicalCaseStyleSheet.css">
     }
-<header style="position: relative;padding-top: 48px;">
+    <header style="padding-top: 48px">
         <div class="website-search">
             <form id="live-search" action="" method="post">
                 <div>
@@ -22,9 +22,11 @@
                 <ul id="menu-main-menu" class="menu">
                     <li id="menu-item-680"
                     class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-680">
-                        <a href="../MedicalCases/MyMedicalCases"> My Cases </a> </li> </ul>
-                    </div>
-                    </div>
+                        <a href="../MedicalCases/MyMedicalCases"> My Cases </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </header>
 
     @{
@@ -146,7 +148,7 @@
                                                                                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
 
                                                                                                             <!-- Button trigger delete modal -->
-                                                                                                            <li style="display:block;"><button class="dropdown-item" data-bs-toggle="modal" data-bs-target=@("#deleteMedicalCaseModal" + @counter)>Delete</button></li>
+                                                                                                            <li style="display:block;"><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target=@("#deleteMedicalCaseModal" + @counter)>Delete</button></li>
 
                                                                                                             <!-- Button trigger edit modal -->
                                                                                                             <li style="display:block;"><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target=@("#editMedicalCaseModal" + @counter)>Edit</button></li>
@@ -211,7 +213,7 @@
                                                     </div>
                                                 </div>
                                                 <!-- Edit MedicalCase Modal -->
-                                                <div class="modal fade" id=@("editMedicalCaseModal"+counter) data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                <div class="modal fade" id=@("editMedicalCaseModal"+counter) data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="z-index:10000;">
                                                     <div class="modal-dialog modal-dialog-centered modal-lg">
                                                         <div class="modal-content" style="top: 79px;">
                                                             <div class="modal-header">
@@ -412,7 +414,7 @@
                                                                                                     <span> @patientCase.PatientPhone</span>
                                                                                                 </div>
                                                                                                 <div class="PatientAge">
-                                                                                                <span>Age:</span>
+                                                                                                    <span>Age:</span>
                                                                                                     <span>@patientCase.PatientAge</span>
                                                                                                 </div>
                                                                                             </div>
@@ -424,24 +426,24 @@
                                                                                         </form>
 
 
-                                            </div>
-                                        </div>
+                                                                                    </div>
+                                                                                </div>
 
 
 
 
 
 
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
 
-                </li>
+                                                    </li>
 
-                </ul>
+                                                </ul>
 
 
 
@@ -449,7 +451,7 @@
 
 
                                             }
-                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

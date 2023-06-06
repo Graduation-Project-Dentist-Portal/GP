@@ -17,7 +17,7 @@ namespace DentistPortal_API.Migrations
                 .WithColumn("JobTitle").AsString().NotNullable()
                 .WithColumn("Description").AsString().NotNullable()
                 .WithColumn("Salary").AsString().NotNullable()
-                .WithColumn("OwnerIdDoctor").AsGuid().Nullable().ForeignKey("Dentist", "Id").OnDelete(System.Data.Rule.Cascade)
+                .WithColumn("OwnerIdDoctor").AsGuid().NotNullable().ForeignKey("Dentist", "Id").OnDelete(System.Data.Rule.Cascade)
                 .WithColumn("IsActive").AsBoolean().NotNullable()
                 .WithColumn("ContactEmail").AsString().NotNullable()
                 .WithColumn("ContactNumber").AsString().Nullable()

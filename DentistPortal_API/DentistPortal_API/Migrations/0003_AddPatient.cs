@@ -19,7 +19,7 @@ namespace DentistPortal_API.Migrations
                 .WithColumn("LastName").AsString().NotNullable()
                 .WithColumn("PasswordHash").AsString().NotNullable()
                 .WithColumn("ProfilePicture").AsString(int.MaxValue).Nullable()
-                .WithColumn("RefreshTokenId").AsGuid().Nullable().ForeignKey("RefreshToken", "Id")
+                .WithColumn("RefreshTokenId").AsGuid().Nullable().ForeignKey("RefreshToken", "Id").OnDelete(System.Data.Rule.Cascade)
                 .WithColumn("IsActive").AsBoolean().NotNullable();
         }
     }

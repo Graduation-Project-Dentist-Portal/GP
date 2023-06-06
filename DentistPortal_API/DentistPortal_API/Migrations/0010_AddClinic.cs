@@ -14,7 +14,7 @@ namespace DentistPortal_API.Migrations
         {
             Create.Table("Clinic")
                 .WithColumn("Id").AsGuid().NotNullable().PrimaryKey()
-                .WithColumn("Address").AsString().NotNullable().Unique()
+                .WithColumn("Address").AsString().NotNullable()
                 .WithColumn("DoctorId").AsGuid().NotNullable().ForeignKey("Dentist", "Id").OnDelete(System.Data.Rule.Cascade)
                 .WithColumn("ClinicPhone").AsString().NotNullable()
                 .WithColumn("Name").AsString().NotNullable()

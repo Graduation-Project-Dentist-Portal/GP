@@ -52,7 +52,7 @@ namespace DentistPortal_API.Controllers
                 var clinic = await _context.Clinic.FirstOrDefaultAsync(x => x.Name == clinicDto.Name && x.IsActive == true);
                 if (clinic is not null)
                 {
-                    return BadRequest("Already Added!");
+                    return BadRequest("Clinic Name Already Taken!");
                 }
                 var uploadResult = new ImageUploadResult();
                 var clinicImage = new ClinicImage();

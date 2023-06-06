@@ -79,7 +79,7 @@ namespace DentistPortal_Client.Pages.AdminPages
             var request = await client.PutAsJsonAsync($"api/un-verify-user/{msg}", id);
             if (request.IsSuccessStatusCode)
             {
-                Msg = "Edited successfully";
+                Msg = "Unverified successfully";
                 Status = "success";
                 return RedirectToPage("");
             }

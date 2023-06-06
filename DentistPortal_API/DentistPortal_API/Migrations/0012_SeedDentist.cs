@@ -48,7 +48,7 @@ namespace DentistPortal_API.Migrations
                 IdentityCardPicture = "https://res.cloudinary.com/djrj0pmt0/image/upload/v1683047655/Blured_oriln7.jpg",
                 UniversityCardPicture = "https://res.cloudinary.com/djrj0pmt0/image/upload/v1683039718/WhatsApp_Image_2023-05-02_at_5.01.39_PM_ej2kyl.jpg",
                 Level = 4,
-                IsVerified = "false",
+                IsVerified = "true",
                 VerfiyMessage = ""
             })
             .Row(new
