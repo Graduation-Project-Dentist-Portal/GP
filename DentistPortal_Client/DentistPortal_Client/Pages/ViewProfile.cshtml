@@ -17,28 +17,63 @@
         <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="~/css/ViewProfile.css">
         <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+        <link rel="stylesheet" href="~/css/Navbar.css" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     </head>
 
+    
     <div id="totop"></div>
     <a href="#totop" class="fa fa-arrow-up" id="fixedarrow"></a>
-    <!-- LEFT VERTICAL FIXED MENU -->
+   
+    <nav style="display:flex; align-items:center;">
+        <div class="logo"><a class="logo" href="/Home"><img src="~/Images/logo-white.png" width="100%" height="90px" /></a></div>
+        <input type="checkbox" id="check" />
+        <label for="check" class="check-btn">
+            <i class="bi bi-list"></i>
+        </label>
+        <ul @*style="display:flex; justify-content:flex-end; margin-bottom:0;"*@>
+            @if (HttpContextAccessor.HttpContext.Session.GetString("Token") == null)
+            {
+                <li><a class="active" href="/DoctorPages/Clinics/DisplayClinics">Clinics</a></li>
+                <li><a href="/DoctorPages/MedicalCases/DisplayMedicalCases">Medical Cases</a></li>
+                <li><a href="/DoctorPages/Tools/DisplayTools">Tools</a></li>
+                <li><a href="/DoctorPages/Jobs/DisplayJobs">Jobs</a></li>
+                <li><a href="/Login">Login</a></li>
+            }
+            else if (HttpContextAccessor.HttpContext.Session.GetString("role") == "Dentist")
+            {
+                <li><a class="active" href="/DoctorPages/Clinics/DisplayClinics">Clinics</a></li>
+                <li><a href="/DoctorPages/MedicalCases/DisplayMedicalCases">Medical Cases</a></li>
+                <li><a href="/DoctorPages/Tools/DisplayTools">Tools</a></li>
+                <li><a href="/DoctorPages/Jobs/DisplayJobs">Jobs</a></li>
+                <div class="dropdown">
+                    <a class="nav-profile-picture dropdown-toggle btn-danger" role="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><img class="nav-profile-picture" src="@HttpContextAccessor.HttpContext.Session.GetString("profilePicture")" /></a>
 
-    <div class="leftverticalmenu">
-        <iconify-icon icon="mdi:tooth" style="color:white;" flip="horizontal" class="tooth" id="twittericon"></iconify-icon>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" href="/ViewProfile"><i class="bi bi-person-circle" style="font-style:normal"> Profile</i></a></li>
+                        <li><a class="dropdown-item" href="/Home?clear=yes"><i class="bi bi-box-arrow-in-right" style="font-style:normal"> Log Out</i></a></li>
+                    </ul>
+                </div>
+            }
+            else if (HttpContextAccessor.HttpContext.Session.GetString("role") == "Admin")
+            {
+                <li><a class="active" href="/Home?clear=yes">Log Out</a></li>
+            }
+            else
+            {
+                <li><a class="active" href="/DoctorPages/Clinics/DisplayClinics">Clinics</a></li>
+                <li><a href="/PatientPages/MyCases_Patient">Find me a doctor</a></li>
+                <div class="dropdown">
+                    <a class="nav-profile-picture dropdown-toggle btn-danger" role="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style="display:flex; align-items:center;"><img class="nav-profile-picture" src="@HttpContextAccessor.HttpContext.Session.GetString("profilePicture")" /></a>
 
-        <div class="sec">
-            <ul>
-                <div class="third">
-                <li><a href="/Home"><i id="icons"></i>Home</a></li>
-                <li><a href="/DoctorPages/Tools/MyTools"><i id="icons"></i>My tools</a></li>
-                <li><a href="/DoctorPages/MedicalCases/MyMedicalCases"><i id="icons"></i>medical cases</a></li>
-        </div>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" href="/ViewPatientProfile"><i class="bi bi-person-circle" style="font-style:normal"> Profile</i></a></li>
+                        <li><a class="dropdown-item" href="/Home?clear=yes"><i class="bi bi-box-arrow-in-right" style="font-style:normal"> Log Out</i></a></li>
+                    </ul>
+                </div>
+            }
         </ul>
-    </div>
-    <figure> <a href="/DoctorPages/MedicalCases/MyMedicalCases"><span style="color: #fff;">Add post</span></a></figure>
-    </div>
-
-    <!-- END OF LEFT FIXED MENU -->
+    </nav>
 
     <div class="flexcontainer">
         <div class="middlecontainer">
@@ -55,7 +90,7 @@
                         <span>@@@Model.profileData.dentist.Username</span>
                     </div>
 
-                    <div class="t1">
+                    <div class="personal-info">
                         <p>Dental Student</p>
                         <p>University | @Model.profileData.dentist.University</p>
                         @if (Model.profileData.dentist.Graduated == false)
@@ -66,18 +101,17 @@
                     <br>
             </section>
 
-            <section class="tweets">
-                <div class="heading">
-                </div>
+            <section>
+                <div class="heading"></div>
             </section>
 
 
             <!-- post -->
             @foreach (var item in Model.profileData.dentistcases)
             {
-                <section class="opp">
-                    <div class="hi">
-                        <div class="card">
+                <section class="post-section">
+                    <div class="post-container">
+                        <div class="post-card">
                             <div class="top">
                                 <div class="userDeatils">
                                     <div class="profileImg">
@@ -90,14 +124,14 @@
                             <div class="caption">
                                 @item.DoctorWork
                             </div>
-                            <div class="row">
-                                <div class="column">
+                            <div class="post-row">
+                                <div class="post-column">
                                     <div class="imgBg">
                                         <img src="@item.BeforePicture" alt="bg" class="cover">
                                     </div>
                                 </div>
 
-                                <div class="column">
+                                <div class="post-column">
                                     <div class="imgBg">
                                         <img src="@item.AfterPicture" alt="bg" class="cover">
                                     </div>
@@ -106,6 +140,7 @@
                         </div>
                     </div>
                 </section>
+                
             }
     </html>
 
