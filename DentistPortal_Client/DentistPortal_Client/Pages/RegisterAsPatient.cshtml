@@ -6,6 +6,7 @@
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
@@ -40,10 +41,11 @@
             </div>
         </form>-->
 
-        <form method="post" enctype="multipart/form-data">
+        
             <div class="card">
                 <div class="form">
                     <h3>Register</h3>
+                    <form method="post" enctype="multipart/form-data">
                     <div class="input-field">
                         <i class="fa fa-envelope"></i>
                         <input asp-for="patient.Username" required placeholder="Username">
@@ -67,6 +69,7 @@
                     </div>
                     <br>
                     <button type="submit">Register</button>
+                </form> <br>
                     <p>Already have an account? <a asp-page="/Login">Sign in</a></p>
                 </div>
                 <div class="image">
@@ -76,7 +79,7 @@
                     </div>
                 </div>
             </div>
-        </form>
+        
 
     </body>
 }
