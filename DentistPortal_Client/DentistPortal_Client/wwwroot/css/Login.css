@@ -8,8 +8,8 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    height: 100vh;
-    width: 100vw;
+   /* height: 100vh;
+    width: 100vw; */
     background-color: #E9EDF8;
     display: flex;
     justify-content: center;
@@ -18,8 +18,8 @@ body {
 
 .card {
     background: #fff;
-    width: 900px;
-    min-height: 400px;
+    width: 70%;
+   
     /*box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;*/
     display: flex;
 }
@@ -33,39 +33,18 @@ body {
     background-image: url('https://img.freepik.com/free-vector/dental-care-background-design_1284-876.jpg?w=740&t=st=1678757643~exp=1678758243~hmac=0d5a40ee2fbb393663774e75f42d07c5e5ec7ae8fd98fae3d213a9e261ef667f');
     background-size: cover;
     background-position: center;
+    
+    
 }
 
-.overlay {
-    width: 100%;
-    height: 100%;
-    /*background-color: rgba(114, 39, 213, 0.31);*/
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    text-align: center;
-}
 
-    .overlay h3 {
-        color: white;
-        letter-spacing: 1px;
-        font-size: 25px;
-        font-weight: 700;
-        opacity: 0.6;
-    }
-
-    .overlay pre {
-        color: white;
-        font-size: 13px;
-        font-weight: bold;
-        opacity: 0.6;
-    }
 
 
 .form {
     padding: 60px 25px;
     display: flex;
     flex-direction: column;
+   
 }
 
     .form h3 {
@@ -123,7 +102,7 @@ button {
     color: white;
     border-radius: 5px;
     font-size: 18px;
-    width: 400px;
+    width: 100%;
 }
 
 pre {
@@ -143,4 +122,20 @@ pre a {
 
 input::placeholder {
     font-family: 'Poppins', sans-serif;
+}
+
+
+@media only screen and (max-width:768px) {
+
+    .card{
+         width:95%;
+         height:75%;
+    }
+
+    .image{
+     width:50%;
+    }
+     pre ,pre a {
+        font-size:9px;        
+    }
 }
